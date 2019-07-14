@@ -1,0 +1,29 @@
+package pro.meisen.boot.dao.mapper;
+
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
+import pro.meisen.boot.domain.Article;
+import pro.meisen.boot.web.req.BlogSearchRequest;
+
+import java.util.List;
+
+@Repository
+public interface ArticleMapper extends BasicMapper<Long, Article> {
+
+    Article findByArticleId(@Param("articleId") String articleId);
+    // 获取所有
+    List<Article> listAllArticles();
+
+    // 根据条件查询
+    List<Article> listByCondition(@Param("condition") Article article);
+
+    List<Article> listByPage(@Param("condition") BlogSearchRequest searchRequest);
+
+    List<Article> listByIds(@Param("idList")List<Long> idList);
+
+    List<Article> listByArticleIdList(@Param("idList")List<String> idList);
+
+    int batchUpdate(@Param("articleList") List<Article> articleList);
+
+    int batchInsert(@Param("articleList") List<Article> articleList);
+}

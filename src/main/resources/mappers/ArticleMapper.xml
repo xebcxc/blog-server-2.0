@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="pro.meisen.boot.dao.mapper.ArticleMapper">
+
+  <sql id="selectAllField">
+    select id, article_id, thumb, title, introduce, content, tags, visit, compliment, publish, `create_time`, modify_time
+    from article
+  </sql>
+
+  <select id="listAllArticles" resultType="Article">
+    <include refid="selectAllField"/>
+  </select>
+
+  <insert id="save" parameterType="Article" useGeneratedKeys="true" keyProperty="id">
+    insert into article(article_id, thumb, title, introduce,content, tags, visit, compliment, publish, `create_time`, modify_time)
+    values (#{articleId},#{thumb}, #{title}, #{introduce}, #{content}, #{tags}, #{visit}, #{compliment}, #{publish}, #{createTime}, #{modifyTime})
+  </insert>
+
+  <update id="update" parameterType="Article">
+    update article set
+    modify_time=#{modifyTime}
+    <if test="articleId != null">
+      , article_id = #{articleId}
+    </if>
+    <if test="title != null">
+      , title = #{title}
+    </if>
+    <if test="tags != null">
+      , tags = #{tags}
+    </if>
+    <if test="visit != null">
+      , visit = #{visit}
+    </if>
+    <if test="publish != null">
+      , publish = #{publish}
+    </if>
+    <if test="introduce != null">
+      , introduce = #{introduce}
+    </if>
+    <if test="content != null">
+      , content = #{content}
+    </if>
+    <if test="compliment != null">
+      , compliment = #{compliment}
+    </if>
+    <if test="thumb != null">
+      , thumb = #{thumb}
+    </if>
+    where id=#{id}
+  </update>
+
+  <delete id="deleteById">
+    delete from article where id=#{id}
+  </delete>
+
+  <select id="findById" resultType="Article">
+    <include refid="selectAllField"/>
+    where id=#{id}
+  </select>
+
+  <select id="findByArticleId" resultType="Article">
+    <include refid="selectAllField"/>
+    where article_id=#{articleId}
+  </select>
+
+  <select id="listByCondition" parameterType="Article" resultType="Article">
+    <include refid="selectAllField"/>
+    <where>
+      <if test="condition.id != null">
+        id = #{condition.id}
+      </if>
+      <if test="condition.title != null">
+        AND title = #{condition.title}
+      </if>
+      <if test="condition.tags != null">
+        AND tags = #{condition.tags}
+      </if>
+      <if test="condition.visit != null">
+        AND visit = #{condition.visit}
+      </if>
+      <if test="condition.publish != null">
+        AND publish = #{condition.publish}
+      </if>
+      <if test="condition.compliment != null">
+        AND compliment = #{condition.compliment}
+      </if>
+    </where>
+  </select>
+
+  <select id="listByPage" parameterType="Article" resultType="Article">
+    <include refid="selectAllField" />
+    <where>
+      <if test="condition.id != null">
+        id = #{condition.id}
+      </if>
+      <if test="condition.title != null">
+        AND title = #{condition.title}
+      </if>
+      <if test="condition.tags != null">
+        AND tags = #{condition.tags}
+      </if>
+      <if test="condition.visit != null">
+        AND visit = #{condition.visit}
+      </if>
+      <if test="condition.publish != null">
+        AND publish = #{condition.publish}
+      </if>
+      <if test="condition.compliment != null">
+        AND compliment = #{condition.compliment}
+      </if>
+    </where>
+  </select>
+
+  <select id="listByIds" parameterType="Map" resultType="Article">
+    <include refid="selectAllField" />
+    where
+    id IN
+    <foreach collection="idList" index="index" item="item" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </select>
+
+  <select id="listByArticleIdList" parameterType="Map" resultType="Article">
+    <include refid="selectAllField" />
+    where
+    article_id IN
+    <foreach collection="idList" index="index" item="item" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </select>
+
+
+  <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
+
+    insert into article(article_id, thumb, title, introduce,content, tags, visit, compliment, publish, `create_time`, modify_time)
+    values
+    <foreach collection="articleList" item="article" index="index"
+             separator=",">
+      (#{article.articleId},#{article.thumb}, #{article.title}, #{article.introduce}, #{article.content}, #{article.tags},
+       #{article.visit}, #{article.compliment}, #{article.publish}, #{article.createTime}, #{article.modifyTime})
+    </foreach>
+  </insert>
+
+  <update id="batchUpdate" parameterType="java.util.List">
+    update article set
+    modify_time=
+    <foreach collection="articleList" item="article" index="index"
+             separator="," open="(" close=")">
+      #{article.modifyTime}
+    </foreach>
+    ,article_id=
+    <foreach collection="articleList" item="article" index="index"
+             separator="," open="(" close=")">
+      #{article.articleId}
+    </foreach>
+    ,title=
+    <foreach collection="articleList" item="article" index="index"
+             separator="," open="(" close=")">
+      #{article.title}
+    </foreach>
+    ,tags=
+    <foreach collection="articleList" item="article" index="index"
+             separator="," open="(" close=")">
+      #{article.tags}
+    </foreach>
+    ,visit=
+    <foreach collection="articleList" item="article" index="index"
+             separator="," open="(" close=")">
+      #{article.visit}
+    </foreach>
+    ,publish=
+    <foreach collection="articleList" item="article" index="index"
+             separator="," open="(" close=")">
+      #{article.publish}
+    </foreach>
+
+    ,introduce=
+    <foreach collection="articleList" item="article" index="index"
+             separator="," open="(" close=")">
+      #{article.introduce}
+    </foreach>
+    ,content=
+    <foreach collection="articleList" item="article" index="index"
+             separator="," open="(" close=")">
+      #{article.content}
+    </foreach>
+    ,compliment=
+    <foreach collection="articleList" item="article" index="index"
+             separator="," open="(" close=")">
+      #{article.compliment}
+    </foreach>
+    ,thumb=
+    <foreach collection="articleList" item="article" index="index"
+             separator="," open="(" close=")">
+      #{article.thumb}
+    </foreach>
+    where id=in
+    <foreach collection="articleList" item="article" index="index"
+             separator="," open="(" close=")">
+      #{article.id}
+    </foreach>
+
+
+    update tag set
+    article_ids =
+    <foreach collection="tagList" item="tag" index="index"
+             separator=",">
+      #{tag.articleIds}
+    </foreach>
+    , modify_time =
+    <foreach collection="tagList" item="tag" index="index"
+             separator=",">
+      #{tag.modifyTime}
+    </foreach>
+    where id in
+    <foreach collection="tagList" item="tag" index="index"
+             separator="," open="(" close=")">
+      #{tag.id}
+    </foreach>
+  </update>
+  
+</mapper>
