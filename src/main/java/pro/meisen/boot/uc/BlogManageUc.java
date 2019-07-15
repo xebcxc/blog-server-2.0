@@ -1,18 +1,21 @@
 package pro.meisen.boot.uc;
 
-import com.alibaba.fastjson.JSON;
+import com.github.pagehelper.Page;
 import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import pro.meisen.boot.core.constants.AppConstants;
+import pro.meisen.boot.core.exception.AppException;
 import pro.meisen.boot.dao.service.ArticleService;
 import pro.meisen.boot.dao.service.TagService;
 import pro.meisen.boot.domain.Article;
+import pro.meisen.boot.domain.ErrorCode;
 import pro.meisen.boot.domain.Tag;
 import pro.meisen.boot.helper.SplitterHelper;
 import pro.meisen.boot.helper.StringHelper;
+import pro.meisen.boot.web.req.BlogSearchRequest;
 
 import javax.transaction.Transactional;
 import java.util.*;
@@ -37,6 +40,31 @@ public class BlogManageUc implements BlogManage{
     private StringHelper stringHelper;
 
     @Override
+    public Page<Article> listArticleWithPage(BlogSearchRequest request) {
+        return articleService.listArticleWithPage(request);
+    }
+
+    @Override
+    public Article getDetailByArticleId(String articleId) {
+        Article article = articleService.findByArticleId(articleId);
+        if (null == article) {
+            throw new AppException(ErrorCode.PARAM_ERROR, "文章不存在,请确认参数");
+        }
+        return article;
+    }
+
+    @Override
+    public List<Article> listByTagName(String tagName) {
+        Tag tag = tagService.getByTagName(tagName);
+        List<Article> articleList = new ArrayList<>();
+        if (tag != null && Strings.isNotEmpty(tag.getArticleIds())) {
+            List<Long> idList = splitterHelper.splitToLongList(tag.getArticleIds(), AppConstants.COMMON_SPLIT);
+            articleList = articleService.listByIds(idList);
+        }
+        return articleList;
+    }
+
+    @Override
     @Transactional(rollbackOn = Exception.class)
     public void addArticle(Article article) {
         try {
@@ -58,7 +86,11 @@ public class BlogManageUc implements BlogManage{
 
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public void deleteArticle(Article article) {
+    public void deleteArticleById(Long id) {
+        Article article = articleService.findById(id);
+        if (article == null) {
+            throw new AppException(ErrorCode.PARAM_ERROR, "文章不存在,请刷新后重试");
+        }
         try {
             articleService.deleteById(article.getId());
             String tags = article.getTags();

@@ -7,6 +7,7 @@ import org.springframework.util.CollectionUtils;
 import pro.meisen.boot.dao.mapper.BasicMapper;
 import pro.meisen.boot.dao.mapper.TagMapper;
 import pro.meisen.boot.dao.service.TagService;
+import pro.meisen.boot.dao.service.basic.BasicServiceImpl;
 import pro.meisen.boot.domain.Tag;
 
 import java.util.ArrayList;

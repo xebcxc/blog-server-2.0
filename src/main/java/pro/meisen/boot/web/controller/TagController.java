@@ -1,21 +1,13 @@
 package pro.meisen.boot.web.controller;
 
-import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import pro.meisen.boot.core.constants.AppConstants;
+import org.springframework.web.bind.annotation.*;
 import pro.meisen.boot.core.exception.AppException;
-import pro.meisen.boot.dao.service.ArticleService;
 import pro.meisen.boot.dao.service.TagService;
-import pro.meisen.boot.domain.Article;
 import pro.meisen.boot.domain.ErrorCode;
 import pro.meisen.boot.domain.Tag;
-import pro.meisen.boot.helper.SplitterHelper;
-import pro.meisen.boot.helper.StringHelper;
+import pro.meisen.boot.uc.TagManage;
 import pro.meisen.boot.web.res.TagRs;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,17 +23,11 @@ import java.util.List;
 public class TagController {
 
     @Autowired
-    private TagService tagService;
-    @Autowired
-    private ArticleService articleService;
-    @Autowired
-    private SplitterHelper splitterHelper;
-    @Autowired
-    private StringHelper stringHelper;
+    private TagManage tagManage;
 
     @RequestMapping(value = "/all", method = RequestMethod.GET)
     public List<TagRs> all(HttpServletRequest request) {
-        List<Tag> tagList = tagService.listAll();
+        List<Tag> tagList = tagManage.listAll();
         return assembleTagRs(tagList);
     }
 
@@ -50,21 +36,16 @@ public class TagController {
         if (null == id) {
             throw new AppException(ErrorCode.PARAM_ERROR, "参数错误,删除失败");
         }
-        Tag tag = tagService.findById(id);
-        if (tag == null) {
-            throw new AppException(ErrorCode.PARAM_ERROR, "标签不存在,删除失败");
+        tagManage.deleteTag(id);
+        return true;
+    }
+
+    @RequestMapping(value = "/update", method = RequestMethod.PUT)
+    public Boolean update(HttpServletRequest request, @RequestBody Tag tag) {
+        if (null == tag || null == tag.getId()) {
+            throw new AppException(ErrorCode.PARAM_ERROR, "参数错误,更新失败");
         }
-        String articleIds = tag.getArticleIds();
-        List<String> idList = splitterHelper.splitToStringList(articleIds, AppConstants.COMMON_SPLIT);
-        List<Article> articleList = articleService.listByArticleIdList(idList);
-        for (Article article : articleList) {
-            String tags = article.getTags();
-            if (Strings.isNotEmpty(tags)) {
-                tags = stringHelper.wipeSpecifyStr(tags, String.valueOf(id));
-                article.setTags(tags);
-            }
-        }
-        articleService.batchUpdate(articleList);
+        tagManage.updateTag(tag);
         return true;
     }
 

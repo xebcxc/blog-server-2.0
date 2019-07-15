@@ -15,10 +15,10 @@ import pro.meisen.boot.domain.Article;
 import pro.meisen.boot.domain.ErrorCode;
 import pro.meisen.boot.domain.Tag;
 import pro.meisen.boot.helper.SplitterHelper;
-import pro.meisen.boot.helper.StringHelper;
 import pro.meisen.boot.uc.BlogManage;
 import pro.meisen.boot.web.req.BlogSearchRequest;
 import pro.meisen.boot.web.req.PageRequest;
+import pro.meisen.boot.web.res.AchieveBlogRs;
 import pro.meisen.boot.web.res.BlogRs;
 import pro.meisen.boot.web.res.ResultPageData;
 
@@ -42,8 +42,6 @@ public class BlogController {
     @Autowired
     private SplitterHelper splitterHelper;
     @Autowired
-    private StringHelper stringHelper;
-    @Autowired
     private TagService tagService;
     @Autowired
     private BlogManage blogManage;
@@ -58,7 +56,7 @@ public class BlogController {
         search.setPublish(1);
         search.setPageNum(pageNum);
         search.setPageSize(pageSize);
-        Page<Article> articlePage = articleService.listArticleWithPage(search);
+        Page<Article> articlePage = blogManage.listArticleWithPage(search);
         List<BlogRs> blogRsList = assembleBlogRs(articlePage.getResult());
         return new ResultPageData<>(blogRsList, articlePage.getTotal(), new PageRequest(pageNum, pageSize));
     }
@@ -68,26 +66,19 @@ public class BlogController {
         if (Strings.isEmpty(id)) {
             throw new AppException(ErrorCode.PARAM_ERROR, "参数为空, 请确认输入");
         }
-        Article article = articleService.findByArticleId(id);
-        if (null == article) {
-            throw new AppException(ErrorCode.PARAM_ERROR, "文章不存在,请确认参数");
-        }
+        Article article = blogManage.getDetailByArticleId(id);
         return assembleBlogRs(article);
     }
 
     @RequestMapping(value = "/tag", method = RequestMethod.GET)
-    public List<BlogRs> tagArticle(HttpServletRequest request, @RequestParam("name") String tagName) {
+    public List<BlogRs> tagArticle(HttpServletRequest request, @RequestParam("tagName") String tagName) {
         if (Strings.isEmpty(tagName)) {
             throw new AppException(ErrorCode.PARAM_ERROR, "参数为空, 请确认输入");
         }
-        Tag tag = tagService.getByTagName(tagName);
-        List<Article> articleList = new ArrayList<>();
-        if (tag != null && Strings.isNotEmpty(tag.getArticleIds())) {
-            List<Long> idList = splitterHelper.splitToLongList(tag.getArticleIds(), AppConstants.COMMON_SPLIT);
-            articleList = articleService.listByIds(idList);
-        }
+        List<Article> articleList = blogManage.listByTagName(tagName);
         return assembleBlogRs(articleList);
     }
+
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public Boolean addArticle(HttpServletRequest request, @RequestBody Article article) {
@@ -105,14 +96,33 @@ public class BlogController {
         if (null == id) {
             throw new AppException(ErrorCode.PARAM_ERROR, "文章id为空,请刷新后重试");
         }
-        Article article = articleService.findById(id);
-        if (article == null) {
-            throw new AppException(ErrorCode.PARAM_ERROR, "文章不存在,请刷新后重试");
-        }
-
         // 删除文章
-        blogManage.deleteArticle(article);
+        blogManage.deleteArticleById(id);
         return true;
+    }
+
+    @RequestMapping(value = "/achieve", method = RequestMethod.GET)
+    public Map<String, List<AchieveBlogRs>> achieve(HttpServletRequest request) {
+        List<Article> articleList = articleService.listAllArticle();
+        Map<String, List<AchieveBlogRs>> achieveBlogRsMap = new HashMap<>();
+        Calendar calendar = Calendar.getInstance();
+        for (Article article : articleList) {
+            Date createTime = article.getCreateTime();
+            calendar.setTime(createTime);
+            String year = String.valueOf(calendar.get(Calendar.YEAR));
+            AchieveBlogRs rs = new AchieveBlogRs();
+            rs.setArticleId(article.getArticleId());
+            rs.setBlogDate(createTime);
+            rs.setTitle(article.getTitle());
+            List<AchieveBlogRs> rsList = achieveBlogRsMap.get(year);
+            if (CollectionUtils.isEmpty(rsList)) {
+                achieveBlogRsMap.put(year, Collections.singletonList(rs));
+            } else {
+                rsList.add(rs);
+                achieveBlogRsMap.put(year, rsList);
+            }
+        }
+        return achieveBlogRsMap;
     }
 
     /**

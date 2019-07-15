@@ -1,12 +1,23 @@
 package pro.meisen.boot.uc;
 
+import com.github.pagehelper.Page;
 import pro.meisen.boot.domain.Article;
+import pro.meisen.boot.web.req.BlogSearchRequest;
+
+import java.util.List;
 
 /**
  * @author meisen
  * 2019-05-23
  */
 public interface BlogManage {
+
+    Page<Article> listArticleWithPage(BlogSearchRequest request);
+
+    Article getDetailByArticleId(String articleId);
+
+    List<Article> listByTagName(String tagName);
+
     /**
      * 添加文章
      * @param article 新文章
@@ -15,8 +26,8 @@ public interface BlogManage {
 
     /**
      * 删除文章
-     * @param article 旧文章
+     * @param id 文章id
      */
-    void deleteArticle(Article article);
+    void deleteArticleById(Long id);
 
 }

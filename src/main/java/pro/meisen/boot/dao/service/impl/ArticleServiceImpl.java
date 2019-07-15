@@ -6,6 +6,7 @@ import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import pro.meisen.boot.dao.service.basic.BasicServiceImpl;
 import pro.meisen.boot.domain.Article;
 import pro.meisen.boot.dao.mapper.ArticleMapper;
 import pro.meisen.boot.dao.mapper.BasicMapper;

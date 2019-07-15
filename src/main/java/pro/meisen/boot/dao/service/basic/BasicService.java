@@ -1,4 +1,4 @@
-package pro.meisen.boot.dao.service;
+package pro.meisen.boot.dao.service.basic;
 
 import pro.meisen.boot.domain.CommonDomain;
 

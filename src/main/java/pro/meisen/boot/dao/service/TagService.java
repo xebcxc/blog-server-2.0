@@ -1,5 +1,6 @@
 package pro.meisen.boot.dao.service;
 
+import pro.meisen.boot.dao.service.basic.BasicService;
 import pro.meisen.boot.domain.Tag;
 
 import java.util.List;

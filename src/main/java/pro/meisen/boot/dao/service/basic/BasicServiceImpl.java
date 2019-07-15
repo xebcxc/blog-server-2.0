@@ -1,8 +1,7 @@
-package pro.meisen.boot.dao.service.impl;
+package pro.meisen.boot.dao.service.basic;
 
 import pro.meisen.boot.domain.CommonDomain;
 import pro.meisen.boot.dao.mapper.BasicMapper;
-import pro.meisen.boot.dao.service.BasicService;
 
 import java.util.Date;
 

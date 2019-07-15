@@ -1,11 +1,9 @@
 package pro.meisen.boot.dao.service;
 
 import com.github.pagehelper.Page;
-import com.github.pagehelper.PageRowBounds;
-import org.apache.ibatis.session.RowBounds;
+import pro.meisen.boot.dao.service.basic.BasicService;
 import pro.meisen.boot.domain.Article;
 import pro.meisen.boot.web.req.BlogSearchRequest;
-import pro.meisen.boot.web.req.PageRequest;
 
 import java.util.List;
 
