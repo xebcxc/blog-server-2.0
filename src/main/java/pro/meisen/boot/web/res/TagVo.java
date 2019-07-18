@@ -4,7 +4,7 @@ package pro.meisen.boot.web.res;
  * @author meisen
  * 2019-07-14
  */
-public class TagRs {
+public class TagVo {
 
     private Long id;
 

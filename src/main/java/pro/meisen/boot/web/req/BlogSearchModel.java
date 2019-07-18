@@ -4,7 +4,7 @@ package pro.meisen.boot.web.req;
  * @author meisen
  * 2019-07-13
  */
-public class BlogSearchRequest extends PageRequest {
+public class BlogSearchModel extends PageModel {
 
     private String id;
 

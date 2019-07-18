@@ -2,7 +2,7 @@ package pro.meisen.boot.uc;
 
 import com.github.pagehelper.Page;
 import pro.meisen.boot.domain.Article;
-import pro.meisen.boot.web.req.BlogSearchRequest;
+import pro.meisen.boot.web.req.BlogSearchModel;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import java.util.List;
  */
 public interface BlogManage {
 
-    Page<Article> listArticleWithPage(BlogSearchRequest request);
+    Page<Article> listArticleWithPage(BlogSearchModel request);
 
     Article getDetailByArticleId(String articleId);
 

@@ -11,7 +11,7 @@ import pro.meisen.boot.domain.Article;
 import pro.meisen.boot.dao.mapper.ArticleMapper;
 import pro.meisen.boot.dao.mapper.BasicMapper;
 import pro.meisen.boot.dao.service.ArticleService;
-import pro.meisen.boot.web.req.BlogSearchRequest;
+import pro.meisen.boot.web.req.BlogSearchModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +46,7 @@ public class ArticleServiceImpl extends BasicServiceImpl<Article> implements Art
     }
 
     @Override
-    public Page<Article> listArticleWithPage(BlogSearchRequest searchRequest) {
+    public Page<Article> listArticleWithPage(BlogSearchModel searchRequest) {
         if (Strings.isEmpty(searchRequest.getOrderBy())) {
             searchRequest.setOrderBy("modify_time desc");
         }

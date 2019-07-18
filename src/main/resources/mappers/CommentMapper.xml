@@ -1,0 +1,78 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="pro.meisen.boot.dao.mapper.CommentMapper">
+    <sql id="condition">
+        <where>
+
+        </where>
+    </sql>
+
+    <sql id="selectAllField">
+        select id,parent_id,user_id,article_id,order,is_delete,comment_user,comment_email,comment_github,
+        content,is_show,create_time,modify_time from comment
+    </sql>
+z
+    <select id="selectWithPage" parameterType="Map" resultType="Comment">
+        <include refid="selectAllField"/>
+        <include refid="condition"/>
+        <include refid="com.dustpan.common.dao.paged"/>
+    </select>
+
+    <select id="selectByCondition" parameterType="Map" resultType="Comment">
+        <include refid="selectAllField"/>
+        <include refid="condition"/>
+        <include refid="com.dustpan.common.dao.orderby"/>
+    </select>
+
+    <select id="selectByPrimaryKey" parameterType="Long" resultType="Comment">
+        <include refid="selectAllField"/>
+        where id=#{key}
+    </select>
+
+    <select id="selectOne" parameterType="Map" resultType="Comment">
+        <include refid="selectAllField"/>
+        <include refid="condition"/>
+        limit 1
+    </select>
+
+    <select id="selectCount" parameterType="Map" resultType="long">
+        select count(*) from comment
+        <include refid="condition"/>
+    </select>
+
+    <insert id="save" keyProperty="id" parameterType="Comment">
+        insert into comment
+        (parent_id,user_id,article_id,order,is_delete,comment_user,comment_email,comment_github,content,
+        is_show,create_time,modify_time) 
+        VALUES
+        (#{parentId},#{userId},#{articleId},#{order},#{isDelete},#{commentUser},#{commentEmail},#{commentGithub},
+        #{content},#{isShow},#{createTime},#{modifyTime})
+    </insert>
+
+    <update id="updateByPrimaryKey" parameterType="Comment">
+        update comment set 
+        parent_id=#{parentId},
+        user_id=#{userId},
+        article_id=#{articleId},
+        order=#{order},
+        is_delete=#{isDelete},
+        comment_user=#{commentUser},
+        comment_email=#{commentEmail},
+        comment_github=#{commentGithub},
+        content=#{content},
+        is_show=#{isShow},
+        modify_time=#{modifyTime}
+        where id=#{id}
+    </update>
+
+    <delete id="deleteByPrimaryKey" parameterType="Long">
+        delete from comment
+        where id = #{key}
+    </delete>
+
+    <delete id="deleteByCondition" parameterType="Map">
+        delete from comment
+        <include refid="condition"/>
+    </delete>
+</mapper>

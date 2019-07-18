@@ -3,7 +3,7 @@ package pro.meisen.boot.dao.service;
 import com.github.pagehelper.Page;
 import pro.meisen.boot.dao.service.basic.BasicService;
 import pro.meisen.boot.domain.Article;
-import pro.meisen.boot.web.req.BlogSearchRequest;
+import pro.meisen.boot.web.req.BlogSearchModel;
 
 import java.util.List;
 
@@ -16,7 +16,7 @@ public interface ArticleService extends BasicService<Article> {
 
     List<Article> listByCondition(Article article);
 
-    Page<Article> listArticleWithPage(BlogSearchRequest searchRequest);
+    Page<Article> listArticleWithPage(BlogSearchModel searchRequest);
 
     /**
      * 通过id查询所有的文章, 这里就不分页了

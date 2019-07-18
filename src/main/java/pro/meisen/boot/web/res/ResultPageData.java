@@ -1,6 +1,6 @@
 package pro.meisen.boot.web.res;
 
-import pro.meisen.boot.web.req.PageRequest;
+import pro.meisen.boot.web.req.PageModel;
 
 import java.util.List;
 
@@ -14,12 +14,12 @@ public class ResultPageData<T> {
 
     private Long count;
 
-    private PageRequest pageRequest;
+    private PageModel pageModel;
 
-    public ResultPageData(List<T> data, Long count, PageRequest pageRequest) {
+    public ResultPageData(List<T> data, Long count, PageModel pageModel) {
         this.data = data;
         this.count = count;
-        this.pageRequest = pageRequest;
+        this.pageModel = pageModel;
     }
 
     public List<T> getData() {
@@ -38,11 +38,11 @@ public class ResultPageData<T> {
         this.count = count;
     }
 
-    public PageRequest getPageRequest() {
-        return pageRequest;
+    public PageModel getPageModel() {
+        return pageModel;
     }
 
-    public void setPageRequest(PageRequest pageRequest) {
-        this.pageRequest = pageRequest;
+    public void setPageModel(PageModel pageModel) {
+        this.pageModel = pageModel;
     }
 }

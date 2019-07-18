@@ -1,5 +1,7 @@
 package pro.meisen.boot.domain;
 
+import pro.meisen.boot.domain.common.CommonDomain;
+
 import java.io.Serializable;
 
 /**
@@ -18,6 +20,8 @@ public class Article extends CommonDomain implements Serializable {
     private String title;
     // 内容
     private String content;
+    // 主题
+    private String topic;
     // 简介
     private String introduce;
     // 标签  多个标签通过,分割
@@ -28,6 +32,8 @@ public class Article extends CommonDomain implements Serializable {
     private Integer compliment;
     // 是否发布
     private Boolean publish;
+    // 是否删除
+    private Boolean isDelete;
 
 
     public String getThumb() {
@@ -100,5 +106,21 @@ public class Article extends CommonDomain implements Serializable {
 
     public void setArticleId(String articleId) {
         this.articleId = articleId;
+    }
+
+    public String getTopic() {
+        return topic;
+    }
+
+    public void setTopic(String topic) {
+        this.topic = topic;
+    }
+
+    public Boolean getDelete() {
+        return isDelete;
+    }
+
+    public void setDelete(Boolean delete) {
+        isDelete = delete;
     }
 }

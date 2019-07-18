@@ -2,9 +2,7 @@ package pro.meisen.boot.dao.mapper;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
-import pro.meisen.boot.domain.Article;
 import pro.meisen.boot.domain.Tag;
-import pro.meisen.boot.web.req.BlogSearchRequest;
 
 import java.util.List;
 

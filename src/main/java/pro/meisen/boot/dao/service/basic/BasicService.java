@@ -1,10 +1,9 @@
 package pro.meisen.boot.dao.service.basic;
 
-import pro.meisen.boot.domain.CommonDomain;
+import pro.meisen.boot.domain.common.CommonDomain;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * @author meisen

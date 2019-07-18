@@ -8,7 +8,7 @@ import java.util.Map;
  * @author meisen
  * 2019-07-15
  */
-public class AchieveBlogRs {
+public class AchieveBlogVo {
 
     private Date blogDate;
 

@@ -12,14 +12,14 @@ import pro.meisen.boot.core.exception.AppException;
 import pro.meisen.boot.dao.service.ArticleService;
 import pro.meisen.boot.dao.service.TagService;
 import pro.meisen.boot.domain.Article;
-import pro.meisen.boot.domain.ErrorCode;
+import pro.meisen.boot.domain.common.ErrorCode;
 import pro.meisen.boot.domain.Tag;
 import pro.meisen.boot.helper.SplitterHelper;
 import pro.meisen.boot.uc.BlogManage;
-import pro.meisen.boot.web.req.BlogSearchRequest;
-import pro.meisen.boot.web.req.PageRequest;
-import pro.meisen.boot.web.res.AchieveBlogRs;
-import pro.meisen.boot.web.res.BlogRs;
+import pro.meisen.boot.web.req.BlogSearchModel;
+import pro.meisen.boot.web.req.PageModel;
+import pro.meisen.boot.web.res.AchieveBlogVo;
+import pro.meisen.boot.web.res.BlogVo;
 import pro.meisen.boot.web.res.ResultPageData;
 
 import javax.servlet.http.HttpServletRequest;
@@ -47,22 +47,22 @@ public class BlogController {
     private BlogManage blogManage;
 
     @RequestMapping(value = "/all", method = RequestMethod.GET)
-    public ResultPageData<BlogRs> all(HttpServletRequest request, Integer pageNum, Integer pageSize) {
+    public ResultPageData<BlogVo> all(HttpServletRequest request, Integer pageNum, Integer pageSize) {
         if (null == pageNum || pageSize == null) {
             pageNum = 0;
             pageSize = 6;
         }
-        BlogSearchRequest search = new BlogSearchRequest();
+        BlogSearchModel search = new BlogSearchModel();
         search.setPublish(1);
         search.setPageNum(pageNum);
         search.setPageSize(pageSize);
         Page<Article> articlePage = blogManage.listArticleWithPage(search);
-        List<BlogRs> blogRsList = assembleBlogRs(articlePage.getResult());
-        return new ResultPageData<>(blogRsList, articlePage.getTotal(), new PageRequest(pageNum, pageSize));
+        List<BlogVo> blogVoList = assembleBlogRs(articlePage.getResult());
+        return new ResultPageData<>(blogVoList, articlePage.getTotal(), new PageModel(pageNum, pageSize));
     }
 
     @RequestMapping(value = "/detail/{id}", method = RequestMethod.GET)
-    public BlogRs detail(HttpServletRequest request, @PathVariable("id") String id) {
+    public BlogVo detail(HttpServletRequest request, @PathVariable("id") String id) {
         if (Strings.isEmpty(id)) {
             throw new AppException(ErrorCode.PARAM_ERROR, "参数为空, 请确认输入");
         }
@@ -71,7 +71,7 @@ public class BlogController {
     }
 
     @RequestMapping(value = "/tag", method = RequestMethod.GET)
-    public List<BlogRs> tagArticle(HttpServletRequest request, @RequestParam("tagName") String tagName) {
+    public List<BlogVo> tagArticle(HttpServletRequest request, @RequestParam("tagName") String tagName) {
         if (Strings.isEmpty(tagName)) {
             throw new AppException(ErrorCode.PARAM_ERROR, "参数为空, 请确认输入");
         }
@@ -101,20 +101,29 @@ public class BlogController {
         return true;
     }
 
+    // 归档文章
     @RequestMapping(value = "/achieve", method = RequestMethod.GET)
-    public Map<String, List<AchieveBlogRs>> achieve(HttpServletRequest request) {
+    public Map<String, List<AchieveBlogVo>> achieve(HttpServletRequest request) {
+        return achieveBlog();
+    }
+
+    /**
+     * 归档文章
+     * @return 文章
+     */
+    private Map<String, List<AchieveBlogVo>> achieveBlog() {
         List<Article> articleList = articleService.listAllArticle();
-        Map<String, List<AchieveBlogRs>> achieveBlogRsMap = new HashMap<>();
+        Map<String, List<AchieveBlogVo>> achieveBlogRsMap = new HashMap<>();
         Calendar calendar = Calendar.getInstance();
         for (Article article : articleList) {
             Date createTime = article.getCreateTime();
             calendar.setTime(createTime);
             String year = String.valueOf(calendar.get(Calendar.YEAR));
-            AchieveBlogRs rs = new AchieveBlogRs();
+            AchieveBlogVo rs = new AchieveBlogVo();
             rs.setArticleId(article.getArticleId());
             rs.setBlogDate(createTime);
             rs.setTitle(article.getTitle());
-            List<AchieveBlogRs> rsList = achieveBlogRsMap.get(year);
+            List<AchieveBlogVo> rsList = achieveBlogRsMap.get(year);
             if (CollectionUtils.isEmpty(rsList)) {
                 achieveBlogRsMap.put(year, Collections.singletonList(rs));
             } else {
@@ -146,27 +155,28 @@ public class BlogController {
      * @param articleList 数据库ArticleList
      * @return 返回到页面上的BlogRs
      */
-    private List<BlogRs> assembleBlogRs(List<Article> articleList) {
+    private List<BlogVo> assembleBlogRs(List<Article> articleList) {
         if (CollectionUtils.isEmpty(articleList)) {
             return new ArrayList<>();
         }
-        List<BlogRs> rsList = new ArrayList<>();
+        List<BlogVo> rsList = new ArrayList<>();
         for (Article article : articleList) {
             if (article == null) {
                 continue;
             }
-            BlogRs rs = assembleBlogRs(article);
+            BlogVo rs = assembleBlogRs(article);
             rsList.add(rs);
         }
         return rsList;
     }
 
-    private BlogRs assembleBlogRs(Article article) {
-        BlogRs rs = new BlogRs();
+    private BlogVo assembleBlogRs(Article article) {
+        BlogVo rs = new BlogVo();
         rs.setArticleId(article.getArticleId());
         rs.setThumb(article.getThumb());
         rs.setTitle(article.getTitle());
         rs.setContent(article.getContent());
+        rs.setTopic(article.getTopic());
         rs.setIntroduce(article.getIntroduce());
         rs.setVisit(article.getVisit());
         rs.setCompliment(article.getCompliment());

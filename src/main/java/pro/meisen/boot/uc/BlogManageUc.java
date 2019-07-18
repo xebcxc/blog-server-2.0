@@ -11,11 +11,11 @@ import pro.meisen.boot.core.exception.AppException;
 import pro.meisen.boot.dao.service.ArticleService;
 import pro.meisen.boot.dao.service.TagService;
 import pro.meisen.boot.domain.Article;
-import pro.meisen.boot.domain.ErrorCode;
+import pro.meisen.boot.domain.common.ErrorCode;
 import pro.meisen.boot.domain.Tag;
 import pro.meisen.boot.helper.SplitterHelper;
 import pro.meisen.boot.helper.StringHelper;
-import pro.meisen.boot.web.req.BlogSearchRequest;
+import pro.meisen.boot.web.req.BlogSearchModel;
 
 import javax.transaction.Transactional;
 import java.util.*;
@@ -40,7 +40,7 @@ public class BlogManageUc implements BlogManage{
     private StringHelper stringHelper;
 
     @Override
-    public Page<Article> listArticleWithPage(BlogSearchRequest request) {
+    public Page<Article> listArticleWithPage(BlogSearchModel request) {
         return articleService.listArticleWithPage(request);
     }
 

@@ -1,4 +1,4 @@
-package pro.meisen.boot.domain;
+package pro.meisen.boot.domain.common;
 
 import java.util.Date;
 

@@ -4,7 +4,7 @@ package pro.meisen.boot.web.req;
  * @author meisen
  * 2019-07-13
  */
-public class PageRequest {
+public class PageModel {
 
     private Integer pageNum;
 
@@ -12,10 +12,10 @@ public class PageRequest {
 
     private String orderBy;
 
-    public PageRequest() {
+    public PageModel() {
     }
 
-    public PageRequest(Integer pageNum, Integer pageSize) {
+    public PageModel(Integer pageNum, Integer pageSize) {
         this.pageNum = pageNum;
         this.pageSize = pageSize;
     }

@@ -1,10 +1,12 @@
 package pro.meisen.boot.domain;
 
+import pro.meisen.boot.domain.common.CommonDomain;
+
 /**
  * @author meisen
  * 2019-07-13
  */
-public class Tag extends CommonDomain{
+public class Tag extends CommonDomain {
 
     // 标签的名字
     private String tagName;

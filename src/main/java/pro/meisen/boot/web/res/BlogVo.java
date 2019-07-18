@@ -1,7 +1,5 @@
 package pro.meisen.boot.web.res;
 
-import pro.meisen.boot.domain.CommonDomain;
-
 import java.util.Date;
 import java.util.List;
 
@@ -9,12 +7,14 @@ import java.util.List;
  * @author meisen
  * 2019-05-23
  */
-public class BlogRs {
+public class BlogVo {
     private String articleId;
     // 图片
     private String thumb;
     // 标题
     private String title;
+    // 主题
+    private String topic;
     // 内容
     private String content;
     // 简介
@@ -108,5 +108,13 @@ public class BlogRs {
 
     public void setModifyTime(Date modifyTime) {
         this.modifyTime = modifyTime;
+    }
+
+    public String getTopic() {
+        return topic;
+    }
+
+    public void setTopic(String topic) {
+        this.topic = topic;
     }
 }

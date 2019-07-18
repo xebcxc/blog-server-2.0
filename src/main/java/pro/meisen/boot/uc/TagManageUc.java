@@ -4,12 +4,13 @@ import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import pro.meisen.boot.core.constants.AppConstants;
 import pro.meisen.boot.core.exception.AppException;
 import pro.meisen.boot.dao.service.ArticleService;
 import pro.meisen.boot.dao.service.TagService;
 import pro.meisen.boot.domain.Article;
-import pro.meisen.boot.domain.ErrorCode;
+import pro.meisen.boot.domain.common.ErrorCode;
 import pro.meisen.boot.domain.Tag;
 import pro.meisen.boot.helper.SplitterHelper;
 import pro.meisen.boot.helper.StringHelper;
@@ -21,6 +22,7 @@ import java.util.List;
  * @author meisen
  * 2019-07-14
  */
+@Component
 public class TagManageUc implements TagManage {
     private static final Logger LOGGER = LoggerFactory.getLogger(TagManageUc.class);
 

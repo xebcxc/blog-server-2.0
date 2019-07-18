@@ -4,11 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import pro.meisen.boot.core.exception.AppException;
-import pro.meisen.boot.dao.service.TagService;
-import pro.meisen.boot.domain.ErrorCode;
+import pro.meisen.boot.domain.common.ErrorCode;
 import pro.meisen.boot.domain.Tag;
 import pro.meisen.boot.uc.TagManage;
-import pro.meisen.boot.web.res.TagRs;
+import pro.meisen.boot.web.res.TagVo;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -19,14 +18,14 @@ import java.util.List;
  * 2019-07-14
  */
 @RestController
-@RequestMapping("/tag")
+@RequestMapping("/api/tag")
 public class TagController {
 
     @Autowired
     private TagManage tagManage;
 
     @RequestMapping(value = "/all", method = RequestMethod.GET)
-    public List<TagRs> all(HttpServletRequest request) {
+    public List<TagVo> all(HttpServletRequest request) {
         List<Tag> tagList = tagManage.listAll();
         return assembleTagRs(tagList);
     }
@@ -49,18 +48,18 @@ public class TagController {
         return true;
     }
 
-    private List<TagRs> assembleTagRs(List<Tag> tagList) {
+    private List<TagVo> assembleTagRs(List<Tag> tagList) {
         if (CollectionUtils.isEmpty(tagList)) {
             return new ArrayList<>();
         }
-        List<TagRs> tagRsList = new ArrayList<>();
+        List<TagVo> tagVoList = new ArrayList<>();
         for (Tag tag : tagList) {
-            TagRs rs = new TagRs();
+            TagVo rs = new TagVo();
             rs.setId(tag.getId());
             rs.setTagName(tag.getTagName());
-            tagRsList.add(rs);
+            tagVoList.add(rs);
         }
-        return tagRsList;
+        return tagVoList;
     }
 }
 

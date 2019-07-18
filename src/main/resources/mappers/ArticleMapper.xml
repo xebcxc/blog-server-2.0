@@ -3,7 +3,7 @@
 <mapper namespace="pro.meisen.boot.dao.mapper.ArticleMapper">
 
   <sql id="selectAllField">
-    select id, article_id, thumb, title, introduce, content, tags, visit, compliment, publish, `create_time`, modify_time
+    select id, article_id, thumb, title,topic, introduce, content, tags, visit, compliment, publish, `create_time`, modify_time
     from article
   </sql>
 
@@ -12,8 +12,8 @@
   </select>
 
   <insert id="save" parameterType="Article" useGeneratedKeys="true" keyProperty="id">
-    insert into article(article_id, thumb, title, introduce,content, tags, visit, compliment, publish, `create_time`, modify_time)
-    values (#{articleId},#{thumb}, #{title}, #{introduce}, #{content}, #{tags}, #{visit}, #{compliment}, #{publish}, #{createTime}, #{modifyTime})
+    insert into article(article_id, thumb, title,topic, introduce,content, tags, visit, compliment, publish, `create_time`, modify_time)
+    values (#{articleId},#{thumb}, #{title},#{topic}, #{introduce}, #{content}, #{tags}, #{visit}, #{compliment}, #{publish}, #{createTime}, #{modifyTime})
   </insert>
 
   <update id="update" parameterType="Article">
@@ -24,6 +24,9 @@
     </if>
     <if test="title != null">
       , title = #{title}
+    </if>
+    <if test="topic != null">
+      , topic = #{topic}
     </if>
     <if test="tags != null">
       , tags = #{tags}
@@ -74,6 +77,9 @@
       </if>
       <if test="condition.tags != null">
         AND tags = #{condition.tags}
+      </if>
+      <if test="condition.topic != null">
+        AND topic = #{condition.topic}
       </if>
       <if test="condition.visit != null">
         AND visit = #{condition.visit}
@@ -132,11 +138,11 @@
 
   <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
 
-    insert into article(article_id, thumb, title, introduce,content, tags, visit, compliment, publish, `create_time`, modify_time)
+    insert into article(article_id, thumb, title,topic, introduce,content, tags, visit, compliment, publish, `create_time`, modify_time)
     values
     <foreach collection="articleList" item="article" index="index"
              separator=",">
-      (#{article.articleId},#{article.thumb}, #{article.title}, #{article.introduce}, #{article.content}, #{article.tags},
+      (#{article.articleId},#{article.thumb}, #{article.title},#{article.topic}, #{article.introduce}, #{article.content}, #{article.tags},
        #{article.visit}, #{article.compliment}, #{article.publish}, #{article.createTime}, #{article.modifyTime})
     </foreach>
   </insert>
@@ -162,6 +168,11 @@
     <foreach collection="articleList" item="article" index="index"
              separator="," open="(" close=")">
       #{article.tags}
+    </foreach>
+    ,topic=
+    <foreach collection="articleList" item="article" index="index"
+             separator="," open="(" close=")">
+      #{article.topic}
     </foreach>
     ,visit=
     <foreach collection="articleList" item="article" index="index"
@@ -198,24 +209,6 @@
     <foreach collection="articleList" item="article" index="index"
              separator="," open="(" close=")">
       #{article.id}
-    </foreach>
-
-
-    update tag set
-    article_ids =
-    <foreach collection="tagList" item="tag" index="index"
-             separator=",">
-      #{tag.articleIds}
-    </foreach>
-    , modify_time =
-    <foreach collection="tagList" item="tag" index="index"
-             separator=",">
-      #{tag.modifyTime}
-    </foreach>
-    where id in
-    <foreach collection="tagList" item="tag" index="index"
-             separator="," open="(" close=")">
-      #{tag.id}
     </foreach>
   </update>
   
