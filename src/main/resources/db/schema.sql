@@ -26,22 +26,22 @@ CREATE TABLE `tag` (
   `create_time` date ,
   `modify_time` date
 );
-
-CREATE TABLE comment(
-id bigint(20) NOT NULL AUTO_INCREMENT,
-parent_id bigint(20),
-user_id varchar(128),
-article_id varchar(128),
-order int(20),
-comment_user varchar(128),
-comment_email varchar(128),
-comment_github varchar(128),
-content varchar(128),
-is_delete tinyint(20),
-is_show tinyint(20),
-create_time datetime NOT NULL,
-modify_time datetime NOT NULL,
-PRIMARY KEY (id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+--
+-- CREATE TABLE comment(
+-- id bigint(20) NOT NULL AUTO_INCREMENT,
+-- parent_id bigint(20),
+-- user_id varchar(128),
+-- article_id varchar(128),
+-- order int(20),
+-- comment_user varchar(128),
+-- comment_email varchar(128),
+-- comment_github varchar(128),
+-- content varchar(128),
+-- is_delete tinyint(20),
+-- is_show tinyint(20),
+-- create_time datetime NOT NULL,
+-- modify_time datetime NOT NULL,
+-- PRIMARY KEY (id)
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 

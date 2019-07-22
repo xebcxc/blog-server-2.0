@@ -12,22 +12,15 @@
         select id,parent_id,user_id,article_id,order,is_delete,comment_user,comment_email,comment_github,
         content,is_show,create_time,modify_time from comment
     </sql>
-z
-    <select id="selectWithPage" parameterType="Map" resultType="Comment">
+
+    <select id="listByCondition" parameterType="Map" resultType="Comment">
         <include refid="selectAllField"/>
         <include refid="condition"/>
-        <include refid="com.dustpan.common.dao.paged"/>
     </select>
 
-    <select id="selectByCondition" parameterType="Map" resultType="Comment">
+    <select id="findById" parameterType="Long" resultType="Comment">
         <include refid="selectAllField"/>
-        <include refid="condition"/>
-        <include refid="com.dustpan.common.dao.orderby"/>
-    </select>
-
-    <select id="selectByPrimaryKey" parameterType="Long" resultType="Comment">
-        <include refid="selectAllField"/>
-        where id=#{key}
+        where id=#{id}
     </select>
 
     <select id="selectOne" parameterType="Map" resultType="Comment">
@@ -41,7 +34,7 @@ z
         <include refid="condition"/>
     </select>
 
-    <insert id="save" keyProperty="id" parameterType="Comment">
+    <insert id="save" parameterType="Comment" useGeneratedKeys="true" keyProperty="id">
         insert into comment
         (parent_id,user_id,article_id,order,is_delete,comment_user,comment_email,comment_github,content,
         is_show,create_time,modify_time) 
@@ -50,12 +43,12 @@ z
         #{content},#{isShow},#{createTime},#{modifyTime})
     </insert>
 
-    <update id="updateByPrimaryKey" parameterType="Comment">
+    <update id="update" parameterType="Comment">
         update comment set 
         parent_id=#{parentId},
         user_id=#{userId},
         article_id=#{articleId},
-        order=#{order},
+        `order`=#{order},
         is_delete=#{isDelete},
         comment_user=#{commentUser},
         comment_email=#{commentEmail},
@@ -66,7 +59,7 @@ z
         where id=#{id}
     </update>
 
-    <delete id="deleteByPrimaryKey" parameterType="Long">
+    <delete id="deleteById" parameterType="Long">
         delete from comment
         where id = #{key}
     </delete>

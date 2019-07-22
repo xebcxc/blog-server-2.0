@@ -2,10 +2,26 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="pro.meisen.boot.dao.mapper.ArticleMapper">
 
+  <sql id="condition">
+    <where>
+
+    </where>
+  </sql>
   <sql id="selectAllField">
     select id, article_id, thumb, title,topic, introduce, content, tags, visit, compliment, publish, `create_time`, modify_time
     from article
   </sql>
+
+  <select id="selectOne" parameterType="Map" resultType="Comment">
+    <include refid="selectAllField"/>
+    <include refid="condition"/>
+    limit 1
+  </select>
+
+  <select id="selectCount" parameterType="Map" resultType="long">
+    select count(*) from article
+    <include refid="condition"/>
+  </select>
 
   <select id="listAllArticles" resultType="Article">
     <include refid="selectAllField"/>

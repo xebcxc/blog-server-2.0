@@ -104,34 +104,30 @@ public class BlogController {
     // 归档文章
     @RequestMapping(value = "/achieve", method = RequestMethod.GET)
     public Map<String, List<AchieveBlogVo>> achieve(HttpServletRequest request) {
-        return achieveBlog();
+        List<Article> articleList = articleService.listAllArticle();
+        return achieveBlog(articleList);
     }
 
     /**
      * 归档文章
      * @return 文章
      */
-    private Map<String, List<AchieveBlogVo>> achieveBlog() {
-        List<Article> articleList = articleService.listAllArticle();
-        Map<String, List<AchieveBlogVo>> achieveBlogRsMap = new HashMap<>();
-        Calendar calendar = Calendar.getInstance();
-        for (Article article : articleList) {
-            Date createTime = article.getCreateTime();
-            calendar.setTime(createTime);
-            String year = String.valueOf(calendar.get(Calendar.YEAR));
-            AchieveBlogVo rs = new AchieveBlogVo();
-            rs.setArticleId(article.getArticleId());
-            rs.setBlogDate(createTime);
-            rs.setTitle(article.getTitle());
-            List<AchieveBlogVo> rsList = achieveBlogRsMap.get(year);
-            if (CollectionUtils.isEmpty(rsList)) {
-                achieveBlogRsMap.put(year, Collections.singletonList(rs));
-            } else {
-                rsList.add(rs);
-                achieveBlogRsMap.put(year, rsList);
+    private Map<String, List<AchieveBlogVo>> achieveBlog(List<Article> articleList) {
+        Map<String, List<Article>> blogMap = blogManage.achieveBlog(articleList);
+        Map<String, List<AchieveBlogVo>> blogVoMap = new HashMap<>();
+        for (Map.Entry<String, List<Article>> map : blogMap.entrySet()) {
+            String key = map.getKey();
+            List<AchieveBlogVo> blogVoList = new ArrayList<>();
+            for (Article article : map.getValue()) {
+                AchieveBlogVo blogVo = new AchieveBlogVo();
+                blogVo.setArticleId(article.getArticleId());
+                blogVo.setBlogDate(article.getCreateTime());
+                blogVo.setTitle(article.getTitle());
+                blogVoList.add(blogVo);
             }
+            blogVoMap.put(key, blogVoList);
         }
-        return achieveBlogRsMap;
+        return blogVoMap;
     }
 
     /**

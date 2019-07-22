@@ -5,6 +5,7 @@ import pro.meisen.boot.domain.Article;
 import pro.meisen.boot.web.req.BlogSearchModel;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author meisen
@@ -29,5 +30,7 @@ public interface BlogManage {
      * @param id 文章id
      */
     void deleteArticleById(Long id);
+
+    Map<String, List<Article>> achieveBlog(List<Article> articleList);
 
 }

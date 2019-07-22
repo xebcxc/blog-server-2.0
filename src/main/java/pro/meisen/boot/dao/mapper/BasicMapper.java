@@ -14,4 +14,8 @@ public interface BasicMapper<K, T> {
 
     int save(T t);
 
+    Long selectCount(T condition);
+
+    T selectOne(T condition);
+
 }

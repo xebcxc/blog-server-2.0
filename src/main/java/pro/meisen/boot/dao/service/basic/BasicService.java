@@ -19,6 +19,10 @@ public interface BasicService<T extends CommonDomain> {
 
     int save(T t);
 
+    Long selectCount(T condition);
+
+    T selectOne(T condition);
+
     default List<T> notEmptyList(List<T> list) {
         return null == list || list.isEmpty() ? new ArrayList<>() : list;
     }

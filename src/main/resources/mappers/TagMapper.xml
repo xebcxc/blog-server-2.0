@@ -2,13 +2,32 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="pro.meisen.boot.dao.mapper.TagMapper">
 
+  <sql id="condition">
+    <where>
+
+    </where>
+  </sql>
+
   <sql id="selectAllField">
     select id, tag_name, article_ids, `create_time`, modify_time
     from tag
   </sql>
 
+
+
   <select id="listAll" resultType="Tag">
     <include refid="selectAllField"/>
+  </select>
+
+  <select id="selectOne" parameterType="Map" resultType="Comment">
+    <include refid="selectAllField"/>
+    <include refid="condition"/>
+    limit 1
+  </select>
+
+  <select id="selectCount" parameterType="Map" resultType="long">
+    select count(*) from tag
+    <include refid="condition"/>
   </select>
 
   <insert id="save" parameterType="Tag" useGeneratedKeys="true" keyProperty="id">

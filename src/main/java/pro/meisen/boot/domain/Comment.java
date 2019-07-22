@@ -4,6 +4,7 @@ import pro.meisen.boot.domain.common.CommonDomain;
 
 /**
  * 评论
+ * 暂时不用
  * @author meisen
  * 2019-07-17
  */

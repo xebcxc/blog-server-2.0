@@ -49,4 +49,13 @@ public abstract class BasicServiceImpl<T extends CommonDomain> implements BasicS
         return getMapper().save(t);
     }
 
+    @Override
+    public Long selectCount(T condition) {
+        return getMapper().selectCount(condition);
+    }
+
+    @Override
+    public T selectOne(T condition) {
+        return getMapper().selectOne(condition);
+    }
 }

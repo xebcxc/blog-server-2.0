@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 import pro.meisen.boot.core.constants.AppConstants;
 import pro.meisen.boot.core.exception.AppException;
 import pro.meisen.boot.dao.service.ArticleService;
@@ -106,6 +107,27 @@ public class BlogManageUc implements BlogManage{
             LOGGER.error("删除文章失败, article: {}|errorMsg={}", article, e.getMessage());
             throw e;
         }
+    }
+
+    @Override
+    public Map<String, List<Article>> achieveBlog(List<Article> articleList) {
+        Map<String, List<Article>> blogVoMap = new HashMap<>();
+        Calendar calendar = Calendar.getInstance();
+        for (Article article : articleList) {
+            Date createTime = article.getCreateTime();
+            calendar.setTime(createTime);
+            String year = String.valueOf(calendar.get(Calendar.YEAR));
+            List<Article> voList = blogVoMap.get(year);
+            if (CollectionUtils.isEmpty(voList)) {
+                List<Article> articles = new ArrayList<>();
+                articles.add(article);
+                blogVoMap.put(year, articles);
+            } else {
+                voList.add(article);
+                blogVoMap.put(year, voList);
+            }
+        }
+        return blogVoMap;
     }
 
     /**
