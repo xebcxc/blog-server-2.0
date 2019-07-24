@@ -17,6 +17,7 @@ public class AppException extends RuntimeException {
 
     }
     public AppException(String errorCode, String errorMsg) {
+        super();
         this.errorCode = errorCode;
         this.errorMsg = errorMsg;
     }
@@ -35,5 +36,15 @@ public class AppException extends RuntimeException {
 
     public void setErrorCode(String errorCode) {
         this.errorCode = errorCode;
+    }
+
+    @Override
+    public String toString() {
+        return " AppException|errorMsg=" +  errorMsg + "|errorCode" +  errorCode;
+    }
+
+    @Override
+    public String getMessage() {
+        return " AppException|errorCode=" + errorCode + "|errorMsg=" + errorMsg;
     }
 }

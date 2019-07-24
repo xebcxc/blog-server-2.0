@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Configuration scan="true">
+
+    <property name="log-path" value="/opt/applog" />
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder charset="UTF-8">
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36}:%L- %msg%n</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>DEBUG</level>
+        </filter>
+    </appender>
+
+    <appender name="LogFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 把日志文件输出到:项目启动的目录下的log文件夹(无则自动创建)下 -->
+        <file>${log-path}/boot-info.log</file>
+
+        <!-- 把日志文件输出到:name为logFilePositionDir的property标签指定的位置下 -->
+        <!-- <file>${logFilePositionDir}/logFile.log</file> -->
+        <!-- 把日志文件输出到:当前磁盘下的log文件夹(无则自动创建)下 -->
+        <!-- <file>/log/logFile.log</file> -->
+        <rollingPolicy
+                class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- TimeBasedRollingPolicy策略会将过时的日志，另存到指定的文件中(无该文件则创建) -->
+            <!-- 把因为 过时 或 过大  而拆分后的文件也保存到目启动的目录下的log文件夹下  -->
+            <fileNamePattern>
+                ${log-path}/boot-info.%d{yyyy-MM-dd}.%i.log
+            </fileNamePattern>
+            <!-- 设置过时时间(单位:<fileNamePattern>标签中%d里最小的时间单位) -->
+            <!-- 系统会删除(分离出去了的)过时了的日志文件 -->
+            <MaxHistory>
+                2
+            </MaxHistory>
+            <!-- 滚动策略可以嵌套；
+                     这里嵌套了一个SizeAndTimeBasedFNATP策略，
+                        主要目的是: 在每天都会拆分日志的前提下，
+                        当该天的日志大于规定大小时，
+                        也进行拆分并以【%i】进行区分，i从0开始
+            -->
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>5MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <encoder>
+            <!-- 日志输出格式 -->
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36}:%L- %msg%n</pattern>
+            <!-- 日志编码 -->
+            <charset class="java.nio.charset.Charset">UTF-8</charset>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>WARN</level>
+        </filter>
+    </appender>
+
+
+    <appender name="ErrorFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log-path}/boot-error.log</file>
+        <rollingPolicy
+                class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>
+                ${log-path}/boot-error.%d{yyyy-MM-dd}.%i.log
+            </fileNamePattern>
+            <MaxHistory>
+                2
+            </MaxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>5MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <encoder>logger{36}
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %:%L- %msg%n</pattern>
+            <charset class="java.nio.charset.Charset">UTF-8</charset>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+    </appender>
+
+    <!--定义logger, 只有定义了logger并引入appender, appender才会生效-->
+    <logger name="com" level="debug"/>
+<!--    <logger name="com.zaxxer.hikari.HikariConfig" level="INFO"/>-->
+    <logger name="org" level="warn"/>
+    <logger name="io" level="warn"/>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="LogFile"/>
+        <appender-ref ref="ErrorFile"/>
+    </root>
+</Configuration>

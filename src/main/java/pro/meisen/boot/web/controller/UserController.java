@@ -93,7 +93,7 @@ public class UserController {
         String username = userModel.getUsername();
         User user = userService.findByUsername(username);
         if (null != user) {
-            throw new AppException(ErrorCode.APP_ERROR_ACCOUNT_EXIST, "用户名已存在, 请重新输入.");
+            throw new AppException(ErrorCode.APP_ERROR_ACCOUNT_EXIST, "用户名已存在, 请确认输入.");
         }
         // 注册用户
         user = registerUser(userModel);

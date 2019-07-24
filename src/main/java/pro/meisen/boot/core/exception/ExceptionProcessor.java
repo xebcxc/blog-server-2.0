@@ -26,9 +26,10 @@ public class ExceptionProcessor {
             AppException appException = (AppException) e;
             result.setCode(appException.getErrorCode());
             result.setMsg(appException.getErrorMsg());
+            LOGGER.error("AppException.errorCode={}|errorMsg={}", appException.getErrorCode(), appException.getErrorMsg());
             return result;
         }
-        LOGGER.error("未知错误, 错误信息: {}", e.getCause());
+        LOGGER.error("系统错误. msg={}", e.getMessage());
         result.setCode(AppCode.APP_ERROR);
         result.setMsg("未知错误, 请稍后重试.");
         return result;
