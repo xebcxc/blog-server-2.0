@@ -64,7 +64,7 @@ public class BlogController {
     @RequestMapping(value = "/detail/{id}", method = RequestMethod.GET)
     public BlogVo detail(HttpServletRequest request, @PathVariable("id") String id) {
         if (Strings.isEmpty(id)) {
-            throw new AppException(ErrorCode.PARAM_ERROR, "参数为空, 请确认输入");
+            throw new AppException(ErrorCode.APP_ERROR_PARAM_ILLEGAL, "参数为空, 请确认输入");
         }
         Article article = blogManage.getDetailByArticleId(id);
         return assembleBlogRs(article);
@@ -73,7 +73,7 @@ public class BlogController {
     @RequestMapping(value = "/tag", method = RequestMethod.GET)
     public List<BlogVo> tagArticle(HttpServletRequest request, @RequestParam("tagName") String tagName) {
         if (Strings.isEmpty(tagName)) {
-            throw new AppException(ErrorCode.PARAM_ERROR, "参数为空, 请确认输入");
+            throw new AppException(ErrorCode.APP_ERROR_PARAM_ILLEGAL, "参数为空, 请确认输入");
         }
         List<Article> articleList = blogManage.listByTagName(tagName);
         return assembleBlogRs(articleList);
@@ -83,7 +83,7 @@ public class BlogController {
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public Boolean addArticle(HttpServletRequest request, @RequestBody Article article) {
         if (null == article) {
-            throw new AppException(ErrorCode.PARAM_ERROR, "参数为空, 请确认输入");
+            throw new AppException(ErrorCode.APP_ERROR_PARAM_ILLEGAL, "参数为空, 请确认输入");
         }
         // 校验参数
         validateAddArticleParams(article);
@@ -94,7 +94,7 @@ public class BlogController {
     @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
     public Boolean deleteArticle(HttpServletRequest request, @RequestParam("id")Long id) {
         if (null == id) {
-            throw new AppException(ErrorCode.PARAM_ERROR, "文章id为空,请刷新后重试");
+            throw new AppException(ErrorCode.APP_ERROR_PARAM_ILLEGAL, "文章id为空,请刷新后重试");
         }
         // 删除文章
         blogManage.deleteArticleById(id);
@@ -136,13 +136,13 @@ public class BlogController {
      */
     private void validateAddArticleParams(Article article) {
         if (Strings.isEmpty(article.getTitle())) {
-            throw new AppException(ErrorCode.PARAM_ERROR, "文章标题不能为空, 请确认输入");
+            throw new AppException(ErrorCode.APP_ERROR_PARAM_ILLEGAL, "文章标题不能为空, 请确认输入");
         } else if (Strings.isEmpty(article.getIntroduce())) {
-            throw new AppException(ErrorCode.PARAM_ERROR, "文章简介不能为空, 请确认输入");
+            throw new AppException(ErrorCode.APP_ERROR_PARAM_ILLEGAL, "文章简介不能为空, 请确认输入");
         } else if (Strings.isEmpty(article.getContent())) {
-            throw new AppException(ErrorCode.PARAM_ERROR, "文章内容不能为空, 请确认输入");
+            throw new AppException(ErrorCode.APP_ERROR_PARAM_ILLEGAL, "文章内容不能为空, 请确认输入");
         } else if (Strings.isEmpty(article.getThumb())) {
-            throw new AppException(ErrorCode.PARAM_ERROR, "文章图片不能为空, 请确认输入");
+            throw new AppException(ErrorCode.APP_ERROR_PARAM_ILLEGAL, "文章图片不能为空, 请确认输入");
         }
     }
 

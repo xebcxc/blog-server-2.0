@@ -14,7 +14,7 @@ public class User extends CommonDomain {
     // 密码
     private String password;
     // 角色id
-    private String roleId;
+    private Integer roleId;
     // 是否启用
     private Boolean isActive;
 
@@ -35,11 +35,11 @@ public class User extends CommonDomain {
         this.password = password;
     }
 
-    public String getRoleId() {
+    public Integer getRoleId() {
         return roleId;
     }
 
-    public void setRoleId(String roleId) {
+    public void setRoleId(Integer roleId) {
         this.roleId = roleId;
     }
 
@@ -57,5 +57,9 @@ public class User extends CommonDomain {
 
     public void setAccount(String account) {
         this.account = account;
+    }
+
+    public String getCredentialsSalt() {
+        return username;
     }
 }

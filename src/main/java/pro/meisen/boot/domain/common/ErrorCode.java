@@ -6,5 +6,25 @@ package pro.meisen.boot.domain.common;
  */
 public class ErrorCode {
 
-    public static final Integer PARAM_ERROR = 5000;
+    // 参数错误
+    public static final String APP_ERROR_PARAM_ILLEGAL = "50000";
+
+    // 权限错误
+    public static final String APP_ERROR_AUTH_ILLEGAL = "60001";
+
+    // 登陆用户名
+    public static final String APP_ERROR_USERNAME_ILLEGAL = "70001";
+    // 登陆密码
+    public static final String APP_ERROR_PASSWORD_ILLEGAL = "70002";
+    //  用户被冻结
+    public static final String APP_ERROR_ACCOUNT_FREEZED = "70003";
+    // 账户不存在
+    public static final String APP_ERROR_ACCOUNT_NOT_EXISTED = "70004";
+    // 未知错误
+    public static final String APP_ERROR_UNKOWN_ERROR = "70005";
+    // 用户已存在
+    public static final String APP_ERROR_ACCOUNT_EXIST = "70006";
+    // 无权限
+    public static final String APP_ERROR_ACCOUNT_UNAUTH = "70008";
+
 }

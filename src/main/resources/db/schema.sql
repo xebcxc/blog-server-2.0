@@ -2,7 +2,7 @@ drop table article if exists ;
 drop table tag if exists ;
 
 CREATE TABLE `article` (
-  `id` int(50) NOT NULL auto_increment PRIMARY KEY,
+  `id` int(20) NOT NULL auto_increment PRIMARY KEY,
   `article_id` varchar(100) NOT null,
   `thumb` varchar(600) DEFAULT NULL,
   `title` varchar(200) NOT NULL,
@@ -16,16 +16,28 @@ CREATE TABLE `article` (
   `is_delete` tinyint(1) DEFAULT '0',
   `create_time` date ,
   `modify_time` date
-);
+)ENGINE=innoDB AUTO_INCREMENT=200 DEFAULT CHARSET=utf8;
 
 
 CREATE TABLE `tag` (
-  `id` int(50) NOT NULL auto_increment PRIMARY KEY ,
+  `id` int(20) NOT NULL auto_increment PRIMARY KEY ,
   `tag_name` varchar(100) DEFAULT NULL,
   `article_ids` varchar(600) NOT NULL,
   `create_time` date ,
   `modify_time` date
-);
+)ENGINE=innoDB AUTO_INCREMENT=100 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `user` (
+  `id` int(20) NOT NULL auto_increment PRIMARY KEY ,
+  `account` varchar(50) DEFAULT NULL,
+  `username` varchar(600) NOT NULL,
+  `password` varchar(600) NOT NULL,
+  `role_id` INT(20),
+  `is_active` INT(2) NOT NULL,
+  `create_time` date ,
+  `modify_time` date
+)ENGINE=innoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8;
+
 --
 -- CREATE TABLE comment(
 -- id bigint(20) NOT NULL AUTO_INCREMENT,

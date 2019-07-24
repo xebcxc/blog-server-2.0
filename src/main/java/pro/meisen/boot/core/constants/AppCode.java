@@ -7,9 +7,8 @@ package pro.meisen.boot.core.constants;
  */
 public class AppCode {
 
-    public static final Integer SUCCESS_CODE = 10000;
+    public static final String SUCCESS_CODE = "10000";
 
-    public static final Integer APP_ERROR = 20000;
+    public static final String APP_ERROR = "20000";
 
-    public static final Integer PARAM_ERROR = 30000;
 }

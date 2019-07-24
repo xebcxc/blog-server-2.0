@@ -1,4 +1,4 @@
-package pro.meisen.boot.core.redis;
+package pro.meisen.boot.ext.redis;
 
 /**
  * @author meisen

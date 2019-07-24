@@ -9,14 +9,14 @@ public class AppException extends RuntimeException {
 
     private static final long serialVersionUID = -7455556413670313345L;
 
-    private Integer errorCode;
+    private String errorCode;
 
     private String errorMsg;
 
     private AppException() {
 
     }
-    public AppException(Integer errorCode, String errorMsg) {
+    public AppException(String errorCode, String errorMsg) {
         this.errorCode = errorCode;
         this.errorMsg = errorMsg;
     }
@@ -29,11 +29,11 @@ public class AppException extends RuntimeException {
         this.errorMsg = errorMsg;
     }
 
-    public Integer getErrorCode() {
+    public String getErrorCode() {
         return errorCode;
     }
 
-    public void setErrorCode(Integer errorCode) {
+    public void setErrorCode(String errorCode) {
         this.errorCode = errorCode;
     }
 }

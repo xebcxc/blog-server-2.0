@@ -33,7 +33,7 @@ public class TagController {
     @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
     public Boolean delete(HttpServletRequest request, @RequestParam("tagId") Long id) {
         if (null == id) {
-            throw new AppException(ErrorCode.PARAM_ERROR, "参数错误,删除失败");
+            throw new AppException(ErrorCode.APP_ERROR_PARAM_ILLEGAL, "参数错误,删除失败");
         }
         tagManage.deleteTag(id);
         return true;
@@ -42,7 +42,7 @@ public class TagController {
     @RequestMapping(value = "/update", method = RequestMethod.PUT)
     public Boolean update(HttpServletRequest request, @RequestBody Tag tag) {
         if (null == tag || null == tag.getId()) {
-            throw new AppException(ErrorCode.PARAM_ERROR, "参数错误,更新失败");
+            throw new AppException(ErrorCode.APP_ERROR_PARAM_ILLEGAL, "参数错误,更新失败");
         }
         tagManage.updateTag(tag);
         return true;

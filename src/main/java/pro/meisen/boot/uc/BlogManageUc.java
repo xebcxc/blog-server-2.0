@@ -49,7 +49,7 @@ public class BlogManageUc implements BlogManage{
     public Article getDetailByArticleId(String articleId) {
         Article article = articleService.findByArticleId(articleId);
         if (null == article) {
-            throw new AppException(ErrorCode.PARAM_ERROR, "文章不存在,请确认参数");
+            throw new AppException(ErrorCode.APP_ERROR_PARAM_ILLEGAL, "文章不存在,请确认参数");
         }
         return article;
     }
@@ -90,7 +90,7 @@ public class BlogManageUc implements BlogManage{
     public void deleteArticleById(Long id) {
         Article article = articleService.findById(id);
         if (article == null) {
-            throw new AppException(ErrorCode.PARAM_ERROR, "文章不存在,请刷新后重试");
+            throw new AppException(ErrorCode.APP_ERROR_PARAM_ILLEGAL, "文章不存在,请刷新后重试");
         }
         try {
             articleService.deleteById(article.getId());

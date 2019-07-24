@@ -6,18 +6,18 @@ package pro.meisen.boot.core.response;
  * 2019-05-23
  */
 public class Result<T> {
-    private Integer code;
+    private String code;
 
     private T data;
 
     private String msg;
 
 
-    public Integer getCode() {
+    public String getCode() {
         return code;
     }
 
-    public void setCode(Integer code) {
+    public void setCode(String code) {
         this.code = code;
     }
 

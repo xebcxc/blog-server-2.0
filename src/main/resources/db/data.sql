@@ -45,3 +45,9 @@ VALUES (107, 'Git', '205', parsedatetime('18-05-2019 06:36:42.23', 'dd-MM-yyyy h
 
 
 
+INSERT INTO `user`(`id`, `account`, `username`,`password`,`role_id`,`is_active`, `create_time`, `modify_time`)
+VALUES (10001, '', 'admin', '928bfd2577490322a6e19b793691467e', null, 1, parsedatetime('18-05-2019 06:36:42.23', 'dd-MM-yyyy hh:mm:ss.SS'), parsedatetime('18-04-2019 02:47:52.39', 'dd-MM-yyyy hh:mm:ss.SS'));
+
+
+
+

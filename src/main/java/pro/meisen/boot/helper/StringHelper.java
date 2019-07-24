@@ -39,4 +39,22 @@ public class StringHelper {
         }
         return String.join(AppConstants.COMMON_SPLIT, resultList);
     }
+
+    /**
+     * 判断字符串是不是数字
+     * @param str 字符串
+     * @return true 是  false 不是
+     */
+    public boolean isNumeric(String str) {
+        if (Strings.isEmpty(str)) {
+            return false;
+        }
+        char[] chr = str.toCharArray();
+        for (char ch : chr) {
+            if (!Character.isDigit(ch)) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

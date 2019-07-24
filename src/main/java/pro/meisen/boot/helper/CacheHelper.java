@@ -4,8 +4,8 @@ import com.alibaba.fastjson.JSON;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import pro.meisen.boot.core.redis.RedisKey;
-import pro.meisen.boot.core.redis.RedisOperation;
+import pro.meisen.boot.ext.redis.RedisKey;
+import pro.meisen.boot.ext.redis.RedisOperation;
 import pro.meisen.boot.domain.Article;
 import pro.meisen.boot.dao.service.ArticleService;
 

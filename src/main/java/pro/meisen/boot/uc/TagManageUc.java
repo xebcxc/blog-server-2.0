@@ -45,7 +45,7 @@ public class TagManageUc implements TagManage {
     public void deleteTag(Long id) {
         Tag tag = tagService.findById(id);
         if (tag == null) {
-            throw new AppException(ErrorCode.PARAM_ERROR, "标签不存在,删除失败");
+            throw new AppException(ErrorCode.APP_ERROR_PARAM_ILLEGAL, "标签不存在,删除失败");
         }
         try {
             // 先删除
@@ -62,7 +62,7 @@ public class TagManageUc implements TagManage {
     public void updateTag(Tag updateTag) {
         Tag tag = tagService.findById(updateTag.getId());
         if (tag == null) {
-            throw new AppException(ErrorCode.PARAM_ERROR, "标签不存在,更新失败");
+            throw new AppException(ErrorCode.APP_ERROR_PARAM_ILLEGAL, "标签不存在,更新失败");
         }
         tag.setTagName(updateTag.getTagName());
         tag.setArticleIds(updateTag.getArticleIds());

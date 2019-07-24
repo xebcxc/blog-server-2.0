@@ -16,6 +16,7 @@
         <typeAlias type="pro.meisen.boot.domain.Article" alias="Article" />
         <typeAlias type="pro.meisen.boot.domain.Tag" alias="Tag" />
         <typeAlias type="pro.meisen.boot.domain.Comment" alias="Comment" />
+        <typeAlias type="pro.meisen.boot.domain.User" alias="User" />
     </typeAliases>
 
 
