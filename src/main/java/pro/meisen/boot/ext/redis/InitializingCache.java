@@ -18,13 +18,13 @@ public class InitializingCache implements InitializingBean {
     @Autowired
     private CacheHelper cacheHelper;
 
-    private void cacheAllArticle() {
+    private void initArticleCache() {
         List<Article> allArticles = articleService.listAllArticle();
         allArticles.forEach(cacheHelper::cacheArticle);
     }
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        cacheAllArticle();
+        initArticleCache();
     }
 }

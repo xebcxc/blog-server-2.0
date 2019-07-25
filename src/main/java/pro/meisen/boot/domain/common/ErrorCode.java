@@ -6,8 +6,11 @@ package pro.meisen.boot.domain.common;
  */
 public class ErrorCode {
 
+    // 系统处理错误
+    public static final String APP_ERROR_SYSTEM_FAIL = "50000";
+
     // 参数错误
-    public static final String APP_ERROR_PARAM_ILLEGAL = "50000";
+    public static final String APP_ERROR_PARAM_ILLEGAL = "40000";
 
     // 权限错误
     public static final String APP_ERROR_AUTH_ILLEGAL = "60001";

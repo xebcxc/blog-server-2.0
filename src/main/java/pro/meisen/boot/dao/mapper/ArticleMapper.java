@@ -17,7 +17,7 @@ public interface ArticleMapper extends BasicMapper<Long, Article> {
     // 根据条件查询
     List<Article> listByCondition(@Param("condition") Article article);
 
-    List<Article> listByPage(@Param("condition") BlogSearchModel searchRequest);
+    List<Article> listByPage(@Param("condition") BlogSearchModel searchModel);
 
     List<Article> listByIds(@Param("idList")List<Long> idList);
 
