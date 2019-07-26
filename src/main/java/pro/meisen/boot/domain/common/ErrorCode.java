@@ -11,6 +11,8 @@ public class ErrorCode {
 
     // 参数错误
     public static final String APP_ERROR_PARAM_ILLEGAL = "40000";
+    // 文件上传失败
+    public static final String APP_FILE_UPLOAD_FAIL = "40001";
 
     // 权限错误
     public static final String APP_ERROR_AUTH_ILLEGAL = "60001";

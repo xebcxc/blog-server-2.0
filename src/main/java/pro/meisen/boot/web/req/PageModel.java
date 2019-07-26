@@ -10,6 +10,10 @@ public class PageModel {
 
     private Integer pageSize;
 
+    private String column;
+
+    private String order;
+
     private String orderBy;
 
     public PageModel() {
@@ -34,6 +38,22 @@ public class PageModel {
 
     public void setPageSize(Integer pageSize) {
         this.pageSize = pageSize;
+    }
+
+    public String getOrder() {
+        return order;
+    }
+
+    public void setOrder(String order) {
+        this.order = order;
+    }
+
+    public String getColumn() {
+        return column;
+    }
+
+    public void setColumn(String column) {
+        this.column = column;
     }
 
     public String getOrderBy() {

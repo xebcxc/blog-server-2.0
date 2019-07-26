@@ -30,7 +30,7 @@ public class CacheHelper {
     public void cacheArticle(Article article) {
         if (null != article && Strings.isEmpty(article.getArticleId())) {
             String id = article.getArticleId();
-            redisOperation.hSet(RedisKey.BLOG, id, JSON.toJSONString(article));
+            redisOperation.hSet(RedisKey.BLOG.getKey(), id, JSON.toJSONString(article));
         }
     }
 }

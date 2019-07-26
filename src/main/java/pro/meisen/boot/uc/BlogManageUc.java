@@ -8,12 +8,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import pro.meisen.boot.core.constants.AppConstants;
+import pro.meisen.boot.core.constants.DataCacheType;
 import pro.meisen.boot.core.exception.AppException;
 import pro.meisen.boot.dao.service.ArticleService;
 import pro.meisen.boot.dao.service.TagService;
 import pro.meisen.boot.domain.Article;
 import pro.meisen.boot.domain.common.ErrorCode;
 import pro.meisen.boot.domain.Tag;
+import pro.meisen.boot.ext.annotation.DataCache;
+import pro.meisen.boot.ext.redis.RedisKey;
 import pro.meisen.boot.helper.SplitterHelper;
 import pro.meisen.boot.helper.StringHelper;
 import pro.meisen.boot.web.req.BlogSearchModel;
@@ -40,12 +43,14 @@ public class BlogManageUc implements BlogManage{
     @Autowired
     private StringHelper stringHelper;
 
+    @DataCache(key = "page_blog_")
     @Override
     public Page<Article> listArticleWithPage(BlogSearchModel request) {
         return articleService.listArticleWithPage(request);
     }
 
     @Override
+    @DataCache(key = "blog_detail_")
     public Article getDetailByArticleId(String articleId) {
         Article article = articleService.findByArticleId(articleId);
         if (null == article) {
@@ -55,6 +60,7 @@ public class BlogManageUc implements BlogManage{
     }
 
     @Override
+    @DataCache(key = "blog_list_")
     public List<Article> listByTagName(String tagName) {
         Tag tag = tagService.getByTagName(tagName);
         List<Article> articleList = new ArrayList<>();
@@ -66,6 +72,7 @@ public class BlogManageUc implements BlogManage{
     }
 
     @Override
+    @DataCache(key ="blog_add", type = DataCacheType.INSERT)
     @Transactional(rollbackOn = Exception.class)
     public void addArticle(Article article) {
         try {
@@ -86,6 +93,7 @@ public class BlogManageUc implements BlogManage{
     }
 
     @Override
+    @DataCache(key ="blog_delete", type = DataCacheType.DELETE)
     @Transactional(rollbackOn = Exception.class)
     public void deleteArticleById(Long id) {
         Article article = articleService.findById(id);
@@ -110,6 +118,7 @@ public class BlogManageUc implements BlogManage{
     }
 
     @Override
+    @DataCache(key ="blog_achieve")
     public Map<String, List<Article>> achieveBlog(List<Article> articleList) {
         Map<String, List<Article>> blogVoMap = new HashMap<>();
         Calendar calendar = Calendar.getInstance();

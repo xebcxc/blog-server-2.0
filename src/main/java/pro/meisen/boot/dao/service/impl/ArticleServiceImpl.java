@@ -46,12 +46,14 @@ public class ArticleServiceImpl extends BasicServiceImpl<Article> implements Art
     }
 
     @Override
-    public Page<Article> listArticleWithPage(BlogSearchModel searchRequest) {
-        if (Strings.isEmpty(searchRequest.getOrderBy())) {
-            searchRequest.setOrderBy("modify_time desc");
+    public Page<Article> listArticleWithPage(BlogSearchModel request) {
+        if (Strings.isEmpty(request.getColumn())) {
+            String column = request.getColumn();
+            String order = Strings.isEmpty(request.getOrder()) ? "" : request.getOrder();
+            request.setOrderBy(column + " " + order);
         }
-        return PageHelper.startPage(searchRequest.getPageNum(), searchRequest.getPageSize(), searchRequest.getOrderBy())
-                .doSelectPage(() -> mapper.listByPage(searchRequest));
+        return PageHelper.startPage(request.getPageNum(), request.getPageSize(), request.getOrderBy())
+                .doSelectPage(() -> mapper.listByPage(request));
     }
 
     @Override

@@ -1,9 +1,11 @@
 package pro.meisen.boot.core.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import pro.meisen.boot.core.intercepter.RequestInterceptor;
 
@@ -14,12 +16,23 @@ import pro.meisen.boot.core.intercepter.RequestInterceptor;
  */
 @Configuration
 public class WebAppConfigurer extends WebMvcConfigurationSupport {
+
+    @Value("${spring.resources.static-locations}")
+    private String resourceStaticLocations;
+
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/api/**")
                 .allowedMethods("*").allowedHeaders("*")
                 .allowCredentials(true)
                 .exposedHeaders(HttpHeaders.SET_COOKIE).maxAge(3600L);
+    }
+
+    @Override
+    protected void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/api/static/image/**").addResourceLocations(resourceStaticLocations);
+//        registry.addResourceHandler("/api/image/**").addResourceLocations("file:/opt/app/static/");
+        super.addResourceHandlers(registry);
     }
 
     @Override

@@ -1,4 +1,4 @@
-package pro.meisen.boot.ext.shiro;
+package pro.meisen.boot.core.config;
 
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.mgt.SecurityManager;
@@ -34,11 +34,11 @@ public class ShiroConfig {
         //注意过滤器配置顺序 不能颠倒
         //配置退出 过滤器,其中的具体的退出代码Shiro已经替我们实现了，登出后跳转配置的loginUrl
         filterChainDefinitionMap.put("/api/user/logout", "logout");
-//        filterChainDefinitionMap.put("/api/image/**", "anon");
+        filterChainDefinitionMap.put("/api/static/image/**", "anon");
+        filterChainDefinitionMap.put("/api/static/file/upload", "anon");
         filterChainDefinitionMap.put("/api/blog/**", "anon");
         filterChainDefinitionMap.put("/api/user/login", "anon");
         filterChainDefinitionMap.put("/api/user/register", "anon");
-        filterChainDefinitionMap.put("/api/file/upload", "anon");
         filterChainDefinitionMap.put("/api/**", "authc");
         //配置shiro默认登录界面地址，前后端分离中登录界面跳转应由前端路由控制，后台仅返回json数据
         filterFactoryBean.setLoginUrl("/api/user/unauth");

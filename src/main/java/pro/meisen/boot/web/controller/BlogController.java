@@ -61,8 +61,8 @@ public class BlogController {
         return new ResultPageData<>(blogVoList, articlePage.getTotal(), new PageModel(pageNum, pageSize));
     }
 
-    @RequestMapping(value = "/detail/{id}", method = RequestMethod.GET)
-    public BlogVo detail(HttpServletRequest request, @PathVariable("id") String id) {
+    @GetMapping(value = "/info")
+    public BlogVo detail(HttpServletRequest request, @RequestParam("id") String id) {
         if (Strings.isEmpty(id)) {
             throw new AppException(ErrorCode.APP_ERROR_PARAM_ILLEGAL, "参数为空, 请确认输入");
         }
@@ -100,6 +100,24 @@ public class BlogController {
         blogManage.deleteArticleById(id);
         return true;
     }
+
+    @PutMapping("/increaseVisit")
+    public Boolean increaseVisit(HttpServletRequest request, @RequestBody Article blog) {
+        if (null == blog || Strings.isEmpty(blog.getArticleId())) {
+            throw new AppException(ErrorCode.APP_ERROR_PARAM_ILLEGAL, "文章id为空,请刷新后重试");
+        }
+        Article article = blogManage.getDetailByArticleId(blog.getArticleId());
+        if (null == article) {
+            throw new AppException(ErrorCode.APP_ERROR_PARAM_ILLEGAL, "文章不存在,请刷新后重试");
+        }
+        Integer visit = article.getVisit();
+        Article updateArticle = new Article();
+        updateArticle.setId(article.getId());
+        updateArticle.setVisit(++visit);
+        articleService.update(updateArticle);
+        return true;
+    }
+
 
     // 归档文章
     @RequestMapping(value = "/achieve", method = RequestMethod.GET)
