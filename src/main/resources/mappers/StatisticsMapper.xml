@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="pro.meisen.boot.dao.mapper.StatisticsMapper">
+
+  <sql id="condition">
+    <where>
+
+    </where>
+  </sql>
+  <sql id="selectAllField">
+    select id, user_visit, daily_user_visit, statistic_time, `create_time`, modify_time
+    from statistics
+  </sql>
+
+  <select id="selectOne" parameterType="Map" resultType="Statistics">
+    <include refid="selectAllField"/>
+    <include refid="condition"/>
+    limit 1
+  </select>
+
+  <select id="selectCount" parameterType="Map" resultType="long">
+    select count(*) from statistics
+    <include refid="condition"/>
+  </select>
+
+  <select id="listAllStatistics" resultType="Statistics">
+    <include refid="selectAllField"/>
+  </select>
+
+  <insert id="save" parameterType="Statistics" useGeneratedKeys="true" keyProperty="id">
+    insert into statistics(user_visit, daily_user_visit, statistic_time, `create_time`, modify_time)
+    values (#{userVisit}, #{dailyUserVisit}, #{statisticTime}, #{createTime}, #{modifyTime})
+  </insert>
+
+  <update id="update" parameterType="Statistics">
+    update statistics set
+    modify_time=#{modifyTime}
+    <if test="userVisit != null">
+      , user_visit = #{userVisit}
+    </if>
+    <if test="dailyUserVisit != null">
+      , daily_user_visit = #{dailyUserVisit}
+    </if>
+    where id=#{id}
+  </update>
+
+  <delete id="deleteById">
+    delete from statistics where id=#{id}
+  </delete>
+
+  <select id="findById" resultType="Statistics">
+    <include refid="selectAllField"/>
+    where id=#{id}
+  </select>
+  <select id="searchLatest" resultType="Statistics" parameterType="Map">
+    <include refid="selectAllField"/>
+    order by create_time desc
+    limit 1
+  </select>
+</mapper>

@@ -5,8 +5,11 @@ package pro.meisen.boot.ext.redis;
  * 2019-05-23
  */
 public enum RedisKey {
-   BLOG("blog"),
-   BLOG_PAGE("page_blog_");
+    BLOG("blog"),
+    UV("user_visit"),
+    ARTICLE_INFO("article_info"),
+    ARTICLE("article_"),
+    BLOG_PAGE("page_blog_"),;
 
     private String key;
 

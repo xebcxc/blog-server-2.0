@@ -12,7 +12,7 @@
     from article
   </sql>
 
-  <select id="selectOne" parameterType="Map" resultType="Comment">
+  <select id="selectOne" parameterType="Map" resultType="Article">
     <include refid="selectAllField"/>
     <include refid="condition"/>
     limit 1
@@ -146,7 +146,7 @@
     <include refid="selectAllField" />
     where
     article_id IN
-    <foreach collection="idList" index="index" item="item" open="(" separator="," close=")">
+    <foreach collection="articleIdList" index="index" item="item" open="(" separator="," close=")">
       #{item}
     </foreach>
   </select>

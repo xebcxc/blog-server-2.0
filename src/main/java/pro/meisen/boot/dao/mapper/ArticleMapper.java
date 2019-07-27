@@ -21,7 +21,7 @@ public interface ArticleMapper extends BasicMapper<Long, Article> {
 
     List<Article> listByIds(@Param("idList")List<Long> idList);
 
-    List<Article> listByArticleIdList(@Param("idList")List<String> idList);
+    List<Article> listByArticleIdList(@Param("articleIdList")List<String> articleIdList);
 
     int batchUpdate(@Param("articleList") List<Article> articleList);
 

@@ -65,11 +65,11 @@ public class ArticleServiceImpl extends BasicServiceImpl<Article> implements Art
     }
 
     @Override
-    public List<Article> listByArticleIdList(List<String> idList) {
-        if (CollectionUtils.isEmpty(idList)) {
+    public List<Article> listByArticleIdList(List<String> articleIdList) {
+        if (CollectionUtils.isEmpty(articleIdList)) {
             return new ArrayList<>();
         }
-        return notEmptyList(mapper.listByArticleIdList(idList));
+        return notEmptyList(mapper.listByArticleIdList(articleIdList));
     }
 
     @Override

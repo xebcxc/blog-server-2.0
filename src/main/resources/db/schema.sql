@@ -1,5 +1,7 @@
 drop table article if exists ;
 drop table tag if exists ;
+drop table `user` if exists ;
+drop table `statistics` if exists ;
 
 CREATE TABLE `article` (
   `id` int(20) NOT NULL auto_increment PRIMARY KEY,
@@ -37,6 +39,15 @@ CREATE TABLE `user` (
   `create_time` date ,
   `modify_time` date
 )ENGINE=innoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `statistics` (
+  `id` int(20) NOT NULL auto_increment PRIMARY KEY ,
+  `user_visit` INT(20),
+  `daily_user_visit` INT(20),
+  `statistic_time` date ,
+  `create_time` date ,
+  `modify_time` date
+)ENGINE=innoDB AUTO_INCREMENT=100 DEFAULT CHARSET=utf8;
 
 --
 -- CREATE TABLE comment(

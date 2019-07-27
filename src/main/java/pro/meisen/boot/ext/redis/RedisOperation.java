@@ -28,6 +28,8 @@ public class RedisOperation<T> {
     private ValueOperations<String, T> valueOperations;
     @Autowired
     private SetOperations<String, T> setOperations;
+    @Autowired
+    private HyperLogLogOperations<String, T> hyperLogLogOperations;
 
     public void hSet(String key, String hashKey, T t) {
         hashOperations.put(key, hashKey, t);
@@ -96,6 +98,14 @@ public class RedisOperation<T> {
         return zSetOperations.score(key, value);
     }
 
+    public Set<T> zRange(String key, long start, long end) {
+        return zSetOperations.range(key, start, end);
+    }
+
+    public Set<T> reverseRange(String key, long start, long end) {
+        return zSetOperations.reverseRange(key, start, end);
+    }
+
     public Long zDel(String key, T value) {
         return zSetOperations.remove(key, value);
     }
@@ -103,7 +113,6 @@ public class RedisOperation<T> {
     public Double zIncr(String key, T t, double delta) {
         return zSetOperations.incrementScore(key, t, delta);
     }
-
 
     public void vSet(String key, T t) {
         valueOperations.set(key, t);
@@ -132,6 +141,14 @@ public class RedisOperation<T> {
 
     public T get(String key) {
         return setOperations.pop(key);
+    }
+
+    public Long pfAdd(String key, T t) {
+       return hyperLogLogOperations.add(key, t);
+    }
+
+    public Long pdCount(String key) {
+        return hyperLogLogOperations.size(key);
     }
 
 }

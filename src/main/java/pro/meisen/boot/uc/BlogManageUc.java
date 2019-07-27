@@ -17,6 +17,7 @@ import pro.meisen.boot.domain.common.ErrorCode;
 import pro.meisen.boot.domain.Tag;
 import pro.meisen.boot.ext.annotation.DataCache;
 import pro.meisen.boot.ext.redis.RedisKey;
+import pro.meisen.boot.ext.redis.RedisOperation;
 import pro.meisen.boot.helper.SplitterHelper;
 import pro.meisen.boot.helper.StringHelper;
 import pro.meisen.boot.web.req.BlogSearchModel;
@@ -42,6 +43,8 @@ public class BlogManageUc implements BlogManage{
     private SplitterHelper splitterHelper;
     @Autowired
     private StringHelper stringHelper;
+    @Autowired
+    private RedisOperation<String> redisOperation;
 
     @DataCache(key = "page_blog_")
     @Override
@@ -56,6 +59,9 @@ public class BlogManageUc implements BlogManage{
         if (null == article) {
             throw new AppException(ErrorCode.APP_ERROR_PARAM_ILLEGAL, "文章不存在,请确认参数");
         }
+        Long id = article.getId();
+        String member = id.toString();
+        redisOperation.zIncr(RedisKey.ARTICLE_INFO.getKey(), member, 1);
         return article;
     }
 

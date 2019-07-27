@@ -39,7 +39,8 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/api/blog/**", "anon");
         filterChainDefinitionMap.put("/api/user/login", "anon");
         filterChainDefinitionMap.put("/api/user/register", "anon");
-        filterChainDefinitionMap.put("/api/**", "authc");
+//        filterChainDefinitionMap.put("/api/**", "authc");
+        filterChainDefinitionMap.put("/api/**", "anon");
         //配置shiro默认登录界面地址，前后端分离中登录界面跳转应由前端路由控制，后台仅返回json数据
         filterFactoryBean.setLoginUrl("/api/user/unauth");
         filterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);

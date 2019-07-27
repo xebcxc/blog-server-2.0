@@ -80,4 +80,14 @@ public class RedisConfig {
     public ListOperations<String, Object> listOperations(RedisTemplate<String, Object> redisTemplate) {
         return redisTemplate.opsForList();
     }
+
+    /**
+     * 实例化HyperLogLogOperations对象
+     * @param redisTemplate  redisTemplate
+     * @return HyperLogLogOperations
+     */
+    @Bean
+    public HyperLogLogOperations<String, Object> hyperLogLogOperations(RedisTemplate<String, Object> redisTemplate) {
+        return redisTemplate.opsForHyperLogLog();
+    }
 }
