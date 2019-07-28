@@ -49,16 +49,6 @@ public class BlogManageUc implements BlogManage{
     @DataCache(key = "page_blog_")
     @Override
     public Page<Article> listArticleWithPage(BlogSearchModel request) {
-        // 这里后面可以删除
-        List<Tag> tags = tagService.listAll();
-        if (tags.isEmpty()) {
-            List<Article> articleList = articleService.listAllArticle();
-            for (Article article : articleList) {
-                if (Strings.isNotEmpty(article.getTags())) {
-                    saveTags(article, article.getId());
-                }
-            }
-        }
         return articleService.listArticleWithPage(request);
     }
 
