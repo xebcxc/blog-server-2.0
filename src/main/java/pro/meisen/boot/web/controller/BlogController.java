@@ -42,7 +42,7 @@ public class BlogController {
     private BlogManage blogManage;
 
     @GetMapping(value = "/all")
-    public ResultPageData<BlogVo> all(HttpServletRequest request, Integer pageNum, Integer pageSize) {
+    public ResultPageData<BlogVo> all(HttpServletRequest request, Integer pageNum, Integer pageSize, String column, String order) {
         if (null == pageNum || pageSize == null) {
             pageNum = 0;
             pageSize = 10;
@@ -51,6 +51,8 @@ public class BlogController {
         search.setPublish(1);
         search.setPageNum(pageNum);
         search.setPageSize(pageSize);
+        search.setColumn(column);
+        search.setOrder(order);
         Page<Article> articlePage = blogManage.listArticleWithPage(search);
         List<BlogVo> blogVoList = articleHelper.assembleBlogVo(articlePage.getResult());
         return new ResultPageData<>(blogVoList, articlePage.getTotal(), new PageModel(pageNum, pageSize));
