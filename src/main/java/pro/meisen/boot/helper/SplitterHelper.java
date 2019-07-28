@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author meisen
@@ -26,7 +27,8 @@ public class SplitterHelper {
             return new ArrayList<>();
         }
         String[] strings = str.split(splitter);
-        return Arrays.asList(strings);
+        // 去除空格
+        return Arrays.stream(strings).map(String::trim).filter(Strings::isNotEmpty).collect(Collectors.toList());
     }
 
     /**

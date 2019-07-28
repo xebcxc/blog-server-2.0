@@ -11,7 +11,7 @@ CREATE TABLE `article` (
   `topic` varchar(200) NOT NULL,
   `introduce` varchar(400) DEFAULT NULL,
   `tags` varchar(200) DEFAULT NULL,
-  `content` varchar(500),
+  `content` text,
   `visit` int(11) DEFAULT '0' ,
   `compliment` int(11) DEFAULT '0' ,
   `publish` tinyint(1) DEFAULT '0',

@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import pro.meisen.boot.core.constants.AppConstants;
-import pro.meisen.boot.core.constants.DataCacheType;
 import pro.meisen.boot.core.exception.AppException;
 import pro.meisen.boot.dao.service.ArticleService;
 import pro.meisen.boot.dao.service.TagService;
@@ -89,7 +88,7 @@ public class BlogManageUc implements BlogManage{
             Long id = article.getId();
             // 如果tags不为空 ,需要保存tag信息
             if (Strings.isNotEmpty(article.getTags())) {
-                saveTags(article, id);
+                saveOrUpdateTags(article, id);
             }
         } catch (Exception e) {
             LOGGER.error("添加文章失败, article: {}|error={}", article, e.getMessage());
@@ -164,7 +163,7 @@ public class BlogManageUc implements BlogManage{
     public Article updateArticle(Article article) {
         // 如果tags不为空 ,需要保存tag信息
         if (Strings.isNotEmpty(article.getTags())) {
-            saveTags(article, article.getId());
+            saveOrUpdateTags(article, article.getId());
         } else {
             articleService.update(article);
         }
@@ -176,11 +175,18 @@ public class BlogManageUc implements BlogManage{
      * @param article 文章
      * @param id 文章id
      */
-    private void saveTags(Article article, Long id) {
+    private void saveOrUpdateTags(Article article, Long id) {
+        // 分割获取tagNamelist
         List<String> tagNameList = splitterHelper.splitToStringList(article.getTags(), AppConstants.COMMON_SPLIT);
+        // 根据tagName获取所有的Tag
         List<Tag> tagList = tagService.listByTagNameList(tagNameList);
         Map<String, Tag> existTag = new HashMap<>();
+        // 存在的TagList
         for (Tag tag : tagList) {
+            String tagName = tag.getTagName();
+            if (stringHelper.isNumeric(tagName)) {
+                continue;
+            }
             existTag.put(tag.getTagName(), tag);
         }
         // 新增或更新tag信息 批量更新
@@ -196,8 +202,10 @@ public class BlogManageUc implements BlogManage{
      */
     private void updateArticleAfterSaveTag(Article article, Set<Long> tagIdList) {
         String tags = tagIdList.stream().map(String::valueOf).collect(Collectors.joining(","));
-        article.setTags(tags);
-        articleService.update(article);
+        Article condition = new Article();
+        condition.setId(article.getId());
+        condition.setTags(tags);
+        articleService.update(condition);
     }
 
     /**
@@ -211,24 +219,30 @@ public class BlogManageUc implements BlogManage{
     private Set<Long> insertAndUpdateTagList(Long id, List<String> tagNameList, Map<String, Tag> existTagMap) {
         List<Tag> updateTagList = new ArrayList<>();
         List<Tag> insertTagList = new ArrayList<>();
-        tagNameList.forEach(tagName -> {
-            Tag tag = existTagMap.get(tagName);
-            // 当前tag已经存在
-            if (null != tag) {
-                String articleIds = tag.getArticleIds();
-                if (!articleIds.contains(String.valueOf(id))) {
-                    articleIds = articleIds + "," + id;
-                    tag.setArticleIds(articleIds);
-                    updateTagList.add(tag);
-                }
-            } else {
-                // 如果当前tag不存在
-                tag = new Tag();
-                tag.setTagName(tagName);
-                tag.setArticleIds(String.valueOf(id));
-                insertTagList.add(tag);
-            }
-        });
+        tagNameList.stream()
+                .filter(tagName -> !stringHelper.isNumeric(tagName))
+                .forEach(tagName -> {
+                    // 判断是否有tag
+                    Tag tag = existTagMap.get(tagName);
+                    // 当前tag已经存在
+                    if (null != tag) {
+                        String articleIds = tag.getArticleIds();
+                        if (!articleIds.contains(String.valueOf(id))) {
+                            articleIds = articleIds + "," + id;
+                            tag.setArticleIds(articleIds);
+                            updateTagList.add(tag);
+                        } else {
+                            tag.setArticleIds(articleIds);
+                            updateTagList.add(tag);
+                        }
+                    } else {
+                        // 如果当前tag不存在
+                        tag = new Tag();
+                        tag.setTagName(tagName);
+                        tag.setArticleIds(String.valueOf(id));
+                        insertTagList.add(tag);
+                    }
+                });
         tagService.batchInsert(insertTagList);
         tagService.batchUpdate(updateTagList);
 
