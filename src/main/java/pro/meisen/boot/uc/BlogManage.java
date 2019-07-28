@@ -31,6 +31,11 @@ public interface BlogManage {
      */
     void deleteArticleById(Long id);
 
+    void deleteArticleByArticleId(String articleId);
+
     Map<String, List<Article>> achieveBlog(List<Article> articleList);
+
+
+    Article updateArticle(Article article);
 
 }

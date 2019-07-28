@@ -21,7 +21,7 @@ public class ErrorCode {
     public static final String APP_ERROR_USERNAME_ILLEGAL = "70001";
     // 登陆密码
     public static final String APP_ERROR_PASSWORD_ILLEGAL = "70002";
-    //  用户被冻结
+    // 用户被冻结
     public static final String APP_ERROR_ACCOUNT_FREEZED = "70003";
     // 账户不存在
     public static final String APP_ERROR_ACCOUNT_NOT_EXISTED = "70004";

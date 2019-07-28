@@ -1,5 +1,7 @@
 package pro.meisen.boot.dao.mapper;
 
+import org.apache.ibatis.annotations.Param;
+
 /**
  * @author meisen
  * 2019-07-13
@@ -14,8 +16,8 @@ public interface BasicMapper<K, T> {
 
     int save(T t);
 
-    Long selectCount(T condition);
+    Long selectCount(@Param("condition")T condition);
 
-    T selectOne(T condition);
+    T selectOne(@Param("condition") T condition);
 
 }

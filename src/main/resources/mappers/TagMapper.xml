@@ -97,28 +97,17 @@
   <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
     insert into tag(tag_name, article_ids, `create_time`, modify_time)
     values
-    <foreach collection="tagList" item="tag" index="index"
-             separator=",">
+    <foreach collection="tagList" item="tag" index="index" separator=",">
     (#{tag.tagName}, #{tag.articleIds}, #{tag.createTime}, #{tag.modifyTime})
     </foreach>
   </insert>
 
   <update id="batchUpdate" parameterType="java.util.List">
+    <foreach close=";" collection="tagList" index="index" item="tag" open="" separator=";">
     update tag set
-    article_ids =
-    <foreach collection="tagList" item="tag" index="index"
-             separator=",">
-      #{tag.articleIds}
-    </foreach>
-    , modify_time =
-    <foreach collection="tagList" item="tag" index="index"
-             separator=",">
-    #{tag.modifyTime}
-    </foreach>
-    where id in
-    <foreach collection="tagList" item="tag" index="index"
-             separator="," open="(" close=")">
-      #{tag.id}
+    article_ids =  #{tag.articleIds}
+    ,modify_time =#{tag.modifyTime}
+    where id=#{tag.id}
     </foreach>
   </update>
   

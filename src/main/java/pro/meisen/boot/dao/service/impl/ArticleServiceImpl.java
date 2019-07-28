@@ -76,6 +76,4 @@ public class ArticleServiceImpl extends BasicServiceImpl<Article> implements Art
     public int batchUpdate(List<Article> articleList) {
         return mapper.batchUpdate(articleList);
     }
-
-
 }

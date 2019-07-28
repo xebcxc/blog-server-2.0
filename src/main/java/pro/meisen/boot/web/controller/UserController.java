@@ -87,6 +87,18 @@ public class UserController {
         }
     }
 
+    @GetMapping("/currentUser")
+    public User currentUser(HttpServletRequest request) {
+        Subject subject = SecurityUtils.getSubject();
+        Object principal = subject.getPrincipal();
+        if (null == principal && !(principal instanceof User)) {
+            throw new AppException(ErrorCode.APP_ERROR_AUTH_ILLEGAL, "权限错误,请重试");
+        }
+        User user = (User) principal;
+        user.setPassword(null);
+        return user;
+    }
+
     @PostMapping("/register")
     public RegisterVo register(HttpServletRequest request, @RequestBody UserModel userModel) {
         validateParam(userModel);

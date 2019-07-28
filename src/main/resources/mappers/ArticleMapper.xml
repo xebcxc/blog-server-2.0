@@ -4,6 +4,15 @@
 
   <sql id="condition">
     <where>
+      <if test="condition.id != null">
+        id = #{condition.id}
+      </if>
+      <if test="condition.articleId != null">
+        AND article_id = #{condition.articleId}
+      </if>
+      <if test="condition.publish != null">
+        AND publish = #{condition.publish}
+      </if>
 
     </where>
   </sql>
@@ -164,68 +173,22 @@
   </insert>
 
   <update id="batchUpdate" parameterType="java.util.List">
-    update article set
-    modify_time=
-    <foreach collection="articleList" item="article" index="index"
-             separator="," open="(" close=")">
-      #{article.modifyTime}
-    </foreach>
-    ,article_id=
-    <foreach collection="articleList" item="article" index="index"
-             separator="," open="(" close=")">
-      #{article.articleId}
-    </foreach>
-    ,title=
-    <foreach collection="articleList" item="article" index="index"
-             separator="," open="(" close=")">
-      #{article.title}
-    </foreach>
-    ,tags=
-    <foreach collection="articleList" item="article" index="index"
-             separator="," open="(" close=")">
-      #{article.tags}
-    </foreach>
-    ,topic=
-    <foreach collection="articleList" item="article" index="index"
-             separator="," open="(" close=")">
-      #{article.topic}
-    </foreach>
-    ,visit=
-    <foreach collection="articleList" item="article" index="index"
-             separator="," open="(" close=")">
-      #{article.visit}
-    </foreach>
-    ,publish=
-    <foreach collection="articleList" item="article" index="index"
-             separator="," open="(" close=")">
-      #{article.publish}
+    <foreach close=";" collection="articleList" index="index" item="article" open="" separator=";">
+      update article set
+      modify_time=#{article.modifyTime}
+      ,article_id=#{article.articleId}
+      ,title=#{article.title}
+      ,tags=#{article.tags}
+      ,topic= #{article.topic}
+      ,visit= #{article.visit}
+      ,publish=#{article.publish}
+      ,introduce=#{article.introduce}
+      ,content=#{article.content}
+      ,compliment=#{article.compliment}
+      ,thumb=#{article.thumb}
+      where id =#{article.id}
     </foreach>
 
-    ,introduce=
-    <foreach collection="articleList" item="article" index="index"
-             separator="," open="(" close=")">
-      #{article.introduce}
-    </foreach>
-    ,content=
-    <foreach collection="articleList" item="article" index="index"
-             separator="," open="(" close=")">
-      #{article.content}
-    </foreach>
-    ,compliment=
-    <foreach collection="articleList" item="article" index="index"
-             separator="," open="(" close=")">
-      #{article.compliment}
-    </foreach>
-    ,thumb=
-    <foreach collection="articleList" item="article" index="index"
-             separator="," open="(" close=")">
-      #{article.thumb}
-    </foreach>
-    where id=in
-    <foreach collection="articleList" item="article" index="index"
-             separator="," open="(" close=")">
-      #{article.id}
-    </foreach>
   </update>
   
 </mapper>

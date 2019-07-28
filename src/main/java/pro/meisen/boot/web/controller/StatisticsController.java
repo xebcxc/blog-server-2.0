@@ -15,12 +15,12 @@ import pro.meisen.boot.domain.common.ErrorCode;
 import pro.meisen.boot.ext.redis.RedisKey;
 import pro.meisen.boot.ext.redis.RedisOperation;
 import pro.meisen.boot.helper.StringHelper;
+import pro.meisen.boot.web.res.StatisticsCount;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * @author meisen
@@ -68,6 +68,25 @@ public class StatisticsController {
         return resultArticles;
     }
 
+    @GetMapping("/articleCount")
+    public Long articleCount(HttpServletRequest request) {
+        return articleService.selectCount(new Article());
+    }
+
+    @GetMapping("/statisticCount")
+    public StatisticsCount statisticsCount(HttpServletRequest request) {
+        Article condition = new Article();
+        Long articleCount = articleService.selectCount(condition);
+        condition.setPublish(true);
+        Long publishCount = articleService.selectCount(condition);
+        condition.setPublish(false);
+        Long nonPublishCount = articleService.selectCount(condition);
+        StatisticsCount count = new StatisticsCount();
+        count.setArticleCount(articleCount);
+        count.setPublishCount(publishCount);
+        count.setNonPublishCount(nonPublishCount);
+        return count;
+    }
     /**
      * 将结果排序
      * @param idList 排序的id集合

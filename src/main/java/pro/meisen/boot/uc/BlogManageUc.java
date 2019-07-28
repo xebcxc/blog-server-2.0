@@ -53,7 +53,7 @@ public class BlogManageUc implements BlogManage{
     }
 
     @Override
-    @DataCache(key = "blog_detail_")
+//    @DataCache(key = "blog_detail_")
     public Article getDetailByArticleId(String articleId) {
         Article article = articleService.findByArticleId(articleId);
         if (null == article) {
@@ -66,7 +66,7 @@ public class BlogManageUc implements BlogManage{
     }
 
     @Override
-    @DataCache(key = "blog_list_")
+//    @DataCache(key = "blog_list_")
     public List<Article> listByTagName(String tagName) {
         Tag tag = tagService.getByTagName(tagName);
         List<Article> articleList = new ArrayList<>();
@@ -78,7 +78,7 @@ public class BlogManageUc implements BlogManage{
     }
 
     @Override
-    @DataCache(key ="blog_add", type = DataCacheType.INSERT)
+//    @DataCache(key ="blog_add", type = DataCacheType.INSERT)
     @Transactional(rollbackOn = Exception.class)
     public void addArticle(Article article) {
         try {
@@ -99,7 +99,7 @@ public class BlogManageUc implements BlogManage{
     }
 
     @Override
-    @DataCache(key ="blog_delete", type = DataCacheType.DELETE)
+//    @DataCache(key ="blog_delete", type = DataCacheType.DELETE)
     @Transactional(rollbackOn = Exception.class)
     public void deleteArticleById(Long id) {
         Article article = articleService.findById(id);
@@ -124,7 +124,22 @@ public class BlogManageUc implements BlogManage{
     }
 
     @Override
-    @DataCache(key ="blog_achieve")
+//    @DataCache(key ="blog_delete", type = DataCacheType.DELETE)
+    @Transactional(rollbackOn = Exception.class)
+    public void deleteArticleByArticleId(String articleId) {
+        Article article = articleService.findByArticleId(articleId);
+        if (article == null) {
+            throw new AppException(ErrorCode.APP_ERROR_PARAM_ILLEGAL, "文章不存在,请刷新后重试");
+        }
+        try {
+            deleteArticleById(article.getId());
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    @Override
+//    @DataCache(key ="blog_achieve")
     public Map<String, List<Article>> achieveBlog(List<Article> articleList) {
         Map<String, List<Article>> blogVoMap = new HashMap<>();
         Calendar calendar = Calendar.getInstance();
@@ -143,6 +158,17 @@ public class BlogManageUc implements BlogManage{
             }
         }
         return blogVoMap;
+    }
+
+    @Override
+    public Article updateArticle(Article article) {
+        // 如果tags不为空 ,需要保存tag信息
+        if (Strings.isNotEmpty(article.getTags())) {
+            saveTags(article, article.getId());
+        } else {
+            articleService.update(article);
+        }
+        return article;
     }
 
     /**

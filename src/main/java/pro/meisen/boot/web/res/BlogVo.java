@@ -23,6 +23,8 @@ public class BlogVo {
     private List<String> tagList;
     // 访问量
     private Integer visit;
+    // 发布
+    private boolean publish;
     // 点赞数
     private Integer compliment;
 
@@ -116,5 +118,13 @@ public class BlogVo {
 
     public void setTopic(String topic) {
         this.topic = topic;
+    }
+
+    public boolean isPublish() {
+        return publish;
+    }
+
+    public void setPublish(boolean publish) {
+        this.publish = publish;
     }
 }
