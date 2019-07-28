@@ -11,7 +11,7 @@
 	<groupId>pro.meisen</groupId>
 	<artifactId>boot</artifactId>
 	<version>1.0.0</version>
-	<packaging>war</packaging>
+<!--	<packaging>war</packaging>-->
 	<name>boot</name>
 	<description>Spring Boot Blog Project</description>
 

@@ -48,8 +48,8 @@ public class ArticleServiceImpl extends BasicServiceImpl<Article> implements Art
     @Override
     public Page<Article> listArticleWithPage(BlogSearchModel request) {
         if (Strings.isEmpty(request.getColumn())) {
-            String column = request.getColumn();
-            String order = Strings.isEmpty(request.getOrder()) ? "" : request.getOrder();
+            String column = Strings.isEmpty(request.getColumn()) ? "create_time" : request.getColumn();
+            String order = Strings.isEmpty(request.getOrder()) ? "desc" : request.getOrder();
             request.setOrderBy(column + " " + order);
         }
         return PageHelper.startPage(request.getPageNum(), request.getPageSize(), request.getOrderBy())
