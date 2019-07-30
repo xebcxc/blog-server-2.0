@@ -20,6 +20,7 @@ import pro.meisen.boot.web.res.ResultPageData;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -99,6 +100,14 @@ public class BlogController {
                 blogVoList.add(blogVo);
             }
             blogVoMap.put(key, blogVoList);
+        }
+        // 排序
+        for (Map.Entry<String, List<AchieveBlogVo>> entry : blogVoMap.entrySet()) {
+            List<AchieveBlogVo> achieveBlogVoList = entry.getValue();
+            List<AchieveBlogVo> sortBlogVoList = achieveBlogVoList.stream()
+                    .sorted(Comparator.comparing(AchieveBlogVo::getBlogDate).reversed())
+                    .collect(Collectors.toList());
+            entry.setValue(sortBlogVoList);
         }
         return blogVoMap;
     }
