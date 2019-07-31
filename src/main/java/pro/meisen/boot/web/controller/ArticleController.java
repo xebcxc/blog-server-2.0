@@ -41,10 +41,9 @@ public class ArticleController {
             pageSize = 10;
         }
         BlogSearchModel search = new BlogSearchModel();
-        search.setPublish(1);
+        search.setPublish(publish);
         search.setPageNum(pageNum);
         search.setPageSize(pageSize);
-        search.setPublish(publish);
         Page<Article> articlePage = blogManage.listArticleWithPage(search);
         List<BlogVo> blogVoList = articleHelper.assembleBlogVo(articlePage.getResult());
         return new ResultPageData<>(blogVoList, articlePage.getTotal(), new PageModel(pageNum, pageSize));
