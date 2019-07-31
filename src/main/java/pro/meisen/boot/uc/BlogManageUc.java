@@ -161,11 +161,10 @@ public class BlogManageUc implements BlogManage{
 
     @Override
     public Article updateArticle(Article article) {
+        articleService.update(article);
         // 如果tags不为空 ,需要保存tag信息
         if (Strings.isNotEmpty(article.getTags())) {
             saveOrUpdateTags(article, article.getId());
-        } else {
-            articleService.update(article);
         }
         return article;
     }

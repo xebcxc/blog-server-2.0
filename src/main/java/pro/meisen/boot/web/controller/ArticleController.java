@@ -115,6 +115,11 @@ public class ArticleController {
         } else if (Strings.isEmpty(article.getThumb())) {
             throw new AppException(ErrorCode.APP_ERROR_PARAM_ILLEGAL, "文章图片不能为空, 请确认输入");
         }
+        // 目前topic设置默认值
+        if (Strings.isEmpty(article.getTopic())) {
+            article.setTopic("");
+        }
+
     }
 
 
