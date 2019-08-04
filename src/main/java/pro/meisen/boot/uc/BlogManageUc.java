@@ -53,7 +53,7 @@ public class BlogManageUc implements BlogManage{
 
     @Override
 //    @DataCache(key = "blog_detail_")
-    public Article getDetailByArticleId(String articleId) {
+    public Article getDetailByArticleIdWithCache(String articleId) {
         Article article = articleService.findByArticleId(articleId);
         if (null == article) {
             throw new AppException(ErrorCode.APP_ERROR_PARAM_ILLEGAL, "文章不存在,请确认参数");
@@ -61,6 +61,14 @@ public class BlogManageUc implements BlogManage{
         Long id = article.getId();
         String member = id.toString();
         redisOperation.zIncr(RedisKey.ARTICLE_INFO.getKey(), member, 1);
+        return article;
+    }
+    @Override
+    public Article getDetailByArticleId(String articleId) {
+        Article article = articleService.findByArticleId(articleId);
+        if (null == article) {
+            throw new AppException(ErrorCode.APP_ERROR_PARAM_ILLEGAL, "文章不存在,请确认参数");
+        }
         return article;
     }
 
@@ -266,6 +274,6 @@ public class BlogManageUc implements BlogManage{
             article.setPublish(false);
         }
         // 文章id为UUid
-        article.setArticleId(UUID.randomUUID().toString());
+        article.setArticleId(UUID.randomUUID().toString().replaceAll("-", ""));
     }
 }

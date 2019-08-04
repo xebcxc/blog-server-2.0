@@ -33,6 +33,15 @@ public class ArticleController {
     @Autowired
     private ArticleHelper articleHelper;
 
+    @GetMapping(value = "/info")
+    public BlogVo detail(HttpServletRequest request, @RequestParam("id") String id) {
+        if (Strings.isEmpty(id)) {
+            throw new AppException(ErrorCode.APP_ERROR_PARAM_ILLEGAL, "参数为空, 请确认输入");
+        }
+        Article article = blogManage.getDetailByArticleId(id);
+        return articleHelper.assembleBlogVo(article);
+    }
+
     @GetMapping(value = "/condition")
     public ResultPageData<BlogVo> condition(HttpServletRequest request, Integer pageNum, Integer pageSize,
                                             Integer publish) {

@@ -62,7 +62,7 @@ public class BlogController {
         if (Strings.isEmpty(id)) {
             throw new AppException(ErrorCode.APP_ERROR_PARAM_ILLEGAL, "参数为空, 请确认输入");
         }
-        Article article = blogManage.getDetailByArticleId(id);
+        Article article = blogManage.getDetailByArticleIdWithCache(id);
         return articleHelper.assembleBlogVo(article);
     }
 

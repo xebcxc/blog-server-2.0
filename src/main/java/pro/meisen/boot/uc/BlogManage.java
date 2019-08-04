@@ -16,6 +16,7 @@ public interface BlogManage {
     Page<Article> listArticleWithPage(BlogSearchModel request);
 
     Article getDetailByArticleId(String articleId);
+    Article getDetailByArticleIdWithCache(String articleId);
 
     List<Article> listByTagName(String tagName);
 
