@@ -12,7 +12,7 @@ import pro.meisen.boot.helper.DateHelper;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Date;
+import java.util.UUID;
 
 /**
  * 静态处理器
@@ -37,7 +37,7 @@ public class StaticController {
             throw new AppException(ErrorCode.APP_FILE_UPLOAD_FAIL, "文件名错误, 请重新上传.");
         }
         String fileExt = fileName.substring(fileName.lastIndexOf('.'));
-        String encryptName = dateHelper.getCurrentDateStr(new Date()) + fileExt;
+        String encryptName = UUID.fromString(fileName) + fileExt;
         // 文件路径需要根据上线之后的路径确定
         String filePath = path + encryptName;
         try {

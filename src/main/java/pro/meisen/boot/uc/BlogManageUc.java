@@ -183,7 +183,7 @@ public class BlogManageUc implements BlogManage{
      * @param id 文章id
      */
     private void saveOrUpdateTags(Article article, Long id) {
-        // 分割获取tagNamelist
+        // 分割获取tagNameList
         List<String> tagNameList = splitterHelper.splitToStringList(article.getTags(), AppConstants.COMMON_SPLIT);
         // 根据tagName获取所有的Tag
         List<Tag> tagList = tagService.listByTagNameList(tagNameList);

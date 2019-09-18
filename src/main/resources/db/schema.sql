@@ -16,8 +16,8 @@ CREATE TABLE `article` (
   `compliment` int(11) DEFAULT '0' ,
   `publish` tinyint(1) DEFAULT '0',
   `is_delete` tinyint(1) DEFAULT '0',
-  `create_time` date ,
-  `modify_time` date
+  `create_time` datetime not null  default current_timestamp ,
+  `modify_time` datetime not null default current_timestamp
 )ENGINE=innoDB AUTO_INCREMENT=200 DEFAULT CHARSET=utf8;
 
 
