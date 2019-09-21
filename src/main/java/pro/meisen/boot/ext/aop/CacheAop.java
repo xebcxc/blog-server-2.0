@@ -22,8 +22,10 @@ public class CacheAop extends DataCacheAdvice {
     @Around("cacheDataPointCut()")
     public Object cacheData(final ProceedingJoinPoint jp) throws Throwable {
         // 处理之前, 检查缓存
-        beforeProcess(jp);
-        Object result = jp.proceed();
+        Object result = beforeProcess(jp);
+        if (result == null ) {
+            result = jp.proceed();
+        }
         afterProcess(jp, result);
         return result;
     }

@@ -1,14 +1,12 @@
 package pro.meisen.boot.ext.aop;
 
 import com.alibaba.fastjson.JSON;
-import com.sun.org.apache.regexp.internal.RE;
-import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.Pointcut;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import pro.meisen.boot.ext.annotation.DataCache;
-import pro.meisen.boot.ext.redis.RedisKey;
 import pro.meisen.boot.ext.redis.RedisOperation;
 import pro.meisen.boot.web.req.PageModel;
 
@@ -21,6 +19,7 @@ import java.util.List;
  */
 @Component
 public class DataCacheAdvice {
+    private static final Logger LOGGER = LoggerFactory.getLogger(DataCacheAdvice.class);
     @Autowired
     private RedisOperation<String> redisOperation;
 
@@ -35,6 +34,7 @@ public class DataCacheAdvice {
             return null;
         }
         String redisKey = dataCache.key();
+        redisKey = getRedisKey(point, redisKey);
         String value = redisOperation.get(redisKey);
         return JSON.toJSON(value);
     }
@@ -52,6 +52,7 @@ public class DataCacheAdvice {
         String redisKey = dataCache.key();
         // 判断是否需要加参数
         redisKey = getRedisKey(point, redisKey);
+        // 目前只缓存List的接口
         if (result instanceof List) {
             redisOperation.set(redisKey, JSON.toJSONString(result));
         }
@@ -62,7 +63,7 @@ public class DataCacheAdvice {
      * 获取缓存
      * @param point 横切点
      * @param redisKey 缓存key
-     * @return
+     * @return 缓存key
      */
     private String getRedisKey(ProceedingJoinPoint point, String redisKey) {
         int pageNum = 0;
@@ -100,7 +101,7 @@ public class DataCacheAdvice {
         try {
             return jp.getTarget().getClass().getMethod(jp.getSignature().getName(), argTypes);
         } catch (NoSuchMethodException e) {
-            e.printStackTrace();
+            LOGGER.error("数据缓存注解获取方法失败.");
         }
         return null;
     }

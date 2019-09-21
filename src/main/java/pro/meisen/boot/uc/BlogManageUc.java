@@ -1,6 +1,5 @@
 package pro.meisen.boot.uc;
 
-import com.github.pagehelper.Page;
 import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,9 +13,8 @@ import pro.meisen.boot.dao.TagSearchParam;
 import pro.meisen.boot.dao.service.ArticleService;
 import pro.meisen.boot.dao.service.TagService;
 import pro.meisen.boot.domain.Article;
-import pro.meisen.boot.domain.common.ErrorCode;
 import pro.meisen.boot.domain.Tag;
-import pro.meisen.boot.ext.annotation.DataCache;
+import pro.meisen.boot.domain.common.ErrorCode;
 import pro.meisen.boot.ext.redis.RedisKey;
 import pro.meisen.boot.ext.redis.RedisOperation;
 import pro.meisen.boot.helper.SplitterHelper;
@@ -49,7 +47,7 @@ public class BlogManageUc implements BlogManage{
     @Autowired
     private RedisOperation<String> redisOperation;
 
-    @DataCache(key = "page_blog_")
+//    @DataCache(key = "page_blog_")
     @Override
     public ResultPageData<Article> listArticleWithPage(BlogSearchModel request) {
         return articleService.listArticleWithPage(request);
