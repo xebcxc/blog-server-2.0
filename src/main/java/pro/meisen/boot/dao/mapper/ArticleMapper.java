@@ -2,6 +2,7 @@ package pro.meisen.boot.dao.mapper;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+import pro.meisen.boot.dao.TagSearchParam;
 import pro.meisen.boot.domain.Article;
 import pro.meisen.boot.web.req.BlogSearchModel;
 
@@ -20,6 +21,8 @@ public interface ArticleMapper extends BasicMapper<Long, Article> {
     List<Article> listByPage(@Param("condition") BlogSearchModel searchModel);
 
     List<Article> listByIds(@Param("idList")List<Long> idList);
+
+    List<Article> listByIdListWithPage(TagSearchParam param);
 
     List<Article> listByArticleIdList(@Param("articleIdList")List<String> articleIdList);
 

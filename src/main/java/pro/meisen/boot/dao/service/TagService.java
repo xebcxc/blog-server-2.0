@@ -21,4 +21,6 @@ public interface TagService extends BasicService<Tag> {
     int batchInsert(List<Tag> tagList);
 
     int batchUpdate(List<Tag> tagList);
+
+
 }

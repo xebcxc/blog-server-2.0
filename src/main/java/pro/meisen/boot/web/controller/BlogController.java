@@ -14,6 +14,7 @@ import pro.meisen.boot.domain.helper.ArticleHelper;
 import pro.meisen.boot.uc.BlogManage;
 import pro.meisen.boot.web.req.BlogSearchModel;
 import pro.meisen.boot.web.req.PageModel;
+import pro.meisen.boot.web.req.TagSearchModel;
 import pro.meisen.boot.web.res.AchieveBlogVo;
 import pro.meisen.boot.web.res.BlogVo;
 import pro.meisen.boot.web.res.ResultPageData;
@@ -67,12 +68,14 @@ public class BlogController {
     }
 
     @GetMapping(value = "/tag")
-    public List<BlogVo> tagArticle(HttpServletRequest request, @RequestParam("tagName") String tagName) {
-        if (Strings.isEmpty(tagName)) {
+    public ResultPageData<BlogVo> tagArticle(HttpServletRequest request, @ModelAttribute TagSearchModel searchModel) {
+        if (Objects.isNull(searchModel) || Strings.isEmpty(searchModel.getTagName())) {
             throw new AppException(ErrorCode.APP_ERROR_PARAM_ILLEGAL, "参数为空, 请确认输入");
         }
-        List<Article> articleList = blogManage.listByTagName(tagName);
-        return articleHelper.assembleBlogVo(articleList);
+        Page<Article> articleList = blogManage.listByTagName(searchModel);
+        List<BlogVo> blogVoList = articleHelper.assembleBlogVo(articleList);
+
+        return new ResultPageData<>(blogVoList, articleList.getTotal(), searchModel);
     }
 
     // 归档文章

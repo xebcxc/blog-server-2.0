@@ -4,11 +4,13 @@ import com.github.pagehelper.Page;
 import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import pro.meisen.boot.core.constants.AppConstants;
 import pro.meisen.boot.core.exception.AppException;
+import pro.meisen.boot.dao.TagSearchParam;
 import pro.meisen.boot.dao.service.ArticleService;
 import pro.meisen.boot.dao.service.TagService;
 import pro.meisen.boot.domain.Article;
@@ -20,6 +22,7 @@ import pro.meisen.boot.ext.redis.RedisOperation;
 import pro.meisen.boot.helper.SplitterHelper;
 import pro.meisen.boot.helper.StringHelper;
 import pro.meisen.boot.web.req.BlogSearchModel;
+import pro.meisen.boot.web.req.TagSearchModel;
 
 import javax.transaction.Transactional;
 import java.util.*;
@@ -74,15 +77,21 @@ public class BlogManageUc implements BlogManage{
 
     @Override
 //    @DataCache(key = "blog_list_")
-    public List<Article> listByTagName(String tagName) {
-        Tag tag = tagService.getByTagName(tagName);
-        List<Article> articleList = new ArrayList<>();
+    public Page<Article> listByTagName(TagSearchModel searchModel) {
+        Tag tag = tagService.getByTagName(searchModel.getTagName());
+        Page<Article> articleList = new Page<>();
         if (tag != null && Strings.isNotEmpty(tag.getArticleIds())) {
             List<Long> idList = splitterHelper.splitToLongList(tag.getArticleIds(), AppConstants.COMMON_SPLIT);
-            articleList = articleService.listByIds(idList);
+            TagSearchParam param = new TagSearchParam();
+            BeanUtils.copyProperties(searchModel, param);
+            param.setIdList(idList);
+            articleList = articleService.listByIdListWithPage(param);
+        } else {
+            articleList.setTotal(0);
         }
         return articleList;
     }
+
 
     @Override
 //    @DataCache(key ="blog_add", type = DataCacheType.INSERT)

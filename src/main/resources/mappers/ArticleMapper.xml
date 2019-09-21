@@ -190,5 +190,13 @@
     </foreach>
 
   </update>
-  
+  <select id="listByIdListWithPage" resultType="Article">
+    <include refid="selectAllField" />
+    where
+    id IN
+    <foreach collection="idList" index="index" item="item" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </select>
+
 </mapper>

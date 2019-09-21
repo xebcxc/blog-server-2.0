@@ -3,6 +3,7 @@ package pro.meisen.boot.uc;
 import com.github.pagehelper.Page;
 import pro.meisen.boot.domain.Article;
 import pro.meisen.boot.web.req.BlogSearchModel;
+import pro.meisen.boot.web.req.TagSearchModel;
 
 import java.util.List;
 import java.util.Map;
@@ -18,7 +19,7 @@ public interface BlogManage {
     Article getDetailByArticleId(String articleId);
     Article getDetailByArticleIdWithCache(String articleId);
 
-    List<Article> listByTagName(String tagName);
+    Page<Article> listByTagName(TagSearchModel searchModel);
 
     /**
      * 添加文章

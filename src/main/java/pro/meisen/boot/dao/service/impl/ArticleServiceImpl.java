@@ -6,15 +6,18 @@ import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import pro.meisen.boot.dao.TagSearchParam;
 import pro.meisen.boot.dao.service.basic.BasicServiceImpl;
 import pro.meisen.boot.domain.Article;
 import pro.meisen.boot.dao.mapper.ArticleMapper;
 import pro.meisen.boot.dao.mapper.BasicMapper;
 import pro.meisen.boot.dao.service.ArticleService;
 import pro.meisen.boot.web.req.BlogSearchModel;
+import pro.meisen.boot.web.req.TagSearchModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class ArticleServiceImpl extends BasicServiceImpl<Article> implements ArticleService {
@@ -62,6 +65,22 @@ public class ArticleServiceImpl extends BasicServiceImpl<Article> implements Art
             return new ArrayList<>();
         }
         return notEmptyList(mapper.listByIds(idList));
+    }
+
+    @Override
+    public Page<Article> listByIdListWithPage(TagSearchParam param) {
+        if (Objects.isNull(param) || CollectionUtils.isEmpty(param.getIdList())) {
+            Page<Article> emptyPage = new Page<>();
+            emptyPage.setTotal(0);
+            return emptyPage;
+        }
+        if (Strings.isEmpty(param.getColumn())) {
+            String column = Strings.isEmpty(param.getColumn()) ? "create_time" : param.getColumn();
+            String order = Strings.isEmpty(param.getOrder()) ? "desc" : param.getOrder();
+            param.setOrderBy(column + " " + order);
+        }
+        return PageHelper.startPage(param.getPageNum(), param.getPageSize(), param.getOrderBy())
+                .doSelectPage(() -> mapper.listByIdListWithPage(param));
     }
 
     @Override
