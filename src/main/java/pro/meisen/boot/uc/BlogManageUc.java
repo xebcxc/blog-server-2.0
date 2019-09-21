@@ -23,6 +23,7 @@ import pro.meisen.boot.helper.SplitterHelper;
 import pro.meisen.boot.helper.StringHelper;
 import pro.meisen.boot.web.req.BlogSearchModel;
 import pro.meisen.boot.web.req.TagSearchModel;
+import pro.meisen.boot.web.res.ResultPageData;
 
 import javax.transaction.Transactional;
 import java.util.*;
@@ -50,7 +51,7 @@ public class BlogManageUc implements BlogManage{
 
     @DataCache(key = "page_blog_")
     @Override
-    public Page<Article> listArticleWithPage(BlogSearchModel request) {
+    public ResultPageData<Article> listArticleWithPage(BlogSearchModel request) {
         return articleService.listArticleWithPage(request);
     }
 
@@ -77,19 +78,20 @@ public class BlogManageUc implements BlogManage{
 
     @Override
 //    @DataCache(key = "blog_list_")
-    public Page<Article> listByTagName(TagSearchModel searchModel) {
+    public ResultPageData<Article> listByTagName(TagSearchModel searchModel) {
         Tag tag = tagService.getByTagName(searchModel.getTagName());
-        Page<Article> articleList = new Page<>();
+        ResultPageData<Article> resultPageData = new ResultPageData<>();
         if (tag != null && Strings.isNotEmpty(tag.getArticleIds())) {
             List<Long> idList = splitterHelper.splitToLongList(tag.getArticleIds(), AppConstants.COMMON_SPLIT);
             TagSearchParam param = new TagSearchParam();
             BeanUtils.copyProperties(searchModel, param);
             param.setIdList(idList);
-            articleList = articleService.listByIdListWithPage(param);
+            resultPageData = articleService.listByIdListWithPage(param);
         } else {
-            articleList.setTotal(0);
+            resultPageData.setCount(0L);
+            resultPageData.setData(new ArrayList<>());
         }
-        return articleList;
+        return resultPageData;
     }
 
 

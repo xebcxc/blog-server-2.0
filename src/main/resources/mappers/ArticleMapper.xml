@@ -141,6 +141,29 @@
       </if>
     </where>
   </select>
+  <select id="countArticles" resultType="java.lang.Long">
+    select count(1) from article
+    <where>
+      <if test="condition.id != null">
+        id = #{condition.id}
+      </if>
+      <if test="condition.title != null">
+        AND title = #{condition.title}
+      </if>
+      <if test="condition.tags != null">
+        AND tags = #{condition.tags}
+      </if>
+      <if test="condition.visit != null">
+        AND visit = #{condition.visit}
+      </if>
+      <if test="condition.publish != null">
+        AND publish = #{condition.publish}
+      </if>
+      <if test="condition.compliment != null">
+        AND compliment = #{condition.compliment}
+      </if>
+    </where>
+  </select>
 
   <select id="listByIds" parameterType="Map" resultType="Article">
     <include refid="selectAllField" />
@@ -198,5 +221,14 @@
       #{item}
     </foreach>
   </select>
+  <select id="countByIdList" resultType="java.lang.Long">
+    select count(1) from article
+    where
+    id IN
+    <foreach collection="idList" index="index" item="item" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </select>
+
 
 </mapper>

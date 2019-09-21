@@ -4,6 +4,7 @@ import com.github.pagehelper.Page;
 import pro.meisen.boot.domain.Article;
 import pro.meisen.boot.web.req.BlogSearchModel;
 import pro.meisen.boot.web.req.TagSearchModel;
+import pro.meisen.boot.web.res.ResultPageData;
 
 import java.util.List;
 import java.util.Map;
@@ -14,12 +15,12 @@ import java.util.Map;
  */
 public interface BlogManage {
 
-    Page<Article> listArticleWithPage(BlogSearchModel request);
+    ResultPageData<Article> listArticleWithPage(BlogSearchModel request);
 
     Article getDetailByArticleId(String articleId);
     Article getDetailByArticleIdWithCache(String articleId);
 
-    Page<Article> listByTagName(TagSearchModel searchModel);
+    ResultPageData<Article> listByTagName(TagSearchModel searchModel);
 
     /**
      * 添加文章

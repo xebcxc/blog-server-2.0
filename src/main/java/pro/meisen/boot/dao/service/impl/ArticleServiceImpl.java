@@ -14,6 +14,7 @@ import pro.meisen.boot.dao.mapper.BasicMapper;
 import pro.meisen.boot.dao.service.ArticleService;
 import pro.meisen.boot.web.req.BlogSearchModel;
 import pro.meisen.boot.web.req.TagSearchModel;
+import pro.meisen.boot.web.res.ResultPageData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,14 +50,20 @@ public class ArticleServiceImpl extends BasicServiceImpl<Article> implements Art
     }
 
     @Override
-    public Page<Article> listArticleWithPage(BlogSearchModel request) {
+    public ResultPageData<Article> listArticleWithPage(BlogSearchModel request) {
         if (Strings.isEmpty(request.getColumn())) {
             String column = Strings.isEmpty(request.getColumn()) ? "create_time" : request.getColumn();
             String order = Strings.isEmpty(request.getOrder()) ? "desc" : request.getOrder();
             request.setOrderBy(column + " " + order);
         }
-        return PageHelper.startPage(request.getPageNum(), request.getPageSize(), request.getOrderBy())
-                .doSelectPage(() -> mapper.listByPage(request));
+        PageHelper.startPage(request.getPageNum(), request.getPageSize()).setOrderBy(request.getOrderBy());
+        List<Article> articleList = mapper.listByPage(request);
+        PageHelper.clearPage();
+        Long count = mapper.countArticles(request);
+        ResultPageData<Article> resultPageData = new ResultPageData<>();
+        resultPageData.setData(articleList);
+        resultPageData.setCount(Objects.isNull(count) ? 0L : count);
+        return resultPageData;
     }
 
     @Override
@@ -68,19 +75,26 @@ public class ArticleServiceImpl extends BasicServiceImpl<Article> implements Art
     }
 
     @Override
-    public Page<Article> listByIdListWithPage(TagSearchParam param) {
+    public ResultPageData<Article> listByIdListWithPage(TagSearchParam param) {
+        ResultPageData<Article> resultPageData = new ResultPageData<>();
         if (Objects.isNull(param) || CollectionUtils.isEmpty(param.getIdList())) {
-            Page<Article> emptyPage = new Page<>();
-            emptyPage.setTotal(0);
-            return emptyPage;
+            resultPageData.setData(new ArrayList<>());
+            resultPageData.setCount(0L);
+            return resultPageData;
         }
         if (Strings.isEmpty(param.getColumn())) {
             String column = Strings.isEmpty(param.getColumn()) ? "create_time" : param.getColumn();
             String order = Strings.isEmpty(param.getOrder()) ? "desc" : param.getOrder();
             param.setOrderBy(column + " " + order);
         }
-        return PageHelper.startPage(param.getPageNum(), param.getPageSize(), param.getOrderBy())
-                .doSelectPage(() -> mapper.listByIdListWithPage(param));
+        PageHelper.startPage(param.getPageNum(), param.getPageSize()).setOrderBy(param.getOrderBy());
+        List<Article> articleList = mapper.listByIdListWithPage(param);
+        PageHelper.clearPage();
+        Long count = mapper.countByIdList(param);
+
+        resultPageData.setData(articleList);
+        resultPageData.setCount(Objects.isNull(count) ? 0L : count);
+        return resultPageData;
     }
 
     @Override

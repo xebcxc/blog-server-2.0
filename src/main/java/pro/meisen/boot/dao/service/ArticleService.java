@@ -6,6 +6,7 @@ import pro.meisen.boot.dao.service.basic.BasicService;
 import pro.meisen.boot.domain.Article;
 import pro.meisen.boot.web.req.BlogSearchModel;
 import pro.meisen.boot.web.req.TagSearchModel;
+import pro.meisen.boot.web.res.ResultPageData;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ public interface ArticleService extends BasicService<Article> {
 
     List<Article> listByCondition(Article article);
 
-    Page<Article> listArticleWithPage(BlogSearchModel searchRequest);
+    ResultPageData<Article> listArticleWithPage(BlogSearchModel searchRequest);
 
     /**
      * 通过id查询所有的文章, 这里就不分页了
@@ -27,7 +28,7 @@ public interface ArticleService extends BasicService<Article> {
      */
     List<Article> listByIds(List<Long> idList);
 
-    Page<Article> listByIdListWithPage(TagSearchParam param);
+    ResultPageData<Article> listByIdListWithPage(TagSearchParam param);
 
     List<Article> listByArticleIdList(List<String> idList);
 

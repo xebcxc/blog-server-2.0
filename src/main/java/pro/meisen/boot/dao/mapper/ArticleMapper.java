@@ -20,9 +20,13 @@ public interface ArticleMapper extends BasicMapper<Long, Article> {
 
     List<Article> listByPage(@Param("condition") BlogSearchModel searchModel);
 
+    Long countArticles(@Param("condition")BlogSearchModel searchModel);
+
     List<Article> listByIds(@Param("idList")List<Long> idList);
 
     List<Article> listByIdListWithPage(TagSearchParam param);
+
+    Long countByIdList(TagSearchParam param);
 
     List<Article> listByArticleIdList(@Param("articleIdList")List<String> articleIdList);
 

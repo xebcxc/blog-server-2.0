@@ -53,9 +53,9 @@ public class ArticleController {
         search.setPublish(publish);
         search.setPageNum(pageNum);
         search.setPageSize(pageSize);
-        Page<Article> articlePage = blogManage.listArticleWithPage(search);
-        List<BlogVo> blogVoList = articleHelper.assembleBlogVo(articlePage.getResult());
-        return new ResultPageData<>(blogVoList, articlePage.getTotal(), new PageModel(pageNum, pageSize));
+        ResultPageData<Article> articlePage = blogManage.listArticleWithPage(search);
+        List<BlogVo> blogVoList = articleHelper.assembleBlogVo(articlePage.getData());
+        return new ResultPageData<>(blogVoList, articlePage.getCount(), new PageModel(pageNum, pageSize));
     }
 
     @PostMapping(value = "/add")

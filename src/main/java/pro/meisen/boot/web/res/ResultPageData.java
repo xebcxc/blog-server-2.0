@@ -16,6 +16,14 @@ public class ResultPageData<T> {
 
     private PageModel pageModel;
 
+    public ResultPageData() {
+    }
+
+    public ResultPageData(List<T> data, Long count) {
+        this.data = data;
+        this.count = count;
+    }
+
     public ResultPageData(List<T> data, Long count, PageModel pageModel) {
         this.data = data;
         this.count = count;

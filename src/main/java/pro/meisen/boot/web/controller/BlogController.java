@@ -53,9 +53,9 @@ public class BlogController {
         search.setPageSize(pageSize);
         search.setColumn(column);
         search.setOrder(order);
-        Page<Article> articlePage = blogManage.listArticleWithPage(search);
-        List<BlogVo> blogVoList = articleHelper.assembleBlogVo(articlePage.getResult());
-        return new ResultPageData<>(blogVoList, articlePage.getTotal(), new PageModel(pageNum, pageSize));
+        ResultPageData<Article> articlePage = blogManage.listArticleWithPage(search);
+        List<BlogVo> blogVoList = articleHelper.assembleBlogVo(articlePage.getData());
+        return new ResultPageData<>(blogVoList, articlePage.getCount(), new PageModel(pageNum, pageSize));
     }
 
     @GetMapping(value = "/info")
@@ -72,10 +72,9 @@ public class BlogController {
         if (Objects.isNull(searchModel) || Strings.isEmpty(searchModel.getTagName())) {
             throw new AppException(ErrorCode.APP_ERROR_PARAM_ILLEGAL, "参数为空, 请确认输入");
         }
-        Page<Article> articleList = blogManage.listByTagName(searchModel);
-        List<BlogVo> blogVoList = articleHelper.assembleBlogVo(articleList);
-
-        return new ResultPageData<>(blogVoList, articleList.getTotal(), searchModel);
+        ResultPageData<Article> pageData = blogManage.listByTagName(searchModel);
+        List<BlogVo> blogVoList = articleHelper.assembleBlogVo(pageData.getData());
+        return new ResultPageData<>(blogVoList, pageData.getCount(), searchModel);
     }
 
     // 归档文章
