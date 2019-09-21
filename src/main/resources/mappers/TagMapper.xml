@@ -83,6 +83,7 @@
   <select id="getByTagName" parameterType="Map" resultType="Tag">
     <include refid="selectAllField" />
     where tag_name=#{tagName}
+    limit 1
   </select>
 
   <select id="listByTagNameList" parameterType="Map" resultType="Tag">
