@@ -85,9 +85,9 @@
 <!--    <logger name="com.zaxxer.hikari.HikariConfig" level="INFO"/>-->
     <logger name="org" level="warn"/>
     <logger name="io" level="warn"/>
-<!--    <logger name="org.mybatis.spring" level="debug"/>-->
+<!--    <logger name="pro.meisen.boot.dao" level="debug"/>-->
 
-    <root level="INFO">
+    <root level="DEBUG">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="LogFile"/>
         <appender-ref ref="ErrorFile"/>

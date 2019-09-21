@@ -91,7 +91,6 @@ public class ArticleServiceImpl extends BasicServiceImpl<Article> implements Art
         List<Article> articleList = mapper.listByIdListWithPage(param);
         PageHelper.clearPage();
         Long count = mapper.countByIdList(param);
-
         resultPageData.setData(articleList);
         resultPageData.setCount(Objects.isNull(count) ? 0L : count);
         return resultPageData;
