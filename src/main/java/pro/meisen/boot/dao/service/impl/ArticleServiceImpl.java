@@ -56,7 +56,9 @@ public class ArticleServiceImpl extends BasicServiceImpl<Article> implements Art
             String order = Strings.isEmpty(request.getOrder()) ? "desc" : request.getOrder();
             request.setOrderBy(column + " " + order);
         }
-        PageHelper.startPage(request.getPageNum(), request.getPageSize()).setOrderBy(request.getOrderBy());
+        PageHelper.startPage(request.getPageNum(), request.getPageSize())
+                .setOrderBy(request.getOrderBy())
+                .count(true);
         List<Article> articleList = mapper.listByPage(request);
         PageHelper.clearPage();
         Long count = mapper.countArticles(request);

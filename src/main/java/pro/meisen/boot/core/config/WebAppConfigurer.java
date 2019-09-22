@@ -42,7 +42,12 @@ public class WebAppConfigurer extends WebMvcConfigurationSupport {
 
     @Override
     protected void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/api/static/image/**").addResourceLocations(resourceStaticLocations);
+        registry.addResourceHandler("swagger-ui.html")
+                .addResourceLocations("classpath:/META-INF/resources/");
+        registry.addResourceHandler("/webjars/**")
+                .addResourceLocations("classpath:/META-INF/resources/webjars/");
+        registry.addResourceHandler("/api/static/image/**")
+                .addResourceLocations(resourceStaticLocations);
 //        registry.addResourceHandler("/api/image/**").addResourceLocations("file:/opt/app/static/");
         super.addResourceHandlers(registry);
     }

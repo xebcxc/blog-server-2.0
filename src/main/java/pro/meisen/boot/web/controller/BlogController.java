@@ -1,6 +1,8 @@
 package pro.meisen.boot.web.controller;
 
 import com.github.pagehelper.Page;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +32,7 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequestMapping("/api/blog")
+@Api(description = "前端文章相关接口", tags = "前端文章相关接口tag")
 public class BlogController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BlogController.class);
@@ -42,7 +45,8 @@ public class BlogController {
     private BlogManage blogManage;
 
     @GetMapping(value = "/all")
-    public ResultPageData<BlogVo> all(HttpServletRequest request, Integer pageNum, Integer pageSize, String column, String order) {
+    @ApiOperation(notes = "查询所有的文章", value = "查询所有的文章")
+    public ResultPageData<BlogVo> all(Integer pageNum, Integer pageSize, String column, String order) {
         if (null == pageNum || pageSize == null) {
             pageNum = 0;
             pageSize = 10;
@@ -59,6 +63,7 @@ public class BlogController {
     }
 
     @GetMapping(value = "/info")
+    @ApiOperation(notes = "获取文章详情", value = "获取文章详情")
     public BlogVo detail(HttpServletRequest request, @RequestParam("id") String id) {
         if (Strings.isEmpty(id)) {
             throw new AppException(ErrorCode.APP_ERROR_PARAM_ILLEGAL, "参数为空, 请确认输入");
@@ -68,6 +73,7 @@ public class BlogController {
     }
 
     @GetMapping(value = "/tag")
+    @ApiOperation(notes = "获取标签相关文章", value = "获取标签相关文章")
     public ResultPageData<BlogVo> tagArticle(HttpServletRequest request, @ModelAttribute TagSearchModel searchModel) {
         if (Objects.isNull(searchModel) || Strings.isEmpty(searchModel.getTagName())) {
             throw new AppException(ErrorCode.APP_ERROR_PARAM_ILLEGAL, "参数为空, 请确认输入");
@@ -79,6 +85,7 @@ public class BlogController {
 
     // 归档文章
     @GetMapping(value = "/achieve")
+    @ApiOperation(notes = "获取归档文章", value = "获取归档文章")
     public Map<String, List<AchieveBlogVo>> achieve(HttpServletRequest request) {
         List<Article> articleList = articleService.listAllArticle();
         return achieveBlog(articleList);
