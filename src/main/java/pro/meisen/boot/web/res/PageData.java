@@ -1,33 +1,34 @@
 package pro.meisen.boot.web.res;
 
-import pro.meisen.boot.web.req.PageModel;
+import pro.meisen.boot.web.req.PageInfo;
 
 import java.util.List;
 
 /**
+ * 分页数据
  * @author meisen
  * 2019-07-13
  */
-public class ResultPageData<T> {
+public class PageData<T> {
 
     private List<T> data;
 
     private Long count;
 
-    private PageModel pageModel;
+    private PageInfo pageInfo;
 
-    public ResultPageData() {
+    public PageData() {
     }
 
-    public ResultPageData(List<T> data, Long count) {
+    public PageData(List<T> data, Long count) {
         this.data = data;
         this.count = count;
     }
 
-    public ResultPageData(List<T> data, Long count, PageModel pageModel) {
+    public PageData(List<T> data, Long count, PageInfo pageInfo) {
         this.data = data;
         this.count = count;
-        this.pageModel = pageModel;
+        this.pageInfo = pageInfo;
     }
 
     public List<T> getData() {
@@ -46,11 +47,11 @@ public class ResultPageData<T> {
         this.count = count;
     }
 
-    public PageModel getPageModel() {
-        return pageModel;
+    public PageInfo getPageInfo() {
+        return pageInfo;
     }
 
-    public void setPageModel(PageModel pageModel) {
-        this.pageModel = pageModel;
+    public void setPageInfo(PageInfo pageInfo) {
+        this.pageInfo = pageInfo;
     }
 }

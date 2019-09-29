@@ -2,10 +2,14 @@ package pro.meisen.boot.domain;
 
 import pro.meisen.boot.domain.common.CommonDomain;
 
+import javax.persistence.Column;
+import javax.persistence.Table;
+
 /**
  * @author meisen
  * 2019-07-18
  */
+@Table(name = "user")
 public class User extends CommonDomain {
     // 账户名
     private String account;
@@ -14,8 +18,10 @@ public class User extends CommonDomain {
     // 密码
     private String password;
     // 角色id
+    @Column(name = "role_id")
     private Integer roleId;
     // 是否启用
+    @Column(name = "is_active")
     private Boolean isActive;
 
 

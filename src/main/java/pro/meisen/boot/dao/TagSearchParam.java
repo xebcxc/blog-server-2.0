@@ -1,10 +1,10 @@
 package pro.meisen.boot.dao;
 
-import pro.meisen.boot.web.req.PageModel;
+import pro.meisen.boot.web.req.PageInfo;
 
 import java.util.List;
 
-public class TagSearchParam extends PageModel {
+public class TagSearchParam extends PageInfo {
     private List<Long> idList;
 
     public List<Long> getIdList() {

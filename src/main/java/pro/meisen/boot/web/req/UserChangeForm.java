@@ -1,19 +1,23 @@
 package pro.meisen.boot.web.req;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 /**
  * @author meisen
  * 2019-07-22
  */
-public class UserChangeModel {
-
+@ApiModel
+public class UserChangeForm {
+    @ApiModelProperty("用户id")
     private String userId;
-
+    @ApiModelProperty("用户名")
     private String username;
-
+    @ApiModelProperty("旧密码")
     private String oldPassword;
-
+    @ApiModelProperty("新密码")
     private String newPassword;
-
+    @ApiModelProperty("是否启动")
     private Boolean isActive;
 
     public String getUsername() {

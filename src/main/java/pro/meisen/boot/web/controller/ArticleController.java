@@ -1,6 +1,5 @@
 package pro.meisen.boot.web.controller;
 
-import com.github.pagehelper.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.logging.log4j.util.Strings;
@@ -12,13 +11,14 @@ import pro.meisen.boot.domain.Article;
 import pro.meisen.boot.domain.common.ErrorCode;
 import pro.meisen.boot.domain.helper.ArticleHelper;
 import pro.meisen.boot.uc.BlogManage;
-import pro.meisen.boot.web.req.BlogSearchModel;
-import pro.meisen.boot.web.req.PageModel;
+import pro.meisen.boot.web.req.BlogSearchForm;
+import pro.meisen.boot.web.req.PageInfo;
 import pro.meisen.boot.web.res.BlogVo;
-import pro.meisen.boot.web.res.ResultPageData;
+import pro.meisen.boot.web.res.PageData;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author meisen
@@ -48,19 +48,14 @@ public class ArticleController {
 
     @GetMapping(value = "/condition")
     @ApiOperation(value = "获取文章列表,需要授权", notes = "获取文章列表,需要授权")
-    public ResultPageData<BlogVo> condition(HttpServletRequest request, Integer pageNum, Integer pageSize,
-                                            Integer publish) {
-        if (null == pageNum || pageSize == null) {
-            pageNum = 0;
-            pageSize = 10;
+    public PageData<BlogVo> condition(@ModelAttribute BlogSearchForm form) {
+        if (Objects.isNull(form.getPageNum()) || Objects.isNull(form.getPageSize())) {
+            form.setPageNum(0);
+            form.setPageSize(10);
         }
-        BlogSearchModel search = new BlogSearchModel();
-        search.setPublish(publish);
-        search.setPageNum(pageNum);
-        search.setPageSize(pageSize);
-        ResultPageData<Article> articlePage = blogManage.listArticleWithPage(search);
+        PageData<Article> articlePage = blogManage.listArticleWithPage(form);
         List<BlogVo> blogVoList = articleHelper.assembleBlogVo(articlePage.getData());
-        return new ResultPageData<>(blogVoList, articlePage.getCount(), new PageModel(pageNum, pageSize));
+        return new PageData<>(blogVoList, articlePage.getCount(), form);
     }
 
     @PostMapping(value = "/add")
@@ -97,7 +92,7 @@ public class ArticleController {
         Article updateArticle = new Article();
         updateArticle.setId(id);
         updateArticle.setPublish(publish);
-        articleService.update(updateArticle);
+        articleService.updateByPrimaryKeySelective(updateArticle);
         return true;
     }
 

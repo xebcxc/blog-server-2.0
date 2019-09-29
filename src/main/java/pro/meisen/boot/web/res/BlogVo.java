@@ -1,5 +1,8 @@
 package pro.meisen.boot.web.res;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.util.Date;
 import java.util.List;
 
@@ -7,27 +10,28 @@ import java.util.List;
  * @author meisen
  * 2019-05-23
  */
+@ApiModel
 public class BlogVo {
+    @ApiModelProperty("文章id")
     private String articleId;
-    // 图片
+    @ApiModelProperty("图片")
     private String thumb;
-    // 标题
+    @ApiModelProperty("标题")
     private String title;
-    // 主题
+    @ApiModelProperty("主题")
     private String topic;
-    // 内容
+    @ApiModelProperty("内容")
     private String content;
-    // 简介
+    @ApiModelProperty("简介")
     private String introduce;
-    // 标签
+    @ApiModelProperty("标签")
     private List<String> tagList;
-    // 访问量
+    @ApiModelProperty("访问量")
     private Integer visit;
-    // 发布
+    @ApiModelProperty("发布")
     private boolean publish;
-    // 点赞数
+    @ApiModelProperty("点赞数")
     private Integer compliment;
-
     private Date createTime;
 
     private Date modifyTime;

@@ -8,33 +8,33 @@ package pro.meisen.boot.web.res;
 public class StatisticsCount {
 
     // 文章总数
-    private Long articleCount;
+    private Integer articleCount;
     // 已发布文章
-    private Long publishCount;
+    private Integer publishCount;
     // 未发布文章
-    private Long nonPublishCount;
+    private Integer nonPublishCount;
 
-    public Long getArticleCount() {
+    public Integer getArticleCount() {
         return articleCount;
     }
 
-    public void setArticleCount(Long articleCount) {
+    public void setArticleCount(Integer articleCount) {
         this.articleCount = articleCount;
     }
 
-    public Long getPublishCount() {
+    public Integer getPublishCount() {
         return publishCount;
     }
 
-    public void setPublishCount(Long publishCount) {
+    public void setPublishCount(Integer publishCount) {
         this.publishCount = publishCount;
     }
 
-    public Long getNonPublishCount() {
+    public Integer getNonPublishCount() {
         return nonPublishCount;
     }
 
-    public void setNonPublishCount(Long nonPublishCount) {
+    public void setNonPublishCount(Integer nonPublishCount) {
         this.nonPublishCount = nonPublishCount;
     }
 }

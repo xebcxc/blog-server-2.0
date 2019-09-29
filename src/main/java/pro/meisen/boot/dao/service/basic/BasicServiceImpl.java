@@ -2,6 +2,8 @@ package pro.meisen.boot.dao.service.basic;
 
 import pro.meisen.boot.domain.common.CommonDomain;
 import pro.meisen.boot.dao.mapper.BasicMapper;
+import tk.mybatis.mapper.common.BaseMapper;
+import tk.mybatis.mapper.common.Mapper;
 
 import java.util.Date;
 
@@ -11,14 +13,14 @@ import java.util.Date;
  */
 public abstract class BasicServiceImpl<T extends CommonDomain> implements BasicService<T> {
 
-    public abstract BasicMapper<Long, T> getMapper();
+    public abstract Mapper<T> getMapper();
 
     @Override
     public T findById(Long id) {
         if (null == id) {
             return null;
         }
-        return getMapper().findById(id);
+        return getMapper().selectByPrimaryKey(id);
     }
 
     @Override
@@ -26,31 +28,31 @@ public abstract class BasicServiceImpl<T extends CommonDomain> implements BasicS
         if (null == id) {
             return 0;
         }
-        return getMapper().deleteById(id);
+        return getMapper().deleteByPrimaryKey(id);
     }
 
     @Override
-    public int update(T t) {
+    public int updateByPrimaryKeySelective(T t) {
         if (null == t || null == t.getId()) {
             return 0;
         }
         t.setModifyTime(new Date());
-        return getMapper().update(t);
+        return getMapper().updateByPrimaryKeySelective(t);
     }
 
     @Override
-    public int save(T t) {
+    public int insertSelective(T t) {
         if (null == t) {
             return 0;
         }
         Date now = new Date();
         t.setCreateTime(now);
         t.setModifyTime(now);
-        return getMapper().save(t);
+        return getMapper().insertSelective(t);
     }
 
     @Override
-    public Long selectCount(T condition) {
+    public int selectCount(T condition) {
         return getMapper().selectCount(condition);
     }
 

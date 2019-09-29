@@ -8,7 +8,7 @@ import io.swagger.annotations.ApiModelProperty;
  * 2019-07-13
  */
 @ApiModel
-public class BlogSearchModel extends PageModel {
+public class BlogSearchForm extends PageInfo {
     @ApiModelProperty("文章id")
     private String id;
     @ApiModelProperty("文章图片")

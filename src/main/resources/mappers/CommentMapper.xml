@@ -13,11 +13,6 @@
         content,is_show,create_time,modify_time from comment
     </sql>
 
-    <select id="listByCondition" parameterType="Map" resultType="Comment">
-        <include refid="selectAllField"/>
-        <include refid="condition"/>
-    </select>
-
     <select id="findById" parameterType="Long" resultType="Comment">
         <include refid="selectAllField"/>
         where id=#{id}

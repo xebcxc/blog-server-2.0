@@ -1,10 +1,9 @@
 package pro.meisen.boot.uc;
 
-import com.github.pagehelper.Page;
 import pro.meisen.boot.domain.Article;
-import pro.meisen.boot.web.req.BlogSearchModel;
-import pro.meisen.boot.web.req.TagSearchModel;
-import pro.meisen.boot.web.res.ResultPageData;
+import pro.meisen.boot.web.req.BlogSearchForm;
+import pro.meisen.boot.web.req.TagSearchForm;
+import pro.meisen.boot.web.res.PageData;
 
 import java.util.List;
 import java.util.Map;
@@ -15,12 +14,12 @@ import java.util.Map;
  */
 public interface BlogManage {
 
-    ResultPageData<Article> listArticleWithPage(BlogSearchModel request);
+    PageData<Article> listArticleWithPage(BlogSearchForm request);
 
     Article getDetailByArticleId(String articleId);
-    Article getDetailByArticleIdWithCache(String articleId);
+    Article getDetailByArticleIdWithIncrVisit(String articleId);
 
-    ResultPageData<Article> listByTagName(TagSearchModel searchModel);
+    PageData<Article> listByTagName(TagSearchForm searchModel);
 
     /**
      * 添加文章
@@ -36,9 +35,20 @@ public interface BlogManage {
 
     void deleteArticleByArticleId(String articleId);
 
+    /**
+     * 文章归档
+     * key: 年份
+     * value: 当前类下面的文章
+     * @param articleList 原始文章
+     * @return 归档后的文章
+     */
     Map<String, List<Article>> achieveBlog(List<Article> articleList);
 
-
+    /**
+     * 更显稳重
+     * @param article
+     * @return
+     */
     Article updateArticle(Article article);
 
 }

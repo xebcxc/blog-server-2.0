@@ -1,20 +1,19 @@
 package pro.meisen.boot.dao.service.impl;
 
-import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import pro.meisen.boot.dao.TagSearchParam;
+import pro.meisen.boot.dao.mapper.ArticleMapper;
+import pro.meisen.boot.dao.service.ArticleService;
 import pro.meisen.boot.dao.service.basic.BasicServiceImpl;
 import pro.meisen.boot.domain.Article;
-import pro.meisen.boot.dao.mapper.ArticleMapper;
-import pro.meisen.boot.dao.mapper.BasicMapper;
-import pro.meisen.boot.dao.service.ArticleService;
-import pro.meisen.boot.web.req.BlogSearchModel;
-import pro.meisen.boot.web.req.TagSearchModel;
-import pro.meisen.boot.web.res.ResultPageData;
+import pro.meisen.boot.domain.enums.EArticlePublishStatusEnum;
+import pro.meisen.boot.web.req.BlogSearchForm;
+import pro.meisen.boot.web.res.PageData;
+import tk.mybatis.mapper.common.Mapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +26,7 @@ public class ArticleServiceImpl extends BasicServiceImpl<Article> implements Art
     private ArticleMapper mapper;
 
     @Override
-    public BasicMapper<Long, Article> getMapper() {
+    public Mapper<Article> getMapper() {
         return mapper;
     }
 
@@ -36,36 +35,36 @@ public class ArticleServiceImpl extends BasicServiceImpl<Article> implements Art
         if (Strings.isEmpty(articleId)) {
             return null;
         }
-        return mapper.findByArticleId(articleId);
+        Article article = new Article();
+        article.setArticleId(articleId);
+        article.setDelete(false);
+        return mapper.selectOne(article);
     }
 
     @Override
-    public List<Article> listAllArticle() {
-        return notEmptyList(mapper.listAllArticles());
+    public List<Article> listPublish() {
+        Article record = new Article();
+        record.setPublish(EArticlePublishStatusEnum.PUBLISH.isCode());
+        record.setDelete(false);
+        return notEmptyList(mapper.select(record));
     }
 
     @Override
     public List<Article> listByCondition(Article article) {
-        return notEmptyList(mapper.listByCondition(article));
+        return notEmptyList(mapper.select(article));
     }
 
     @Override
-    public ResultPageData<Article> listArticleWithPage(BlogSearchModel request) {
-        if (Strings.isEmpty(request.getColumn())) {
-            String column = Strings.isEmpty(request.getColumn()) ? "create_time" : request.getColumn();
-            String order = Strings.isEmpty(request.getOrder()) ? "desc" : request.getOrder();
-            request.setOrderBy(column + " " + order);
-        }
+    public PageData<Article> listArticleWithPage(BlogSearchForm request) {
         PageHelper.startPage(request.getPageNum(), request.getPageSize())
-                .setOrderBy(request.getOrderBy())
                 .count(true);
-        List<Article> articleList = mapper.listByPage(request);
+        List<Article> articleList = mapper.selectByCondition(request);
         PageHelper.clearPage();
         Long count = mapper.countArticles(request);
-        ResultPageData<Article> resultPageData = new ResultPageData<>();
-        resultPageData.setData(articleList);
-        resultPageData.setCount(Objects.isNull(count) ? 0L : count);
-        return resultPageData;
+        PageData<Article> pageData = new PageData<>();
+        pageData.setData(notEmptyList(articleList));
+        pageData.setCount(Objects.isNull(count) ? 0L : count);
+        return pageData;
     }
 
     @Override
@@ -77,25 +76,20 @@ public class ArticleServiceImpl extends BasicServiceImpl<Article> implements Art
     }
 
     @Override
-    public ResultPageData<Article> listByIdListWithPage(TagSearchParam param) {
-        ResultPageData<Article> resultPageData = new ResultPageData<>();
+    public PageData<Article> listByIdListWithPage(TagSearchParam param) {
+        PageData<Article> pageData = new PageData<>();
         if (Objects.isNull(param) || CollectionUtils.isEmpty(param.getIdList())) {
-            resultPageData.setData(new ArrayList<>());
-            resultPageData.setCount(0L);
-            return resultPageData;
+            pageData.setData(new ArrayList<>());
+            pageData.setCount(0L);
+            return pageData;
         }
-        if (Strings.isEmpty(param.getColumn())) {
-            String column = Strings.isEmpty(param.getColumn()) ? "create_time" : param.getColumn();
-            String order = Strings.isEmpty(param.getOrder()) ? "desc" : param.getOrder();
-            param.setOrderBy(column + " " + order);
-        }
-        PageHelper.startPage(param.getPageNum(), param.getPageSize()).setOrderBy(param.getOrderBy());
+        PageHelper.startPage(param.getPageNum(), param.getPageSize());
         List<Article> articleList = mapper.listByIdListWithPage(param);
         PageHelper.clearPage();
         Long count = mapper.countByIdList(param);
-        resultPageData.setData(articleList);
-        resultPageData.setCount(Objects.isNull(count) ? 0L : count);
-        return resultPageData;
+        pageData.setData(articleList);
+        pageData.setCount(Objects.isNull(count) ? 0L : count);
+        return pageData;
     }
 
     @Override
@@ -109,5 +103,16 @@ public class ArticleServiceImpl extends BasicServiceImpl<Article> implements Art
     @Override
     public int batchUpdate(List<Article> articleList) {
         return mapper.batchUpdate(articleList);
+    }
+
+    @Override
+    public int logicDeleteById(Long id) {
+        if (Objects.isNull(id)) {
+            return 0;
+        }
+        Article condition = new Article();
+        condition.setId(id);
+        condition.setDelete(true);
+        return mapper.updateByPrimaryKeySelective(condition);
     }
 }

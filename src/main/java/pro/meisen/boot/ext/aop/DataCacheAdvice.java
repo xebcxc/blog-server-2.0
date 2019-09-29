@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import pro.meisen.boot.ext.annotation.DataCache;
 import pro.meisen.boot.ext.redis.RedisOperation;
-import pro.meisen.boot.web.req.PageModel;
+import pro.meisen.boot.web.req.PageInfo;
 
 import java.lang.reflect.Method;
 import java.util.List;
@@ -71,11 +71,11 @@ public class DataCacheAdvice {
         String afterKey = null;
         Object[] args = point.getArgs();
         for (Object obj : args) {
-            if (obj instanceof PageModel) {
-                PageModel pageModel = (PageModel) obj;
-                if (pageModel.getPageNum() != null && pageModel.getPageSize() != null) {
-                    pageNum = pageModel.getPageNum();
-                    pageSize = pageModel.getPageSize();
+            if (obj instanceof PageInfo) {
+                PageInfo pageInfo = (PageInfo) obj;
+                if (pageInfo.getPageNum() != null && pageInfo.getPageSize() != null) {
+                    pageNum = pageInfo.getPageNum();
+                    pageSize = pageInfo.getPageSize();
                     break;
                 }
             } else if (obj instanceof String ) {

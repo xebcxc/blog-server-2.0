@@ -23,7 +23,6 @@ public class DailyStatisticsSchedule {
     private RedisOperation<String> redisOperation;
 
     @Scheduled(cron = "0 56 23 * * ?")
-//    @Scheduled(cron = "0 0/1 * * * ?")
     public void statisticsSchedule() {
         Statistics statistics = statisticsService.searchLatest();
         Long userVisit = 0L;
@@ -35,6 +34,6 @@ public class DailyStatisticsSchedule {
         statistics.setStatisticTime(new Date());
         statistics.setDailyUserVisit(logCount - userVisit);
         statistics.setUserVisit(logCount);
-        statisticsService.save(statistics);
+        statisticsService.insertSelective(statistics);
     }
 }

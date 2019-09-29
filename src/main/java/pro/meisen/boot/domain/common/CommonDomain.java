@@ -1,5 +1,9 @@
 package pro.meisen.boot.domain.common;
 
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.util.Date;
 
 /**
@@ -7,11 +11,12 @@ import java.util.Date;
  * 2019-07-13
  */
 public class CommonDomain {
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @Column(name = "create_time")
     private Date createTime;
-
+    @Column(name = "modify_time")
     private Date modifyTime;
 
     public Long getId() {

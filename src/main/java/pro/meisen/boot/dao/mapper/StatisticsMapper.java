@@ -2,6 +2,7 @@ package pro.meisen.boot.dao.mapper;
 
 import org.springframework.stereotype.Repository;
 import pro.meisen.boot.domain.Statistics;
+import tk.mybatis.mapper.common.Mapper;
 
 /**
  *
@@ -9,7 +10,7 @@ import pro.meisen.boot.domain.Statistics;
  * 2019-07-26
  */
 @Repository
-public interface StatisticsMapper extends BasicMapper<Long, Statistics> {
+public interface StatisticsMapper extends Mapper<Statistics> {
     // 查询最新的统计数据
     Statistics searchLatest();
 }

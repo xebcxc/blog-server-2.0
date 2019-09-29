@@ -2,6 +2,8 @@ package pro.meisen.boot.domain;
 
 import pro.meisen.boot.domain.common.CommonDomain;
 
+import javax.persistence.Column;
+import javax.persistence.Table;
 import java.util.Date;
 
 /**
@@ -9,13 +11,17 @@ import java.util.Date;
  * @author meisen
  * 2019-07-26
  */
+@Table(name = "statistics")
 public class Statistics extends CommonDomain {
 
     // 用户访问统计
+    @Column(name = "user_visit")
     private Long userVisit;
     // 每日用户范文
+    @Column(name = "daily_user_visit")
     private Long dailyUserVisit;
     // 统计时间
+    @Column(name = "statistic_time")
     private Date statisticTime;
 
     public Long getUserVisit() {

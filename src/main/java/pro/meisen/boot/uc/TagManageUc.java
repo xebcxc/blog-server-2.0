@@ -66,7 +66,7 @@ public class TagManageUc implements TagManage {
         }
         tag.setTagName(updateTag.getTagName());
         tag.setArticleIds(updateTag.getArticleIds());
-        tagService.update(tag);
+        tagService.updateByPrimaryKeySelective(tag);
     }
 
     /**

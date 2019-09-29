@@ -2,167 +2,63 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="pro.meisen.boot.dao.mapper.ArticleMapper">
 
-  <sql id="condition">
-    <where>
-      <if test="condition.id != null">
-        id = #{condition.id}
-      </if>
-      <if test="condition.articleId != null">
-        AND article_id = #{condition.articleId}
-      </if>
-      <if test="condition.publish != null">
-        AND publish = #{condition.publish}
-      </if>
+  <resultMap id="BaseResultMap" type="pro.meisen.boot.domain.Article">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="id" jdbcType="BIGINT" property="id" />
+    <result column="article_id" jdbcType="VARCHAR" property="articleId" />
+    <result column="thumb" jdbcType="VARCHAR" property="thumb" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="topic" jdbcType="VARCHAR" property="topic" />
+    <result column="introduce" jdbcType="VARCHAR" property="introduce" />
+    <result column="tags" jdbcType="VARCHAR" property="tags" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="visit" jdbcType="BIGINT" property="visit" />
+    <result column="compliment" jdbcType="BIGINT" property="compliment" />
+    <result column="publish" jdbcType="BIT" property="publish" />
+    <result column="is_delete" jdbcType="BIT" property="isDelete" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+  </resultMap>
 
-    </where>
-  </sql>
   <sql id="selectAllField">
-    select id, article_id, thumb, title,topic, introduce, content, tags, visit, compliment, publish, `create_time`, modify_time
-    from article
+     select id, article_id, thumb, title, topic, introduce, tags,content,visit,compliment, publish, is_delete, create_time, modify_time
+     from article
   </sql>
 
-  <select id="selectOne" parameterType="Map" resultType="Article">
-    <include refid="selectAllField"/>
-    <include refid="condition"/>
-    limit 1
-  </select>
-
-  <select id="selectCount" parameterType="Map" resultType="long">
-    select count(*) from article
-    <include refid="condition"/>
-  </select>
-
-  <select id="listAllArticles" resultType="Article">
-    <include refid="selectAllField"/>
-  </select>
-
-  <insert id="save" parameterType="Article" useGeneratedKeys="true" keyProperty="id">
-    insert into article(article_id, thumb, title,topic, introduce,content, tags, visit, compliment, publish, `create_time`, modify_time)
-    values (#{articleId},#{thumb}, #{title},#{topic}, #{introduce}, #{content}, #{tags}, #{visit}, #{compliment}, #{publish}, #{createTime}, #{modifyTime})
-  </insert>
-
-  <update id="update" parameterType="Article">
-    update article set
-    modify_time=#{modifyTime}
-    <if test="articleId != null">
-      , article_id = #{articleId}
-    </if>
-    <if test="title != null">
-      , title = #{title}
-    </if>
-    <if test="topic != null">
-      , topic = #{topic}
-    </if>
-    <if test="tags != null">
-      , tags = #{tags}
-    </if>
-    <if test="visit != null">
-      , visit = #{visit}
-    </if>
-    <if test="publish != null">
-      , publish = #{publish}
-    </if>
-    <if test="introduce != null">
-      , introduce = #{introduce}
-    </if>
-    <if test="content != null">
-      , content = #{content}
-    </if>
-    <if test="compliment != null">
-      , compliment = #{compliment}
-    </if>
-    <if test="thumb != null">
-      , thumb = #{thumb}
-    </if>
-    where id=#{id}
-  </update>
-
-  <delete id="deleteById">
-    delete from article where id=#{id}
-  </delete>
-
-  <select id="findById" resultType="Article">
-    <include refid="selectAllField"/>
-    where id=#{id}
-  </select>
-
-  <select id="findByArticleId" resultType="Article">
-    <include refid="selectAllField"/>
-    where article_id=#{articleId}
-  </select>
-
-  <select id="listByCondition" parameterType="Article" resultType="Article">
-    <include refid="selectAllField"/>
+  <sql id="sqlCondition">
     <where>
-      <if test="condition.id != null">
-        id = #{condition.id}
+      is_delete = 0
+      <if test="id != null">
+        AND id = #{id}
       </if>
-      <if test="condition.title != null">
-        AND title = #{condition.title}
+      <if test="title != null and title != ''">
+        AND title like concat('%', #{title}, '%')
       </if>
-      <if test="condition.tags != null">
-        AND tags = #{condition.tags}
+      <if test="tags != null and tags != ''">
+        AND tags = #{tags}
       </if>
-      <if test="condition.topic != null">
-        AND topic = #{condition.topic}
+      <if test="visit != null">
+        AND visit = #{visit}
       </if>
-      <if test="condition.visit != null">
-        AND visit = #{condition.visit}
+      <if test="publish != null">
+        AND publish = #{publish}
       </if>
-      <if test="condition.publish != null">
-        AND publish = #{condition.publish}
-      </if>
-      <if test="condition.compliment != null">
-        AND compliment = #{condition.compliment}
+      <if test="compliment != null">
+        AND compliment = #{compliment}
       </if>
     </where>
-  </select>
+  </sql>
 
-  <select id="listByPage" parameterType="Article" resultType="Article">
+  <select id="selectByCondition" parameterType="Article" resultType="Article">
     <include refid="selectAllField" />
-    <where>
-      <if test="condition.id != null">
-        id = #{condition.id}
-      </if>
-      <if test="condition.title != null">
-        AND title = #{condition.title}
-      </if>
-      <if test="condition.tags != null">
-        AND tags = #{condition.tags}
-      </if>
-      <if test="condition.visit != null">
-        AND visit = #{condition.visit}
-      </if>
-      <if test="condition.publish != null">
-        AND publish = #{condition.publish}
-      </if>
-      <if test="condition.compliment != null">
-        AND compliment = #{condition.compliment}
-      </if>
-    </where>
+    <include refid="sqlCondition"/>
+    order by create_time desc
   </select>
   <select id="countArticles" resultType="java.lang.Long">
     select count(1) from article
-    <where>
-      <if test="condition.id != null">
-        id = #{condition.id}
-      </if>
-      <if test="condition.title != null">
-        AND title = #{condition.title}
-      </if>
-      <if test="condition.tags != null">
-        AND tags = #{condition.tags}
-      </if>
-      <if test="condition.visit != null">
-        AND visit = #{condition.visit}
-      </if>
-      <if test="condition.publish != null">
-        AND publish = #{condition.publish}
-      </if>
-      <if test="condition.compliment != null">
-        AND compliment = #{condition.compliment}
-      </if>
-    </where>
+    <include refid="sqlCondition"/>
   </select>
 
   <select id="listByIds" parameterType="Map" resultType="Article">
@@ -185,7 +81,6 @@
 
 
   <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
-
     insert into article(article_id, thumb, title,topic, introduce,content, tags, visit, compliment, publish, `create_time`, modify_time)
     values
     <foreach collection="articleList" item="article" index="index"
@@ -211,7 +106,6 @@
       ,thumb=#{article.thumb}
       where id =#{article.id}
     </foreach>
-
   </update>
   <select id="listByIdListWithPage" resultType="Article">
     <include refid="selectAllField" />
@@ -220,6 +114,7 @@
     <foreach collection="idList" index="index" item="item" open="(" separator="," close=")">
       #{item}
     </foreach>
+    order by create_time desc
   </select>
   <select id="countByIdList" resultType="java.lang.Long">
     select count(1) from article
@@ -229,6 +124,5 @@
       #{item}
     </foreach>
   </select>
-
 
 </mapper>

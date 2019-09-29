@@ -2,6 +2,8 @@ package pro.meisen.boot.domain;
 
 import pro.meisen.boot.domain.common.CommonDomain;
 
+import javax.persistence.Column;
+import javax.persistence.Table;
 import java.io.Serializable;
 
 /**
@@ -9,10 +11,12 @@ import java.io.Serializable;
  * @author meisen
  * 2019-05-23
  */
+@Table(name = "article")
 public class Article extends CommonDomain implements Serializable {
 
     private static final long serialVersionUID = -4137589459810896056L;
     // 文章的id, 页面url通过这个来请求, UUID
+    @Column(name = "article_id")
     private String articleId;
     // 图片
     private String thumb;
@@ -33,6 +37,7 @@ public class Article extends CommonDomain implements Serializable {
     // 是否发布
     private Boolean publish;
     // 是否删除
+    @Column(name = "is_delete")
     private Boolean isDelete;
 
 

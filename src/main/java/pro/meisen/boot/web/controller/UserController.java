@@ -17,8 +17,8 @@ import pro.meisen.boot.domain.User;
 import pro.meisen.boot.domain.common.ErrorCode;
 import pro.meisen.boot.ext.shiro.encrypt.MD5HashEncryptor;
 import pro.meisen.boot.helper.StringHelper;
-import pro.meisen.boot.web.req.UserChangeModel;
-import pro.meisen.boot.web.req.UserModel;
+import pro.meisen.boot.web.req.UserChangeForm;
+import pro.meisen.boot.web.req.UserForm;
 import pro.meisen.boot.web.res.LoginVo;
 import pro.meisen.boot.web.res.RegisterVo;
 
@@ -42,16 +42,16 @@ public class UserController {
     /**
      * 登陆
      * @param request 请求
-     * @param userModel 用户模型
+     * @param userForm 用户模型
      * @return 登陆的数据
      */
     @PostMapping("/login")
-    public LoginVo login(HttpServletRequest request, @RequestBody UserModel userModel) {
+    public LoginVo login(HttpServletRequest request, @RequestBody UserForm userForm) {
         // 校验入参
-        validateParam(userModel);
+        validateParam(userForm);
         Subject subject = SecurityUtils.getSubject();
-        String username = userModel.getUsername().trim();
-        String password = userModel.getPassword().trim();
+        String username = userForm.getUsername().trim();
+        String password = userForm.getPassword().trim();
         UsernamePasswordToken token = new UsernamePasswordToken(username, password);
         LoginVo loginVo = new LoginVo();
         try {
@@ -71,7 +71,7 @@ public class UserController {
             throw new AppException(ErrorCode.APP_ERROR_ACCOUNT_NOT_EXISTED, "不存在该用户.");
         } catch (Exception e) {
             loginVo.setLoginSuccess(false);
-            LOGGER.error("登陆失败.username={}", userModel.getUsername());
+            LOGGER.error("登陆失败.username={}", userForm.getUsername());
             throw new AppException(ErrorCode.APP_ERROR_UNKOWN_ERROR, "登陆失败, 请联系管理员.");
         }
         return loginVo;
@@ -100,20 +100,20 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public RegisterVo register(HttpServletRequest request, @RequestBody UserModel userModel) {
-        validateParam(userModel);
-        String username = userModel.getUsername();
+    public RegisterVo register(HttpServletRequest request, @RequestBody UserForm userForm) {
+        validateParam(userForm);
+        String username = userForm.getUsername();
         User user = userService.findByUsername(username);
         if (null != user) {
             throw new AppException(ErrorCode.APP_ERROR_ACCOUNT_EXIST, "用户名已存在, 请确认输入.");
         }
         // 注册用户
-        user = registerUser(userModel);
+        user = registerUser(userForm);
         return assembleRegisterVo(user);
     }
 
     @PutMapping("/password/change")
-    public Boolean changePassword(HttpServletRequest request, @RequestBody UserChangeModel userModel) {
+    public Boolean changePassword(HttpServletRequest request, @RequestBody UserChangeForm userModel) {
         if (Strings.isEmpty(userModel.getUsername())) {
             throw new AppException(ErrorCode.APP_ERROR_USERNAME_ILLEGAL, "请输入用户名");
         }
@@ -136,7 +136,7 @@ public class UserController {
         }
         newPassword = new MD5HashEncryptor.Builder(newPassword).salt(user.getUsername()).build().toHex();
         user.setPassword(newPassword);
-        userService.update(user);
+        userService.updateByPrimaryKeySelective(user);
         return true;
     }
 
@@ -146,7 +146,7 @@ public class UserController {
      * @param userModel 用户模型
      */
     @PutMapping("/status/change")
-    public void updateStatus(HttpServletRequest request, @RequestBody UserChangeModel userModel) {
+    public void updateStatus(HttpServletRequest request, @RequestBody UserChangeForm userModel) {
         if (Strings.isEmpty(userModel.getUserId()) || !stringHelper.isNumeric(userModel.getUserId()) || null == userModel.isActive()) {
             throw new AppException(ErrorCode.APP_ERROR_PARAM_ILLEGAL, "参数错误,  请刷新后重试.");
         }
@@ -175,36 +175,36 @@ public class UserController {
 
     /**
      * 注册
-     * @param userModel 需要注册的信息
+     * @param userForm 需要注册的信息
      * @return 注册后的用户
      */
-    private User registerUser(UserModel userModel) {
+    private User registerUser(UserForm userForm) {
         User user = new User();
-        String username = userModel.getUsername().trim();
+        String username = userForm.getUsername().trim();
         user.setUsername(username);
-        String password = new MD5HashEncryptor.Builder(userModel.getPassword()).salt(username).build().toHex();
+        String password = new MD5HashEncryptor.Builder(userForm.getPassword()).salt(username).build().toHex();
         user.setPassword(password);
         user.setActive(true);
         user.setAccount("");
-        userService.save(user);
+        userService.insertSelective(user);
         return user;
     }
 
     /**
      * 校验用户请求
-     * @param userModel  用户请求
+     * @param userForm  用户请求
      */
-    private void validateParam(UserModel userModel) {
-        if (Strings.isEmpty(userModel.getUsername())) {
+    private void validateParam(UserForm userForm) {
+        if (Strings.isEmpty(userForm.getUsername())) {
             throw new AppException(ErrorCode.APP_ERROR_USERNAME_ILLEGAL, "请输入用户名");
         }
-        if (userModel.getUsername().length() > 10) {
+        if (userForm.getUsername().length() > 10) {
             throw new AppException(ErrorCode.APP_ERROR_USERNAME_ILLEGAL, "用户名过长");
         }
-        if (Strings.isEmpty(userModel.getPassword())) {
+        if (Strings.isEmpty(userForm.getPassword())) {
             throw new AppException(ErrorCode.APP_ERROR_PASSWORD_ILLEGAL, "请输入密码");
         }
-        if (userModel.getPassword().length() < 6) {
+        if (userForm.getPassword().length() < 6) {
             throw new AppException(ErrorCode.APP_ERROR_PASSWORD_ILLEGAL, "密码太短,至少输入6位.");
         }
 

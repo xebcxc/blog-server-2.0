@@ -15,11 +15,11 @@ public interface BasicService<T extends CommonDomain> {
 
     int deleteById(Long id);
 
-    int update(T t);
+    int updateByPrimaryKeySelective(T t);
 
-    int save(T t);
+    int insertSelective(T t);
 
-    Long selectCount(T condition);
+    int selectCount(T condition);
 
     T selectOne(T condition);
 

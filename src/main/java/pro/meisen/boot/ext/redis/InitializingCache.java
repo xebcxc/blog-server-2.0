@@ -19,7 +19,7 @@ public class InitializingCache implements InitializingBean {
     private CacheHelper cacheHelper;
 
     private void initArticleCache() {
-        List<Article> allArticles = articleService.listAllArticle();
+        List<Article> allArticles = articleService.listPublish();
         allArticles.forEach(cacheHelper::cacheArticle);
     }
 

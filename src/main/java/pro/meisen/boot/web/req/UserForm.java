@@ -1,13 +1,17 @@
 package pro.meisen.boot.web.req;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 /**
  * @author meisen
  * 2019-07-22
  */
-public class UserModel {
-
+@ApiModel
+public class UserForm {
+    @ApiModelProperty("用户名")
     private String username;
-
+    @ApiModelProperty("密码")
     private String password;
 
 

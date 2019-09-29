@@ -19,9 +19,9 @@ import pro.meisen.boot.ext.redis.RedisKey;
 import pro.meisen.boot.ext.redis.RedisOperation;
 import pro.meisen.boot.helper.SplitterHelper;
 import pro.meisen.boot.helper.StringHelper;
-import pro.meisen.boot.web.req.BlogSearchModel;
-import pro.meisen.boot.web.req.TagSearchModel;
-import pro.meisen.boot.web.res.ResultPageData;
+import pro.meisen.boot.web.req.BlogSearchForm;
+import pro.meisen.boot.web.req.TagSearchForm;
+import pro.meisen.boot.web.res.PageData;
 
 import javax.transaction.Transactional;
 import java.util.*;
@@ -49,13 +49,13 @@ public class BlogManageUc implements BlogManage{
 
 //    @DataCache(key = "page_blog_")
     @Override
-    public ResultPageData<Article> listArticleWithPage(BlogSearchModel request) {
+    public PageData<Article> listArticleWithPage(BlogSearchForm request) {
         return articleService.listArticleWithPage(request);
     }
 
     @Override
 //    @DataCache(key = "blog_detail_")
-    public Article getDetailByArticleIdWithCache(String articleId) {
+    public Article getDetailByArticleIdWithIncrVisit(String articleId) {
         Article article = articleService.findByArticleId(articleId);
         if (null == article) {
             throw new AppException(ErrorCode.APP_ERROR_PARAM_ILLEGAL, "文章不存在,请确认参数");
@@ -76,20 +76,20 @@ public class BlogManageUc implements BlogManage{
 
     @Override
 //    @DataCache(key = "blog_list_")
-    public ResultPageData<Article> listByTagName(TagSearchModel searchModel) {
+    public PageData<Article> listByTagName(TagSearchForm searchModel) {
         Tag tag = tagService.getByTagName(searchModel.getTagName());
-        ResultPageData<Article> resultPageData = new ResultPageData<>();
+        PageData<Article> pageData = new PageData<>();
         if (tag != null && Strings.isNotEmpty(tag.getArticleIds())) {
             List<Long> idList = splitterHelper.splitToLongList(tag.getArticleIds(), AppConstants.COMMON_SPLIT);
             TagSearchParam param = new TagSearchParam();
             BeanUtils.copyProperties(searchModel, param);
             param.setIdList(idList);
-            resultPageData = articleService.listByIdListWithPage(param);
+            pageData = articleService.listByIdListWithPage(param);
         } else {
-            resultPageData.setCount(0L);
-            resultPageData.setData(new ArrayList<>());
+            pageData.setCount(0L);
+            pageData.setData(new ArrayList<>());
         }
-        return resultPageData;
+        return pageData;
     }
 
 
@@ -101,7 +101,7 @@ public class BlogManageUc implements BlogManage{
             // 设置一些默认值
             updateAddArticle(article);
             // 先保存文章
-            articleService.save(article);
+            articleService.insertSelective(article);
             Long id = article.getId();
             // 如果tags不为空 ,需要保存tag信息
             if (Strings.isNotEmpty(article.getTags())) {
@@ -123,7 +123,7 @@ public class BlogManageUc implements BlogManage{
             throw new AppException(ErrorCode.APP_ERROR_PARAM_ILLEGAL, "文章不存在,请刷新后重试");
         }
         try {
-            articleService.deleteById(article.getId());
+            articleService.logicDeleteById(article.getId());
             String tags = article.getTags();
             List<Long> tagIdList = splitterHelper.splitToLongList(tags, AppConstants.COMMON_SPLIT);
             List<Tag> tagList = tagService.listByIds(tagIdList);
@@ -178,7 +178,7 @@ public class BlogManageUc implements BlogManage{
 
     @Override
     public Article updateArticle(Article article) {
-        articleService.update(article);
+        articleService.updateByPrimaryKeySelective(article);
         // 如果tags不为空 ,需要保存tag信息
         if (Strings.isNotEmpty(article.getTags())) {
             saveOrUpdateTags(article, article.getId());
@@ -221,7 +221,7 @@ public class BlogManageUc implements BlogManage{
         Article condition = new Article();
         condition.setId(article.getId());
         condition.setTags(tags);
-        articleService.update(condition);
+        articleService.updateByPrimaryKeySelective(condition);
     }
 
     /**

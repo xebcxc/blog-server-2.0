@@ -3,11 +3,13 @@ package pro.meisen.boot.dao.service.impl;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pro.meisen.boot.dao.mapper.BasicMapper;
 import pro.meisen.boot.dao.mapper.UserMapper;
 import pro.meisen.boot.dao.service.UserService;
 import pro.meisen.boot.dao.service.basic.BasicServiceImpl;
 import pro.meisen.boot.domain.User;
+import tk.mybatis.mapper.common.Mapper;
+
+import java.util.Objects;
 
 /**
  * @author meisen
@@ -20,7 +22,7 @@ public class UserServiceImpl extends BasicServiceImpl<User> implements UserServi
     private UserMapper mapper;
 
     @Override
-    public BasicMapper<Long, User> getMapper() {
+    public Mapper<User> getMapper() {
         return mapper;
     }
 
@@ -29,15 +31,20 @@ public class UserServiceImpl extends BasicServiceImpl<User> implements UserServi
         if (Strings.isEmpty(username)) {
             return null;
         }
-        return mapper.findByUsername(username);
+        User record = new User();
+        record.setUsername(username);
+        return mapper.selectOne(record);
     }
 
     @Override
     public void updateUserStatus(Long id, boolean isActive) {
-        if (null == id) {
+        if (Objects.isNull(id)) {
             return;
         }
-        mapper.updateUserStatus(id, isActive);
+        User condition = new User();
+        condition.setId(id);
+        condition.setActive(isActive);
+        mapper.updateByPrimaryKeySelective(condition);
     }
 
 }

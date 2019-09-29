@@ -1,75 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="pro.meisen.boot.dao.mapper.TagMapper">
-
-  <sql id="condition">
-    <where>
-
-    </where>
-  </sql>
+  <resultMap id="BaseResultMap" type="pro.meisen.boot.domain.Tag">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="id" jdbcType="BIGINT" property="id" />
+    <result column="tag_name" jdbcType="VARCHAR" property="tagName" />
+    <result column="article_ids" jdbcType="VARCHAR" property="articleIds" />
+    <result column="create_time" jdbcType="DATE" property="createTime" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+  </resultMap>
 
   <sql id="selectAllField">
     select id, tag_name, article_ids, `create_time`, modify_time
     from tag
   </sql>
-
-
-
-  <select id="listAll" resultType="Tag">
-    <include refid="selectAllField"/>
-  </select>
-
-  <select id="selectOne" parameterType="Map" resultType="Comment">
-    <include refid="selectAllField"/>
-    <include refid="condition"/>
-    limit 1
-  </select>
-
-  <select id="selectCount" parameterType="Map" resultType="long">
-    select count(*) from tag
-    <include refid="condition"/>
-  </select>
-
-  <insert id="save" parameterType="Tag" useGeneratedKeys="true" keyProperty="id">
-    insert into tag(tag_name, article_ids, `create_time`, modify_time)
-    values (#{tagName}, #{articleIds}, #{createTime}, #{modifyTime})
-  </insert>
-
-  <update id="update" parameterType="Tag">
-    update tag set
-    modify_time=#{modifyTime}
-    <if test="tagName != null">
-      , tag_name = #{tagName}
-    </if>
-    <if test="articleIds != null">
-      , article_ids = #{articleIds}
-    </if>
-    where id=#{id}
-  </update>
-
-  <delete id="deleteById">
-    delete from tag where id=#{id}
-  </delete>
-
-  <select id="findById" resultType="Tag">
-    <include refid="selectAllField"/>
-    where id=#{id}
-  </select>
-
-  <select id="listByCondition" parameterType="Tag" resultType="Tag">
-    <include refid="selectAllField"/>
-    <where>
-      <if test="condition.id != null">
-        id = #{condition.id}
-      </if>
-      <if test="condition.tagName != null">
-        AND tag_name = #{condition.tagName}
-      </if>
-      <if test="condition.articleIds != null">
-        AND article_ids = #{condition.articleIds}
-      </if>
-    </where>
-  </select>
 
   <select id="listByIds" parameterType="Map" resultType="Tag">
     <include refid="selectAllField" />
@@ -78,12 +24,6 @@
     <foreach collection="idList" index="index" item="item" open="(" separator="," close=")">
       #{item}
     </foreach>
-  </select>
-
-  <select id="getByTagName" parameterType="Map" resultType="Tag">
-    <include refid="selectAllField" />
-    where tag_name=#{tagName}
-    limit 1
   </select>
 
   <select id="listByTagNameList" parameterType="Map" resultType="Tag">

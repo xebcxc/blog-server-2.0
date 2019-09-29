@@ -2,14 +2,15 @@ package pro.meisen.boot.dao.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pro.meisen.boot.dao.mapper.BasicMapper;
 import pro.meisen.boot.dao.mapper.StatisticsMapper;
 import pro.meisen.boot.dao.service.StatisticsService;
 import pro.meisen.boot.dao.service.basic.BasicServiceImpl;
 import pro.meisen.boot.domain.Statistics;
+import tk.mybatis.mapper.common.Mapper;
 
 
 /**
+ * 统计数据
  * @author meisen
  * 2019-07-26
  */
@@ -18,7 +19,7 @@ public class StatisticServiceImpl extends BasicServiceImpl<Statistics> implement
     @Autowired
     private StatisticsMapper mapper;
     @Override
-    public BasicMapper<Long, Statistics> getMapper() {
+    public Mapper<Statistics> getMapper() {
         return mapper;
     }
 

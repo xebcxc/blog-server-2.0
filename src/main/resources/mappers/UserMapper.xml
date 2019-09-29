@@ -2,74 +2,18 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="pro.meisen.boot.dao.mapper.UserMapper">
-    <sql id="condition">
-        <where>
+    <resultMap id="BaseResultMap" type="pro.meisen.boot.domain.User">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <result column="id" jdbcType="BIGINT" property="id" />
+        <result column="account" jdbcType="VARCHAR" property="account" />
+        <result column="username" jdbcType="VARCHAR" property="username" />
+        <result column="password" jdbcType="VARCHAR" property="password" />
+        <result column="role_id" jdbcType="BIGINT" property="roleId" />
+        <result column="is_active" jdbcType="BIT" property="isActive" />
+        <result column="create_time" jdbcType="DATE" property="createTime" />
+        <result column="modify_time" jdbcType="DATE" property="modifyTime" />
+    </resultMap>
 
-        </where>
-    </sql>
-
-    <sql id="selectAllField">
-        select id,account,username,password,role_id,is_active,create_time,modify_time from user
-    </sql>
-
-    <select id="listByCondition" parameterType="Map" resultType="User">
-        <include refid="selectAllField"/>
-        <include refid="condition"/>
-    </select>
-
-    <select id="findById" parameterType="Long" resultType="User">
-        <include refid="selectAllField"/>
-        where id=#{id}
-    </select>
-
-    <select id="selectOne" parameterType="Map" resultType="User">
-        <include refid="selectAllField"/>
-        <include refid="condition"/>
-        limit 1
-    </select>
-
-    <select id="selectCount" parameterType="Map" resultType="long">
-        select count(*) from user
-        <include refid="condition"/>
-    </select>
-
-    <insert id="save" parameterType="User" useGeneratedKeys="true" keyProperty="id">
-        insert into `user`
-        (account,username,password,role_id,is_active,create_time,modify_time)
-        VALUES
-        (#{account},#{username},#{password},#{roleId},#{isActive},#{createTime},#{modifyTime})
-    </insert>
-
-    <update id="update" parameterType="User">
-        update `user` set
-        account=#{account},
-        username=#{username},
-        password=#{password},
-        role_id=#{roleId},
-        is_active=#{isActive},
-        modify_time=#{modifyTime}
-        where id=#{id}
-    </update>
-
-    <delete id="deleteById" parameterType="Long">
-        delete from `user`
-        where id = #{key}
-    </delete>
-
-    <delete id="deleteByCondition" parameterType="Map">
-        delete from `user`
-        <include refid="condition"/>
-    </delete>
-
-
-    <select id="findByUsername" parameterType="Map" resultType="User">
-        <include refid="selectAllField"/>
-        where username=#{username}
-    </select>
-
-    <update id="updateUserStatus" parameterType="Map">
-        update `user`
-        set is_active=#{isActive}
-        where id=#{id}
-    </update>
 </mapper>

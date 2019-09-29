@@ -69,18 +69,18 @@ public class StatisticsController {
     }
 
     @GetMapping("/articleCount")
-    public Long articleCount(HttpServletRequest request) {
+    public Integer articleCount(HttpServletRequest request) {
         return articleService.selectCount(new Article());
     }
 
     @GetMapping("/statisticCount")
     public StatisticsCount statisticsCount(HttpServletRequest request) {
         Article condition = new Article();
-        Long articleCount = articleService.selectCount(condition);
+        Integer articleCount = articleService.selectCount(condition);
         condition.setPublish(true);
-        Long publishCount = articleService.selectCount(condition);
+        Integer publishCount = articleService.selectCount(condition);
         condition.setPublish(false);
-        Long nonPublishCount = articleService.selectCount(condition);
+        Integer nonPublishCount = articleService.selectCount(condition);
         StatisticsCount count = new StatisticsCount();
         count.setArticleCount(articleCount);
         count.setPublishCount(publishCount);

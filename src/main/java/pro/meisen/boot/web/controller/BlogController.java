@@ -1,6 +1,5 @@
 package pro.meisen.boot.web.controller;
 
-import com.github.pagehelper.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.logging.log4j.util.Strings;
@@ -12,14 +11,15 @@ import pro.meisen.boot.core.exception.AppException;
 import pro.meisen.boot.dao.service.ArticleService;
 import pro.meisen.boot.domain.Article;
 import pro.meisen.boot.domain.common.ErrorCode;
+import pro.meisen.boot.domain.enums.EArticlePublishStatusEnum;
 import pro.meisen.boot.domain.helper.ArticleHelper;
 import pro.meisen.boot.uc.BlogManage;
-import pro.meisen.boot.web.req.BlogSearchModel;
-import pro.meisen.boot.web.req.PageModel;
-import pro.meisen.boot.web.req.TagSearchModel;
+import pro.meisen.boot.web.req.BlogSearchForm;
+import pro.meisen.boot.web.req.PageInfo;
+import pro.meisen.boot.web.req.TagSearchForm;
 import pro.meisen.boot.web.res.AchieveBlogVo;
 import pro.meisen.boot.web.res.BlogVo;
-import pro.meisen.boot.web.res.ResultPageData;
+import pro.meisen.boot.web.res.PageData;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
@@ -44,50 +44,48 @@ public class BlogController {
     @Autowired
     private BlogManage blogManage;
 
-    @GetMapping(value = "/all")
     @ApiOperation(notes = "查询所有的文章", value = "查询所有的文章")
-    public ResultPageData<BlogVo> all(Integer pageNum, Integer pageSize, String column, String order) {
-        if (null == pageNum || pageSize == null) {
-            pageNum = 0;
-            pageSize = 10;
+    @GetMapping(value = "/all")
+    public PageData<BlogVo> all(@ModelAttribute BlogSearchForm form) {
+        if (Objects.isNull(form.getPageNum()) || Objects.isNull(form.getPageSize())) {
+            form.setPageNum(0);
+            form.setPageSize(10);
         }
-        BlogSearchModel search = new BlogSearchModel();
-        search.setPublish(1);
-        search.setPageNum(pageNum);
-        search.setPageSize(pageSize);
-        search.setColumn(column);
-        search.setOrder(order);
-        ResultPageData<Article> articlePage = blogManage.listArticleWithPage(search);
+        form.setPublish(1);
+        PageData<Article> articlePage = blogManage.listArticleWithPage(form);
         List<BlogVo> blogVoList = articleHelper.assembleBlogVo(articlePage.getData());
-        return new ResultPageData<>(blogVoList, articlePage.getCount(), new PageModel(pageNum, pageSize));
+        return new PageData<>(blogVoList, articlePage.getCount(), form);
     }
 
-    @GetMapping(value = "/info")
     @ApiOperation(notes = "获取文章详情", value = "获取文章详情")
+    @GetMapping(value = "/info")
     public BlogVo detail(HttpServletRequest request, @RequestParam("id") String id) {
         if (Strings.isEmpty(id)) {
             throw new AppException(ErrorCode.APP_ERROR_PARAM_ILLEGAL, "参数为空, 请确认输入");
         }
-        Article article = blogManage.getDetailByArticleIdWithCache(id);
+        Article article = blogManage.getDetailByArticleIdWithIncrVisit(id);
         return articleHelper.assembleBlogVo(article);
     }
 
-    @GetMapping(value = "/tag")
     @ApiOperation(notes = "获取标签相关文章", value = "获取标签相关文章")
-    public ResultPageData<BlogVo> tagArticle(HttpServletRequest request, @ModelAttribute TagSearchModel searchModel) {
-        if (Objects.isNull(searchModel) || Strings.isEmpty(searchModel.getTagName())) {
+    @GetMapping(value = "/tag")
+    public PageData<BlogVo> tagArticle(HttpServletRequest request, @ModelAttribute TagSearchForm form) {
+        if (Objects.isNull(form) || Strings.isEmpty(form.getTagName())) {
             throw new AppException(ErrorCode.APP_ERROR_PARAM_ILLEGAL, "参数为空, 请确认输入");
         }
-        ResultPageData<Article> pageData = blogManage.listByTagName(searchModel);
+        PageData<Article> pageData = blogManage.listByTagName(form);
         List<BlogVo> blogVoList = articleHelper.assembleBlogVo(pageData.getData());
-        return new ResultPageData<>(blogVoList, pageData.getCount(), searchModel);
+        return new PageData<>(blogVoList, pageData.getCount(), form);
     }
 
     // 归档文章
     @GetMapping(value = "/achieve")
     @ApiOperation(notes = "获取归档文章", value = "获取归档文章")
     public Map<String, List<AchieveBlogVo>> achieve(HttpServletRequest request) {
-        List<Article> articleList = articleService.listAllArticle();
+        Article condition = new Article();
+        condition.setPublish(EArticlePublishStatusEnum.PUBLISH.isCode());
+
+        List<Article> articleList = articleService.listByCondition(condition);
         return achieveBlog(articleList);
     }
 

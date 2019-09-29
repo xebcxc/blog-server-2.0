@@ -4,11 +4,11 @@ import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-import pro.meisen.boot.dao.mapper.BasicMapper;
 import pro.meisen.boot.dao.mapper.TagMapper;
 import pro.meisen.boot.dao.service.TagService;
 import pro.meisen.boot.dao.service.basic.BasicServiceImpl;
 import pro.meisen.boot.domain.Tag;
+import tk.mybatis.mapper.common.Mapper;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -25,7 +25,7 @@ public class TagServiceImpl extends BasicServiceImpl<Tag> implements TagService 
     private TagMapper mapper;
 
     @Override
-    public BasicMapper<Long, Tag> getMapper() {
+    public Mapper<Tag> getMapper() {
         return mapper;
     }
 
@@ -39,7 +39,7 @@ public class TagServiceImpl extends BasicServiceImpl<Tag> implements TagService 
 
     @Override
     public List<Tag> listAll() {
-        return notEmptyList(mapper.listAll());
+        return notEmptyList(mapper.selectAll());
     }
 
     @Override
@@ -47,7 +47,9 @@ public class TagServiceImpl extends BasicServiceImpl<Tag> implements TagService 
         if (Strings.isEmpty(tagName)) {
             return null;
         }
-        return mapper.getByTagName(tagName);
+        Tag record = new Tag();
+        record.setTagName(tagName);
+        return mapper.selectOne(record);
     }
 
     @Override
