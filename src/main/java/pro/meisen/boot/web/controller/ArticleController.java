@@ -36,8 +36,8 @@ public class ArticleController {
     @Autowired
     private ArticleHelper articleHelper;
 
-    @GetMapping(value = "/info")
     @ApiOperation(value = "获取文章详情,需要授权", notes = "获取文章详情,需要授权")
+    @GetMapping(value = "/info")
     public BlogVo detail(HttpServletRequest request, @RequestParam("id") String id) {
         if (Strings.isEmpty(id)) {
             throw new AppException(ErrorCode.APP_ERROR_PARAM_ILLEGAL, "参数为空, 请确认输入");
@@ -46,8 +46,8 @@ public class ArticleController {
         return articleHelper.assembleBlogVo(article);
     }
 
-    @GetMapping(value = "/condition")
     @ApiOperation(value = "获取文章列表,需要授权", notes = "获取文章列表,需要授权")
+    @GetMapping(value = "/condition")
     public PageData<BlogVo> condition(@ModelAttribute BlogSearchForm form) {
         if (Objects.isNull(form.getPageNum()) || Objects.isNull(form.getPageSize())) {
             form.setPageNum(0);
@@ -58,8 +58,8 @@ public class ArticleController {
         return new PageData<>(blogVoList, articlePage.getCount(), form);
     }
 
-    @PostMapping(value = "/add")
     @ApiOperation(value = "后台新增文章", notes = "后台新增文章")
+    @PostMapping(value = "/add")
     public Boolean addArticle(HttpServletRequest request, @RequestBody Article article) {
         if (null == article) {
             throw new AppException(ErrorCode.APP_ERROR_PARAM_ILLEGAL, "参数为空, 请确认输入");
@@ -70,9 +70,9 @@ public class ArticleController {
         return true;
     }
 
-    @PutMapping(value = "/top")
     @ApiOperation(value = "置顶文章", notes = "置顶文章")
-    public Boolean topArticle(@RequestParam("articleId") Long articleId) {
+    @PutMapping(value = "/top")
+    public Boolean topArticle(@RequestParam("articleId") String articleId) {
         if (Objects.isNull(articleId)) {
             throw new AppException(ErrorCode.APP_ERROR_PARAM_ILLEGAL, "参数为空, 请确认输入");
         }
@@ -80,8 +80,8 @@ public class ArticleController {
         return true;
     }
 
-    @DeleteMapping(value = "/delete")
     @ApiOperation(value = "删除文章", notes = "删除文章")
+    @DeleteMapping(value = "/delete")
     public Boolean deleteArticle(HttpServletRequest request, @RequestParam("id")String articleId) {
         if (Strings.isEmpty(articleId)) {
             throw new AppException(ErrorCode.APP_ERROR_PARAM_ILLEGAL, "文章id为空,请刷新后重试");
@@ -91,8 +91,8 @@ public class ArticleController {
         return true;
     }
 
-    @PutMapping("/publish")
     @ApiOperation(value = "发布文章", notes = "发布文章")
+    @PutMapping("/publish")
     public Boolean publishArticle(HttpServletRequest request, @RequestBody Article article) {
         if (null == article || null == article.getId()) {
             throw new AppException(ErrorCode.APP_ERROR_PARAM_ILLEGAL, "发布文章为空,请刷新后重试");
@@ -106,8 +106,8 @@ public class ArticleController {
         return true;
     }
 
-    @PutMapping("/update")
     @ApiOperation(value = "更新文章", notes = "更新文章")
+    @PutMapping("/update")
     public Article updateArticle(HttpServletRequest request, @RequestBody Article article) {
         if (null == article || Strings.isEmpty(article.getArticleId())) {
             throw new AppException(ErrorCode.APP_ERROR_PARAM_ILLEGAL, "发布文章为空,请刷新后重试");

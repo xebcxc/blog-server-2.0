@@ -61,6 +61,7 @@ public class ArticleHelper {
         rs.setCreateTime(article.getCreateTime());
         rs.setModifyTime(article.getModifyTime());
         rs.setPublish(article.getPublish());
+        rs.setSort(article.getSort());
         if (Strings.isNotBlank(article.getTags())) {
             List<Long> tagList = splitterHelper.splitToLongList(article.getTags(), AppConstants.COMMON_SPLIT);
             List<String> tagNameList =  tagService.listByIds(tagList).stream().map(Tag::getTagName).collect(Collectors.toList());

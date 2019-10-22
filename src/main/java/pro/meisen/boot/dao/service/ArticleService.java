@@ -37,7 +37,7 @@ public interface ArticleService extends BasicService<Article> {
      * 置顶文章
      * @param articleId 文章id
      */
-    void topArticle(Long articleId);
+    void topArticle(String articleId);
 
     void increaseVisit(Long articleId);
 

@@ -32,6 +32,8 @@ public class BlogVo {
     private boolean publish;
     @ApiModelProperty("点赞数")
     private Integer compliment;
+    @ApiModelProperty("排序")
+    private Byte sort;
     private Date createTime;
 
     private Date modifyTime;
@@ -130,5 +132,13 @@ public class BlogVo {
 
     public void setPublish(boolean publish) {
         this.publish = publish;
+    }
+
+    public Byte getSort() {
+        return sort;
+    }
+
+    public void setSort(Byte sort) {
+        this.sort = sort;
     }
 }

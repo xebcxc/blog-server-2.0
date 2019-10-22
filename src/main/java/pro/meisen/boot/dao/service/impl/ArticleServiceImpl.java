@@ -118,12 +118,12 @@ public class ArticleServiceImpl extends BasicServiceImpl<Article> implements Art
     }
 
     @Override
-    public void topArticle(Long articleId) {
+    public void topArticle(String articleId) {
         if (Objects.isNull(articleId)) {
             return;
         }
         Article condition = new Article();
-        condition.setId(articleId);
+        condition.setArticleId(articleId);
         condition.setSort(EArticleSortStatusEnum.TOP.getCode());
         mapper.updateByPrimaryKeySelective(condition);
     }
