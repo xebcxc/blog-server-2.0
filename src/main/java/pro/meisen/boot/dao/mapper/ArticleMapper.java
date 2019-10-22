@@ -30,7 +30,13 @@ public interface ArticleMapper extends Mapper<Article> {
 
     /**
      * 增加访问量
-     * @param articleId
+     * @param articleId 文章主键id
      */
     void increaseVisit(@Param("articleId") Long articleId);
+
+    /**
+     * 置顶文章
+     * @param articleId 文章id
+     */
+    void topArticle(@Param("sort") Byte sort, @Param("articleId") String articleId);
 }

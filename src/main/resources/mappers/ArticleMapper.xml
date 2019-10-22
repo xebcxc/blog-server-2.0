@@ -2,127 +2,137 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="pro.meisen.boot.dao.mapper.ArticleMapper">
 
-  <resultMap id="BaseResultMap" type="pro.meisen.boot.domain.Article">
-    <!--
-      WARNING - @mbg.generated
-    -->
-    <result column="id" jdbcType="BIGINT" property="id" />
-    <result column="article_id" jdbcType="VARCHAR" property="articleId" />
-    <result column="thumb" jdbcType="VARCHAR" property="thumb" />
-    <result column="title" jdbcType="VARCHAR" property="title" />
-    <result column="topic" jdbcType="VARCHAR" property="topic" />
-    <result column="introduce" jdbcType="VARCHAR" property="introduce" />
-    <result column="tags" jdbcType="VARCHAR" property="tags" />
-    <result column="content" jdbcType="VARCHAR" property="content" />
-    <result column="visit" jdbcType="BIGINT" property="visit" />
-    <result column="compliment" jdbcType="BIGINT" property="compliment" />
-    <result column="publish" jdbcType="BIT" property="publish" />
-    <result column="is_delete" jdbcType="BIT" property="isDelete" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
-  </resultMap>
+    <resultMap id="BaseResultMap" type="pro.meisen.boot.domain.Article">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <result column="id" jdbcType="BIGINT" property="id"/>
+        <result column="article_id" jdbcType="VARCHAR" property="articleId"/>
+        <result column="thumb" jdbcType="VARCHAR" property="thumb"/>
+        <result column="title" jdbcType="VARCHAR" property="title"/>
+        <result column="topic" jdbcType="VARCHAR" property="topic"/>
+        <result column="introduce" jdbcType="VARCHAR" property="introduce"/>
+        <result column="tags" jdbcType="VARCHAR" property="tags"/>
+        <result column="content" jdbcType="VARCHAR" property="content"/>
+        <result column="visit" jdbcType="BIGINT" property="visit"/>
+        <result column="compliment" jdbcType="BIGINT" property="compliment"/>
+        <result column="publish" jdbcType="BIT" property="publish"/>
+        <result column="is_delete" jdbcType="BIT" property="isDelete"/>
+        <result column="sort" jdbcType="TINYINT" property="sort"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime"/>
+    </resultMap>
 
-  <sql id="selectAllField">
-     select id, article_id, thumb, title, topic, introduce, tags,content,visit,compliment, publish, is_delete, create_time, modify_time
+    <sql id="selectAllField">
+     select id, article_id, thumb, title, topic, introduce, tags,content,visit,compliment, publish, is_delete, sort, create_time, modify_time
      from article
   </sql>
 
-  <sql id="sqlCondition">
-    <where>
-      is_delete = 0
-      <if test="id != null">
-        AND id = #{id}
-      </if>
-      <if test="title != null and title != ''">
-        AND title like concat('%', #{title}, '%')
-      </if>
-      <if test="tags != null and tags != ''">
-        AND tags = #{tags}
-      </if>
-      <if test="visit != null">
-        AND visit = #{visit}
-      </if>
-      <if test="publish != null">
-        AND publish = #{publish}
-      </if>
-      <if test="compliment != null">
-        AND compliment = #{compliment}
-      </if>
-    </where>
-  </sql>
+    <sql id="sqlCondition">
+        <where>
+            is_delete = 0
+            <if test="id != null">
+                AND id = #{id}
+            </if>
+            <if test="title != null and title != ''">
+                AND title like concat('%', #{title}, '%')
+            </if>
+            <if test="tags != null and tags != ''">
+                AND tags = #{tags}
+            </if>
+            <if test="visit != null">
+                AND visit = #{visit}
+            </if>
+            <if test="publish != null">
+                AND publish = #{publish}
+            </if>
+            <if test="compliment != null">
+                AND compliment = #{compliment}
+            </if>
+        </where>
+    </sql>
 
-  <select id="selectByCondition" parameterType="Article" resultType="Article">
-    <include refid="selectAllField" />
-    <include refid="sqlCondition"/>
-    order by create_time desc
-  </select>
-  <select id="countArticles" resultType="java.lang.Long">
-    select count(1) from article
-    <include refid="sqlCondition"/>
-  </select>
+    <select id="selectByCondition" parameterType="Article" resultType="Article">
+        <include refid="selectAllField"/>
+        <include refid="sqlCondition"/>
+        order by sort desc, create_time desc
+    </select>
+    <select id="countArticles" resultType="java.lang.Long">
+        select count(1) from article
+        <include refid="sqlCondition"/>
+    </select>
 
-  <select id="listByIds" parameterType="Map" resultType="Article">
-    <include refid="selectAllField" />
-    where
-    id IN
-    <foreach collection="idList" index="index" item="item" open="(" separator="," close=")">
-      #{item}
-    </foreach>
-  </select>
+    <select id="listByIds" parameterType="Map" resultType="Article">
+        <include refid="selectAllField"/>
+        where
+        id IN
+        <foreach collection="idList" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
 
-  <select id="listByArticleIdList" parameterType="Map" resultType="Article">
-    <include refid="selectAllField" />
-    where
-    article_id IN
-    <foreach collection="articleIdList" index="index" item="item" open="(" separator="," close=")">
-      #{item}
-    </foreach>
-  </select>
+    <select id="listByArticleIdList" parameterType="Map" resultType="Article">
+        <include refid="selectAllField"/>
+        where
+        article_id IN
+        <foreach collection="articleIdList" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
 
 
-  <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
-    insert into article(article_id, thumb, title,topic, introduce,content, tags, visit, compliment, publish, `create_time`, modify_time)
-    values
-    <foreach collection="articleList" item="article" index="index"
-             separator=",">
-      (#{article.articleId},#{article.thumb}, #{article.title},#{article.topic}, #{article.introduce}, #{article.content}, #{article.tags},
-       #{article.visit}, #{article.compliment}, #{article.publish}, #{article.createTime}, #{article.modifyTime})
-    </foreach>
-  </insert>
+    <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
+        insert into article(article_id, thumb, title,topic, introduce,content, tags, visit, compliment, publish, sort,
+        `create_time`, modify_time)
+        values
+        <foreach collection="articleList" item="article" index="index"
+                 separator=",">
+            (#{article.articleId},#{article.thumb}, #{article.title},#{article.topic}, #{article.introduce},
+            #{article.content}, #{article.tags},
+            #{article.visit}, #{article.compliment}, #{article.publish}, #{article.sort}, #{article.createTime},
+            #{article.modifyTime})
+        </foreach>
+    </insert>
 
-  <update id="batchUpdate" parameterType="java.util.List">
-    <foreach close=";" collection="articleList" index="index" item="article" open="" separator=";">
-      update article set
-      modify_time=#{article.modifyTime}
-      ,article_id=#{article.articleId}
-      ,title=#{article.title}
-      ,tags=#{article.tags}
-      ,topic= #{article.topic}
-      ,visit= #{article.visit}
-      ,publish=#{article.publish}
-      ,introduce=#{article.introduce}
-      ,content=#{article.content}
-      ,compliment=#{article.compliment}
-      ,thumb=#{article.thumb}
-      where id =#{article.id}
-    </foreach>
-  </update>
-  <select id="listByIdListWithPage" resultType="Article">
-    <include refid="selectAllField" />
-    where
-    id IN
-    <foreach collection="idList" index="index" item="item" open="(" separator="," close=")">
-      #{item}
-    </foreach>
-    order by create_time desc
-  </select>
-  <select id="countByIdList" resultType="java.lang.Long">
-    select count(1) from article
-    where
-    id IN
-    <foreach collection="idList" index="index" item="item" open="(" separator="," close=")">
-      #{item}
-    </foreach>
-  </select>
+    <update id="batchUpdate" parameterType="java.util.List">
+        <foreach close=";" collection="articleList" index="index" item="article" open="" separator=";">
+            update article set
+            modify_time=#{article.modifyTime}
+            ,article_id=#{article.articleId}
+            ,title=#{article.title}
+            ,tags=#{article.tags}
+            ,topic= #{article.topic}
+            ,visit= #{article.visit}
+            ,publish=#{article.publish}
+            ,introduce=#{article.introduce}
+            ,content=#{article.content}
+            ,compliment=#{article.compliment}
+            ,thumb=#{article.thumb}
+            where id =#{article.id}
+        </foreach>
+    </update>
+    <select id="listByIdListWithPage" resultType="Article">
+        <include refid="selectAllField"/>
+        where
+        id IN
+        <foreach collection="idList" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        order by create_time desc
+    </select>
+    <select id="countByIdList" resultType="java.lang.Long">
+        select count(1) from article
+        where
+        id IN
+        <foreach collection="idList" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+    <update id="increaseVisit">
+        update article set visit=visit+1, modify_time=now() where id=#{articleId}
+    </update>
+    <update id="topArticle">
+      update article set sort=#{sort}, modify_time=now() where article_id=#{articleId}
+    </update>
 
 </mapper>
