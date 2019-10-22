@@ -39,6 +39,8 @@ public class Article extends CommonDomain implements Serializable {
     // 是否删除
     @Column(name = "is_delete")
     private Boolean isDelete;
+    // 排序
+    private Byte sort;
 
 
     public String getThumb() {
@@ -127,5 +129,13 @@ public class Article extends CommonDomain implements Serializable {
 
     public void setDelete(Boolean delete) {
         isDelete = delete;
+    }
+
+    public Byte getSort() {
+        return sort;
+    }
+
+    public void setSort(Byte sort) {
+        this.sort = sort;
     }
 }

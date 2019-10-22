@@ -27,4 +27,10 @@ public interface ArticleMapper extends Mapper<Article> {
     int batchUpdate(@Param("articleList") List<Article> articleList);
 
     int batchInsert(@Param("articleList") List<Article> articleList);
+
+    /**
+     * 增加访问量
+     * @param articleId
+     */
+    void increaseVisit(@Param("articleId") Long articleId);
 }

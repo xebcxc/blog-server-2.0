@@ -11,6 +11,7 @@ import pro.meisen.boot.dao.service.ArticleService;
 import pro.meisen.boot.dao.service.basic.BasicServiceImpl;
 import pro.meisen.boot.domain.Article;
 import pro.meisen.boot.domain.enums.EArticlePublishStatusEnum;
+import pro.meisen.boot.domain.enums.EArticleSortStatusEnum;
 import pro.meisen.boot.web.req.BlogSearchForm;
 import pro.meisen.boot.web.res.PageData;
 import tk.mybatis.mapper.common.Mapper;
@@ -114,5 +115,21 @@ public class ArticleServiceImpl extends BasicServiceImpl<Article> implements Art
         condition.setId(id);
         condition.setDelete(true);
         return mapper.updateByPrimaryKeySelective(condition);
+    }
+
+    @Override
+    public void topArticle(Long articleId) {
+        if (Objects.isNull(articleId)) {
+            return;
+        }
+        Article condition = new Article();
+        condition.setId(articleId);
+        condition.setSort(EArticleSortStatusEnum.TOP.getCode());
+        mapper.updateByPrimaryKeySelective(condition);
+    }
+
+    @Override
+    public void increaseVisit(Long articleId) {
+        mapper.increaseVisit(articleId);
     }
 }

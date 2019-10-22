@@ -33,4 +33,12 @@ public interface ArticleService extends BasicService<Article> {
 
     int logicDeleteById(Long id);
 
+    /**
+     * 置顶文章
+     * @param articleId 文章id
+     */
+    void topArticle(Long articleId);
+
+    void increaseVisit(Long articleId);
+
 }

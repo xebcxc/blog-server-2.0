@@ -63,6 +63,8 @@ public class BlogManageUc implements BlogManage{
         Long id = article.getId();
         String member = id.toString();
         redisOperation.zIncr(RedisKey.ARTICLE_INFO.getKey(), member, 1);
+        // 增加访问量
+        articleService.increaseVisit(id);
         return article;
     }
     @Override

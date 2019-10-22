@@ -70,6 +70,16 @@ public class ArticleController {
         return true;
     }
 
+    @PutMapping(value = "/top")
+    @ApiOperation(value = "置顶文章", notes = "置顶文章")
+    public Boolean topArticle(@RequestParam("articleId") Long articleId) {
+        if (Objects.isNull(articleId)) {
+            throw new AppException(ErrorCode.APP_ERROR_PARAM_ILLEGAL, "参数为空, 请确认输入");
+        }
+        articleService.topArticle(articleId);
+        return true;
+    }
+
     @DeleteMapping(value = "/delete")
     @ApiOperation(value = "删除文章", notes = "删除文章")
     public Boolean deleteArticle(HttpServletRequest request, @RequestParam("id")String articleId) {
