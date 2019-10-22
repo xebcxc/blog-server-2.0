@@ -38,5 +38,5 @@ public interface ArticleMapper extends Mapper<Article> {
      * 置顶文章
      * @param articleId 文章id
      */
-    void topArticle(@Param("sort") Byte sort, @Param("articleId") String articleId);
+    void sortArticle(@Param("sort") Byte sort, @Param("articleId") String articleId);
 }

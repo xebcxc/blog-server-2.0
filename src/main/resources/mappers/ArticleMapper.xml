@@ -131,7 +131,7 @@
     <update id="increaseVisit">
         update article set visit=visit+1, modify_time=now() where id=#{articleId}
     </update>
-    <update id="topArticle">
+    <update id="sortArticle">
       update article set sort=#{sort}, modify_time=now() where article_id=#{articleId}
     </update>
 

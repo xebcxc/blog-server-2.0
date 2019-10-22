@@ -12,7 +12,6 @@ import pro.meisen.boot.domain.common.ErrorCode;
 import pro.meisen.boot.domain.helper.ArticleHelper;
 import pro.meisen.boot.uc.BlogManage;
 import pro.meisen.boot.web.req.BlogSearchForm;
-import pro.meisen.boot.web.req.PageInfo;
 import pro.meisen.boot.web.res.BlogVo;
 import pro.meisen.boot.web.res.PageData;
 
@@ -72,11 +71,11 @@ public class ArticleController {
 
     @ApiOperation(value = "置顶文章", notes = "置顶文章")
     @PutMapping(value = "/top")
-    public Boolean topArticle(@RequestParam("articleId") String articleId) {
-        if (Objects.isNull(articleId)) {
+    public Boolean topArticle(@RequestParam("articleId") String articleId, @RequestParam("sort") Byte sort) {
+        if (Objects.isNull(articleId) || Objects.isNull(sort)) {
             throw new AppException(ErrorCode.APP_ERROR_PARAM_ILLEGAL, "参数为空, 请确认输入");
         }
-        articleService.topArticle(articleId);
+        articleService.sortArticle(articleId, sort);
         return true;
     }
 
