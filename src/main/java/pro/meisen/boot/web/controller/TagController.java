@@ -24,13 +24,13 @@ public class TagController {
     @Autowired
     private TagManage tagManage;
 
-    @RequestMapping(value = "/all", method = RequestMethod.GET)
+    @GetMapping("/all")
     public List<TagVo> all(HttpServletRequest request) {
         List<Tag> tagList = tagManage.listAll();
         return assembleTagRs(tagList);
     }
 
-    @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
+    @DeleteMapping("/delete")
     public Boolean delete(HttpServletRequest request, @RequestParam("tagId") Long id) {
         if (null == id) {
             throw new AppException(ErrorCode.APP_ERROR_PARAM_ILLEGAL, "参数错误,删除失败");
@@ -39,7 +39,7 @@ public class TagController {
         return true;
     }
 
-    @RequestMapping(value = "/update", method = RequestMethod.PUT)
+    @PutMapping("/update")
     public Boolean update(HttpServletRequest request, @RequestBody Tag tag) {
         if (null == tag || null == tag.getId()) {
             throw new AppException(ErrorCode.APP_ERROR_PARAM_ILLEGAL, "参数错误,更新失败");

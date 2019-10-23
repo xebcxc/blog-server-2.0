@@ -38,6 +38,7 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/api/static/file/upload", "anon");
         filterChainDefinitionMap.put("/swagger-ui.html", "anon");
         filterChainDefinitionMap.put("/api/blog/**", "anon");
+        filterChainDefinitionMap.put("/api/tag/all", "anon");
         filterChainDefinitionMap.put("/api/user/login", "anon");
         filterChainDefinitionMap.put("/api/user/register", "anon");
         filterChainDefinitionMap.put("/api/**", "authc");
