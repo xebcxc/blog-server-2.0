@@ -16,7 +16,17 @@ public interface BlogManage {
 
     PageData<Article> listArticleWithPage(BlogSearchForm request);
 
+    /**
+     * 查询所有文章
+     * @param text 文本
+     * @param pageNum 页数
+     * @return 符合条件的页数
+     */
+    PageData<Article> searchEverything(String text, int pageNum, int pageSize);
+
     Article getDetailByArticleId(String articleId);
+
+
     Article getDetailByArticleIdWithIncrVisit(String articleId);
 
     PageData<Article> listByTagName(TagSearchForm searchModel);

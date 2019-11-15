@@ -25,7 +25,7 @@ public class TagServiceImpl extends BasicServiceImpl<Tag> implements TagService 
     private TagMapper mapper;
 
     @Override
-    public Mapper<Tag> getMapper() {
+    public Mapper<Tag> getArticleMapper() {
         return mapper;
     }
 

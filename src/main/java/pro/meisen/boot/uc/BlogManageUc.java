@@ -54,6 +54,11 @@ public class BlogManageUc implements BlogManage{
     }
 
     @Override
+    public PageData<Article> searchEverything(String text, int pageNum, int pageSize) {
+        return articleService.searchEverything(text, pageNum, pageSize);
+    }
+
+    @Override
 //    @DataCache(key = "blog_detail_")
     public Article getDetailByArticleIdWithIncrVisit(String articleId) {
         Article article = articleService.findByArticleId(articleId);

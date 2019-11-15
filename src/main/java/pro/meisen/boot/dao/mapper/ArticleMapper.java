@@ -22,6 +22,10 @@ public interface ArticleMapper extends Mapper<Article> {
 
     Long countByIdList(TagSearchParam param);
 
+    List<Article> searchByText(@Param("text") String text);
+
+    Integer countByText(@Param("text") String text);
+
     List<Article> listByArticleIdList(@Param("articleIdList")List<String> articleIdList);
 
     int batchUpdate(@Param("articleList") List<Article> articleList);

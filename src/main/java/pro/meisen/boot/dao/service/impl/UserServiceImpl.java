@@ -22,7 +22,7 @@ public class UserServiceImpl extends BasicServiceImpl<User> implements UserServi
     private UserMapper mapper;
 
     @Override
-    public Mapper<User> getMapper() {
+    public Mapper<User> getArticleMapper() {
         return mapper;
     }
 

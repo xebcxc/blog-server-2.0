@@ -19,7 +19,7 @@ public class StatisticServiceImpl extends BasicServiceImpl<Statistics> implement
     @Autowired
     private StatisticsMapper mapper;
     @Override
-    public Mapper<Statistics> getMapper() {
+    public Mapper<Statistics> getArticleMapper() {
         return mapper;
     }
 

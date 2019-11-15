@@ -19,6 +19,13 @@ public interface ArticleService extends BasicService<Article> {
     PageData<Article> listArticleWithPage(BlogSearchForm searchRequest);
 
     /**
+     * 通过文字查询所有内容
+     * @param text 文字
+     * @return 内容
+     */
+    PageData<Article> searchEverything(String text, int pageNum, int pageSize);
+
+    /**
      * 通过id查询所有的文章, 这里就不分页了
      * @param idList id集合
      * @return Article集合

@@ -132,7 +132,21 @@
         update article set visit=visit+1, modify_time=now() where id=#{articleId}
     </update>
     <update id="sortArticle">
-      update article set sort=#{sort}, modify_time=now() where article_id=#{articleId}
+        update article set sort=#{sort}, modify_time=now() where article_id=#{articleId}
     </update>
+    <select id="searchByText" resultType="Article">
+        <include refid="selectAllField"/>
+        WHERE
+        title LIKE CONCAT('%',#{text},'%' )
+        OR topic LIKE CONCAT('%',#{text},'%' )
+    </select>
+
+    <select id="countByText" resultType="java.lang.Integer">
+        SELECT COUNT(1)
+        FROM article
+        WHERE
+        title LIKE CONCAT('%',#{text},'%' )
+        OR topic LIKE CONCAT('%',#{text},'%' )
+    </select>
 
 </mapper>

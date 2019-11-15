@@ -1,6 +1,7 @@
 package pro.meisen.boot.dao.service.impl;
 
 import com.github.pagehelper.PageHelper;
+import com.google.common.collect.Lists;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,7 +12,6 @@ import pro.meisen.boot.dao.service.ArticleService;
 import pro.meisen.boot.dao.service.basic.BasicServiceImpl;
 import pro.meisen.boot.domain.Article;
 import pro.meisen.boot.domain.enums.EArticlePublishStatusEnum;
-import pro.meisen.boot.domain.enums.EArticleSortStatusEnum;
 import pro.meisen.boot.web.req.BlogSearchForm;
 import pro.meisen.boot.web.res.PageData;
 import tk.mybatis.mapper.common.Mapper;
@@ -24,11 +24,11 @@ import java.util.Objects;
 public class ArticleServiceImpl extends BasicServiceImpl<Article> implements ArticleService {
 
     @Autowired
-    private ArticleMapper mapper;
+    private ArticleMapper articleMapper;
 
     @Override
-    public Mapper<Article> getMapper() {
-        return mapper;
+    public Mapper<Article> getArticleMapper() {
+        return articleMapper;
     }
 
     @Override
@@ -39,7 +39,7 @@ public class ArticleServiceImpl extends BasicServiceImpl<Article> implements Art
         Article article = new Article();
         article.setArticleId(articleId);
         article.setDelete(false);
-        return mapper.selectOne(article);
+        return articleMapper.selectOne(article);
     }
 
     @Override
@@ -47,22 +47,39 @@ public class ArticleServiceImpl extends BasicServiceImpl<Article> implements Art
         Article record = new Article();
         record.setPublish(EArticlePublishStatusEnum.PUBLISH.isCode());
         record.setDelete(false);
-        return notEmptyList(mapper.select(record));
+        return notEmptyList(articleMapper.select(record));
     }
 
     @Override
     public List<Article> listByCondition(Article article) {
-        return notEmptyList(mapper.select(article));
+        return notEmptyList(articleMapper.select(article));
     }
 
     @Override
     public PageData<Article> listArticleWithPage(BlogSearchForm request) {
         PageHelper.startPage(request.getPageNum(), request.getPageSize())
                 .count(true);
-        List<Article> articleList = mapper.selectByCondition(request);
+        List<Article> articleList = articleMapper.selectByCondition(request);
         PageHelper.clearPage();
-        Long count = mapper.countArticles(request);
+        Long count = articleMapper.countArticles(request);
         PageData<Article> pageData = new PageData<>();
+        pageData.setData(notEmptyList(articleList));
+        pageData.setCount(Objects.isNull(count) ? 0L : count);
+        return pageData;
+    }
+
+    @Override
+    public PageData<Article> searchEverything(String text, int pageNum, int pageSize) {
+        PageData<Article> pageData = new PageData<>();
+        Integer count = articleMapper.countByText(text);
+        if (count < (pageNum - 1) * pageSize) {
+            pageData.setData(Lists.newArrayList());
+            pageData.setCount(0L);
+            return pageData;
+        }
+        PageHelper.startPage(pageNum, pageSize, false);
+        List<Article> articleList = articleMapper.searchByText(text);
+        PageHelper.clearPage();
         pageData.setData(notEmptyList(articleList));
         pageData.setCount(Objects.isNull(count) ? 0L : count);
         return pageData;
@@ -73,7 +90,7 @@ public class ArticleServiceImpl extends BasicServiceImpl<Article> implements Art
         if (CollectionUtils.isEmpty(idList)) {
             return new ArrayList<>();
         }
-        return notEmptyList(mapper.listByIds(idList));
+        return notEmptyList(articleMapper.listByIds(idList));
     }
 
     @Override
@@ -85,9 +102,9 @@ public class ArticleServiceImpl extends BasicServiceImpl<Article> implements Art
             return pageData;
         }
         PageHelper.startPage(param.getPageNum(), param.getPageSize());
-        List<Article> articleList = mapper.listByIdListWithPage(param);
+        List<Article> articleList = articleMapper.listByIdListWithPage(param);
         PageHelper.clearPage();
-        Long count = mapper.countByIdList(param);
+        Long count = articleMapper.countByIdList(param);
         pageData.setData(articleList);
         pageData.setCount(Objects.isNull(count) ? 0L : count);
         return pageData;
@@ -98,12 +115,12 @@ public class ArticleServiceImpl extends BasicServiceImpl<Article> implements Art
         if (CollectionUtils.isEmpty(articleIdList)) {
             return new ArrayList<>();
         }
-        return notEmptyList(mapper.listByArticleIdList(articleIdList));
+        return notEmptyList(articleMapper.listByArticleIdList(articleIdList));
     }
 
     @Override
     public int batchUpdate(List<Article> articleList) {
-        return mapper.batchUpdate(articleList);
+        return articleMapper.batchUpdate(articleList);
     }
 
     @Override
@@ -114,7 +131,7 @@ public class ArticleServiceImpl extends BasicServiceImpl<Article> implements Art
         Article condition = new Article();
         condition.setId(id);
         condition.setDelete(true);
-        return mapper.updateByPrimaryKeySelective(condition);
+        return articleMapper.updateByPrimaryKeySelective(condition);
     }
 
     @Override
@@ -122,11 +139,11 @@ public class ArticleServiceImpl extends BasicServiceImpl<Article> implements Art
         if (Objects.isNull(articleId) || Objects.isNull(sort)) {
             return;
         }
-        mapper.sortArticle(sort, articleId);
+        articleMapper.sortArticle(sort, articleId);
     }
 
     @Override
     public void increaseVisit(Long articleId) {
-        mapper.increaseVisit(articleId);
+        articleMapper.increaseVisit(articleId);
     }
 }

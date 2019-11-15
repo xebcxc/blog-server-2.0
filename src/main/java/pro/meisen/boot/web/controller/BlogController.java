@@ -1,5 +1,6 @@
 package pro.meisen.boot.web.controller;
 
+import com.google.common.collect.Lists;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.logging.log4j.util.Strings;
@@ -55,6 +56,23 @@ public class BlogController {
         PageData<Article> articlePage = blogManage.listArticleWithPage(form);
         List<BlogVo> blogVoList = articleHelper.assembleBlogVo(articlePage.getData());
         return new PageData<>(blogVoList, articlePage.getCount(), form);
+    }
+
+    @ApiOperation(notes = "根据条件查询文章", value = "根据条件查询文章")
+    @GetMapping(value = "/search")
+    public PageData<BlogVo> search(@RequestParam("text") String text, @RequestParam("pageNum") Integer pageNum
+            , @RequestParam("pageSize") Integer pageSize) {
+        PageInfo pageInfo = new PageInfo();
+        if (Objects.isNull(pageNum) || Objects.isNull(pageSize) || Strings.isBlank(text) || text.length() < 2) {
+            pageInfo.setPageNum(0);
+            pageInfo.setPageSize(10);
+            return new PageData<BlogVo>(Lists.newArrayList(), 0L, pageInfo);
+        }
+        pageInfo.setPageNum(pageNum);
+        pageInfo.setPageSize(pageSize);
+        PageData<Article> pageData = blogManage.searchEverything(text, pageNum, pageSize);
+        List<BlogVo> blogVoList = articleHelper.assembleBlogVo(pageData.getData());
+        return new PageData<>(blogVoList, pageData.getCount(), pageInfo);
     }
 
     @ApiOperation(notes = "获取文章详情", value = "获取文章详情")
