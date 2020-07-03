@@ -1,21 +1,20 @@
 package fun.baozi.boot.web.controller;
 
 import fun.baozi.boot.core.exception.AppException;
+import fun.baozi.boot.dao.service.ArticleService;
+import fun.baozi.boot.dao.service.StatisticsService;
 import fun.baozi.boot.domain.Article;
 import fun.baozi.boot.domain.Statistics;
 import fun.baozi.boot.domain.common.ErrorCode;
 import fun.baozi.boot.ext.redis.RedisKey;
-import fun.baozi.boot.ext.redis.RedisOperation;
 import fun.baozi.boot.helper.StringHelper;
+import fun.baozi.boot.web.res.StatisticsCount;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import fun.baozi.boot.dao.service.ArticleService;
-import fun.baozi.boot.dao.service.StatisticsService;
-import fun.baozi.boot.web.res.StatisticsCount;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -36,15 +35,15 @@ public class StatisticsController {
     private ArticleService articleService;
     @Autowired
     private StringHelper stringHelper;
-    @Autowired
-    private RedisOperation<String> redisOperation;
+//    @Autowired
+//    private RedisOperation<String> redisOperation;
 
     @GetMapping("/userVisit")
     public Long userVisit(HttpServletRequest request) {
-        Long count = redisOperation.pdCount(RedisKey.UV.getKey());
-        if (count != null && count != 0L) {
-            return count;
-        }
+//        Long count = redisOperation.pdCount(RedisKey.UV.getKey());
+//        if (count != null && count != 0L) {
+//            return count;
+//        }
         Statistics statistics = statisticsService.searchLatest();
         if (null == statistics) {
             return 0L;
@@ -52,21 +51,21 @@ public class StatisticsController {
         return statistics.getUserVisit();
     }
 
-    @GetMapping("/popular")
-    public List<Article> popular(HttpServletRequest request, @RequestParam("start") Long start, @RequestParam("end") Long end) {
-        if (null == start || null == end) {
-            return new ArrayList<>();
-        }
-        Set<String> idSet = redisOperation.reverseRange(RedisKey.ARTICLE_INFO.getKey(), start, end);
-        List<Long> idList = new ArrayList<>();
-        // 转换id的类型
-        formatStringToLong(idSet, idList);
-        List<Article> popularArticles = articleService.listByIds(idList);
-        List<Article> resultArticles = new ArrayList<>();
-        // 根据idSet排序
-        sortResultArticles(idList, popularArticles, resultArticles);
-        return resultArticles;
-    }
+//    @GetMapping("/popular")
+//    public List<Article> popular(HttpServletRequest request, @RequestParam("start") Long start, @RequestParam("end") Long end) {
+//        if (null == start || null == end) {
+//            return new ArrayList<>();
+//        }
+//        Set<String> idSet = redisOperation.reverseRange(RedisKey.ARTICLE_INFO.getKey(), start, end);
+//        List<Long> idList = new ArrayList<>();
+//        // 转换id的类型
+//        formatStringToLong(idSet, idList);
+//        List<Article> popularArticles = articleService.listByIds(idList);
+//        List<Article> resultArticles = new ArrayList<>();
+//        // 根据idSet排序
+//        sortResultArticles(idList, popularArticles, resultArticles);
+//        return resultArticles;
+//    }
 
     @GetMapping("/articleCount")
     public Integer articleCount(HttpServletRequest request) {

@@ -1,8 +1,5 @@
 package fun.baozi.boot.ext.schedule;
 
-import fun.baozi.boot.domain.Statistics;
-import fun.baozi.boot.ext.redis.RedisKey;
-import fun.baozi.boot.ext.redis.RedisOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -19,21 +16,19 @@ public class DailyStatisticsSchedule {
 
     @Autowired
     private StatisticsService statisticsService;
-    @Autowired
-    private RedisOperation<String> redisOperation;
 
     @Scheduled(cron = "0 56 23 * * ?")
     public void statisticsSchedule() {
-        Statistics statistics = statisticsService.searchLatest();
-        Long userVisit = 0L;
-        if (null != statistics) {
-            userVisit = statistics.getUserVisit();
-        }
-        Long logCount = redisOperation.pdCount(RedisKey.UV.getKey());
-        statistics = new Statistics();
-        statistics.setStatisticTime(new Date());
-        statistics.setDailyUserVisit(logCount - userVisit);
-        statistics.setUserVisit(logCount);
-        statisticsService.insertSelective(statistics);
+//        Statistics statistics = statisticsService.searchLatest();
+//        Long userVisit = 0L;
+//        if (null != statistics) {
+//            userVisit = statistics.getUserVisit();
+//        }
+////        Long logCount = redisOperation.pdCount(RedisKey.UV.getKey());
+//        statistics = new Statistics();
+//        statistics.setStatisticTime(new Date());
+//        statistics.setDailyUserVisit(logCount - userVisit);
+//        statistics.setUserVisit(logCount);
+//        statisticsService.insertSelective(statistics);
     }
 }

@@ -1,9 +1,7 @@
 package fun.baozi.boot.core.config;
 
 import fun.baozi.boot.core.intercepter.RequestInterceptor;
-import fun.baozi.boot.core.intercepter.StatisticsInterceptor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -26,10 +24,10 @@ public class WebAppConfigurer extends WebMvcConfigurationSupport {
      * 解决在StatisticsInterceptor 拦截时Autowired失败
      * @return StatisticsInterceptor
      */
-    @Bean
-    public StatisticsInterceptor statisticsInterceptor() {
-        return new StatisticsInterceptor();
-    }
+//    @Bean
+//    public StatisticsInterceptor statisticsInterceptor() {
+//        return new StatisticsInterceptor();
+//    }
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
@@ -59,8 +57,8 @@ public class WebAppConfigurer extends WebMvcConfigurationSupport {
         // excludePathPatterns 用户排除拦截
         registry.addInterceptor(new RequestInterceptor())
                 .addPathPatterns("/api/**");
-        registry.addInterceptor(statisticsInterceptor())
-                .addPathPatterns("/**");
+//        registry.addInterceptor(statisticsInterceptor())
+//                .addPathPatterns("/**");
         super.addInterceptors(registry);
     }
 }

@@ -8,6 +8,10 @@ import fun.baozi.boot.web.res.PageData;
 
 import java.util.List;
 
+/**
+ * @author baozi
+ * 2020-07-03
+ */
 public interface ArticleService extends BasicService<Article> {
 
     Article findByArticleId(String articleId);

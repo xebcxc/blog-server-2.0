@@ -3,13 +3,16 @@ package fun.baozi.boot.uc;
 import fun.baozi.boot.core.constants.AppConstants;
 import fun.baozi.boot.core.exception.AppException;
 import fun.baozi.boot.dao.TagSearchParam;
+import fun.baozi.boot.dao.service.ArticleService;
+import fun.baozi.boot.dao.service.TagService;
 import fun.baozi.boot.domain.Article;
 import fun.baozi.boot.domain.Tag;
 import fun.baozi.boot.domain.common.ErrorCode;
-import fun.baozi.boot.ext.redis.RedisKey;
-import fun.baozi.boot.ext.redis.RedisOperation;
 import fun.baozi.boot.helper.SplitterHelper;
 import fun.baozi.boot.helper.StringHelper;
+import fun.baozi.boot.web.req.BlogSearchForm;
+import fun.baozi.boot.web.req.TagSearchForm;
+import fun.baozi.boot.web.res.PageData;
 import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,11 +20,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
-import fun.baozi.boot.dao.service.ArticleService;
-import fun.baozi.boot.dao.service.TagService;
-import fun.baozi.boot.web.req.BlogSearchForm;
-import fun.baozi.boot.web.req.TagSearchForm;
-import fun.baozi.boot.web.res.PageData;
 
 import javax.transaction.Transactional;
 import java.util.*;
@@ -44,8 +42,8 @@ public class BlogManageUc implements BlogManage{
     private SplitterHelper splitterHelper;
     @Autowired
     private StringHelper stringHelper;
-    @Autowired
-    private RedisOperation<String> redisOperation;
+//    @Autowired
+//    private RedisOperation<String> redisOperation;
 
 //    @DataCache(key = "page_blog_")
     @Override
@@ -67,7 +65,7 @@ public class BlogManageUc implements BlogManage{
         }
         Long id = article.getId();
         String member = id.toString();
-        redisOperation.zIncr(RedisKey.ARTICLE_INFO.getKey(), member, 1);
+//        redisOperation.zIncr(RedisKey.ARTICLE_INFO.getKey(), member, 1);
         // 增加访问量
         articleService.increaseVisit(id);
         return article;
