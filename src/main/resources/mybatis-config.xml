@@ -13,11 +13,11 @@
 
     <!--实体类简称-->
     <typeAliases>
-        <typeAlias type="pro.meisen.boot.domain.Article" alias="Article" />
-        <typeAlias type="pro.meisen.boot.domain.Tag" alias="Tag" />
-        <typeAlias type="pro.meisen.boot.domain.Comment" alias="Comment" />
-        <typeAlias type="pro.meisen.boot.domain.User" alias="User" />
-        <typeAlias type="pro.meisen.boot.domain.Statistics" alias="Statistics" />
+        <typeAlias type="fun.baozi.boot.domain.Article" alias="Article" />
+        <typeAlias type="fun.baozi.boot.domain.Tag" alias="Tag" />
+        <typeAlias type="fun.baozi.boot.domain.Comment" alias="Comment" />
+        <typeAlias type="fun.baozi.boot.domain.User" alias="User" />
+        <typeAlias type="fun.baozi.boot.domain.Statistics" alias="Statistics" />
     </typeAliases>
 
 

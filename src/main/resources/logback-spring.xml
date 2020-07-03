@@ -85,7 +85,7 @@
 <!--    <logger name="com.zaxxer.hikari.HikariConfig" level="INFO"/>-->
     <logger name="org" level="warn"/>
     <logger name="io" level="warn"/>
-    <logger name="pro.meisen.boot.dao" level="debug"/>
+    <logger name="fun.baozi.boot.dao" level="debug"/>
 
     <!-- 开发、默认环境 只输出到控制台 -->
     <springProfile name="default,dev">

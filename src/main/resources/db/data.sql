@@ -2,7 +2,7 @@ INSERT INTO article (id, article_id, thumb, title, topic, introduce, tags, conte
 >
 > 站在巨人的肩膀上
 
-在前面的一篇关于[二分查找算法](https://meisen.pro/article/5cb09abee7fe413f9b112664060a7e85)的文章中，简单提了二分查找的算法的算法时间复杂度是`O(logn)`。但是对于什么是算法的复杂度，文中并没有提。为了能够更好理解后面讲解的文章，今天就来就先来学学算法的复杂度。
+在前面的一篇关于[二分查找算法](https://baozi.pro/article/5cb09abee7fe413f9b112664060a7e85)的文章中，简单提了二分查找的算法的算法时间复杂度是`O(logn)`。但是对于什么是算法的复杂度，文中并没有提。为了能够更好理解后面讲解的文章，今天就来就先来学学算法的复杂度。
 
 首先，我们先来说说为什么需要复杂度分析？
 
