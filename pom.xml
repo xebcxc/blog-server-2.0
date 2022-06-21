@@ -20,7 +20,7 @@
 		<project.encoding>UTF-8</project.encoding>
 		<mybatis.springboot.version>2.0.1</mybatis.springboot.version>
 		<mybatis.verson>3.5.1</mybatis.verson>
-		<mysql.connector.version>8.0.16</mysql.connector.version>
+		<mysql.connector.version>8.0.28</mysql.connector.version>
 		<fastjson.version>1.2.58</fastjson.version>
 		<mybati.pageHelper.version>5.1.10</mybati.pageHelper.version>
 		<tk.mybatis.version>4.1.5</tk.mybatis.version>
